@@ -18,8 +18,10 @@ def _remove_queue_info(response: str, many: bool = False) -> str:
     risky. Instead, this takes the serialized response and just runs it through another
     Schema that strips out the queue info.
     """
-    system_data = SystemSansQueueSchema(many=many).loads(response).data
-    return SystemSansQueueSchema(many=many).dumps(system_data).data
+    return response
+    # TODO: Figure this out
+    # system_data = SystemSansQueueSchema(many=many).loads(response).data
+    # return SystemSansQueueSchema(many=many).dumps(system_data).data
 
 
 class SystemAPI(AuthorizationHandler):

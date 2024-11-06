@@ -2,7 +2,7 @@ import logging
 import os
 from copy import deepcopy
 
-import yaml
+from ruamel.yaml import YAML
 from brewtils.models import (
     AliasUserMap,
     Event,
@@ -200,7 +200,7 @@ def load_users_config() -> list:
     if config.get("auth.user_definition_file"):
         if os.path.isfile(config.get("auth.user_definition_file")):
             with open(config.get("auth.user_definition_file"), "r") as config_file:
-                return yaml.safe_load(config_file)
+                return YAML(typ='safe', pure=True).load(config_file)
         else:
             logger.error(
                 f"Unable to load User file: {config.get('auth.user_definition_file')}"

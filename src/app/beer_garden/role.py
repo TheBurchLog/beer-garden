@@ -1,7 +1,7 @@
 import logging
 import os
 
-import yaml
+from ruamel.yaml import YAML
 from brewtils.models import Event, Events, Permissions, Role
 from mongoengine import DoesNotExist
 from mongoengine.errors import FieldDoesNotExist
@@ -104,7 +104,7 @@ def load_roles_config():
     if config.get("auth.role_definition_file"):
         if os.path.isfile(config.get("auth.role_definition_file")):
             with open(config.get("auth.role_definition_file"), "r") as config_file:
-                return yaml.safe_load(config_file)
+                return YAML(typ='safe', pure=True).load(config_file)
         else:
             logger.error(
                 f"Unable to load Roles file: {config.get('auth.role_definition_file')}"

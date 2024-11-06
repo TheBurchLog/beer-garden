@@ -18,7 +18,7 @@ delegate requesting information from the plugin to the request service.
 """
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Tuple
 
 from brewtils.models import (
@@ -456,10 +456,10 @@ async def update_async(
 
     if new_status:
         update["instances.$.status"] = new_status
-        update["instances.$.status_info.heartbeat"] = datetime.utcnow()
+        update["instances.$.status_info.heartbeat"] = datetime.now(timezone.utc)
         push["instances.$.status_info.history"] = {
             "status": new_status,
-            "heartbeat": datetime.utcnow(),
+            "heartbeat": datetime.now(timezone.utc),
         }
 
         if new_status == "STOPPED":
@@ -480,11 +480,11 @@ async def heartbeat_async(
     query = {"instances._id": ObjectIdField().to_mongo(instance_id)}
     projection = {"instances.$": 1, "_id": 0}
     update = {
-        "$set": {"instances.$.status_info.heartbeat": datetime.utcnow()},
+        "$set": {"instances.$.status_info.heartbeat": datetime.now(timezone.utc)},
         "$push": {
             "instances.$.status_info.history": {
                 "status": "RUNNING",
-                "heartbeat": datetime.utcnow(),
+                "heartbeat": datetime.now(timezone.utc),
             }
         },
     }
@@ -648,12 +648,12 @@ class StatusMonitor(StoppableThread):
                 if self.stopped():
                     break
 
-                last_heartbeat = instance.status_info.heartbeat
+                last_heartbeat = instance.status_info.heartbeat.replace(tzinfo=timezone.utc)
 
                 if last_heartbeat:
                     if (
                         instance.status == "RUNNING"
-                        and datetime.utcnow() - last_heartbeat >= self.timeout
+                        and datetime.now(timezone.utc) - last_heartbeat >= self.timeout
                     ):
                         update(
                             system=system,
@@ -665,7 +665,7 @@ class StatusMonitor(StoppableThread):
                     elif (
                         instance.status
                         in ["UNRESPONSIVE", "STARTING", "INITIALIZING", "UNKNOWN"]
-                        and datetime.utcnow() - last_heartbeat < self.timeout
+                        and datetime.now(timezone.utc) - last_heartbeat < self.timeout
                     ):
                         update(
                             system=system,

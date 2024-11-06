@@ -210,7 +210,7 @@ def ensure_v3_27_model_migration():
 
     db = get_db()
 
-    collections = db.collection_names()
+    collections = db.list_collection_names()
 
     # Look for 3.26 Collections
     for legacy_user_collection in ["remote_role", "role_assignment", "remote_user"]:
