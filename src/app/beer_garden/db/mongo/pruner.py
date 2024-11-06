@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Tuple
 
 from brewtils.errors import ModelValidationError
@@ -20,7 +20,7 @@ display_name = "Mongo Pruner"
 
 
 def run_pruner(tasks, ttl_name):
-    current_time = datetime.utcnow()
+    current_time = datetime.now(timezone.utc)
 
     if tasks:
         for task in tasks:
@@ -211,7 +211,7 @@ def prune_outstanding():
     ttl_config = config.get("db.ttl")
     cancel_threshold = ttl_config.get("in_progress", -1)
     if cancel_threshold > 0:
-        timeout = datetime.utcnow() - timedelta(minutes=cancel_threshold)
+        timeout = datetime.now(timezone.utc) - timedelta(minutes=cancel_threshold)
         outstanding_requests = Request.objects.filter(
             status__in=["IN_PROGRESS", "CREATED"], created_at__lte=timeout
         )

@@ -1,6 +1,6 @@
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional, cast
 from uuid import uuid4
 
@@ -113,7 +113,7 @@ class TrustedHeaderLoginHandler(BaseLoginHandler):
                         ]
 
                     authenticated_user.metadata["last_authentication"] = (
-                        datetime.utcnow().timestamp()
+                        datetime.now(timezone.utc).timestamp()
                     )
                     authenticated_user = update_user(authenticated_user)
 

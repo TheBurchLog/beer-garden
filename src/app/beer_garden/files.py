@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from base64 import b64decode, b64encode
-from datetime import datetime
+from datetime import datetime, timezone
 from math import ceil
 from typing import Any, Callable, Dict, List, Union
 
@@ -134,7 +134,7 @@ def check_file(file_id: str, upsert: bool = False) -> File:
         else:
             raise NotFoundError(f"Tried to fetch an unsaved file {file_id}")
 
-        db.modify(res, updated_at=datetime.utcnow())
+        db.modify(res, updated_at=datetime.now(timezone.utc))
 
     return res
 

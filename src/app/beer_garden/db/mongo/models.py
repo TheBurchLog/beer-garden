@@ -460,7 +460,7 @@ class Request(MongoModel, Document):
 
     def _pre_save(self):
         """Move request attributes to GridFS if too big"""
-        self.updated_at = datetime.datetime.utcnow()
+        self.updated_at = datetime.datetime.now(datetime.timezone.utc)
         encoding = "utf-8"
 
         # NOTE: The following was added for #1216, which aims to resolve the duplication
@@ -505,7 +505,7 @@ class Request(MongoModel, Document):
         status_key = f"{self.status}_{config.get('garden.name')}"
         if status_key not in self.metadata:
             self.metadata[status_key] = int(
-                datetime.datetime.utcnow().timestamp() * 1000
+                datetime.datetime.now(datetime.timezone.utc).timestamp() * 1000
             )
 
     def _post_save(self):
@@ -597,7 +597,7 @@ class Request(MongoModel, Document):
         if (
             not self.target_garden or self.target_garden == config.get("garden.name")
         ) and ("status" in self.changed_fields or self.created):
-            self.status_updated_at = datetime.datetime.utcnow()
+            self.status_updated_at = datetime.datetime.now(datetime.timezone.utc)
 
     def clean_update(self):
         """Ensure that the update would not result in an illegal status transition"""

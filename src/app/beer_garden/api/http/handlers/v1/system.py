@@ -5,7 +5,6 @@ from brewtils.schema_parser import SchemaParser
 from brewtils.schemas import SystemSchema as BrewtilsSystemSchema
 
 from beer_garden.api.http.handlers import AuthorizationHandler
-from beer_garden.api.http.schemas.v1.system import SystemSansQueueSchema
 from beer_garden.metrics import collect_metrics
 
 
@@ -18,10 +17,9 @@ def _remove_queue_info(response: str, many: bool = False) -> str:
     risky. Instead, this takes the serialized response and just runs it through another
     Schema that strips out the queue info.
     """
-    return response
-    # TODO: Figure this out
-    # system_data = SystemSansQueueSchema(many=many).loads(response).data
-    # return SystemSansQueueSchema(many=many).dumps(system_data).data
+
+    system_data = BrewtilsSystemSchema(many=many).loads(response)
+    return BrewtilsSystemSchema(many=many, exclude=("instances.queue_type", "instances.queue_info")).dumps(system_data)
 
 
 class SystemAPI(AuthorizationHandler):
@@ -66,7 +64,7 @@ class SystemAPI(AuthorizationHandler):
         if not include_commands:
             system.commands = []
 
-        response = SystemSansQueueSchema().dump(system).data
+        response = _remove_queue_info(system)
 
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         self.write(response)

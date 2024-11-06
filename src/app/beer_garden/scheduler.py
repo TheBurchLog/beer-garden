@@ -8,7 +8,7 @@ The schedule service is responsible for:
 import json
 import logging
 import threading
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 from apscheduler.events import EVENT_JOB_MAX_INSTANCES
@@ -290,7 +290,7 @@ class MixedScheduler(object):
             job.request_template.metadata["src_path"] = src_path
         self.add_job(
             run_job,
-            trigger=DateTrigger(datetime.utcnow(), timezone="UTC"),
+            trigger=DateTrigger(datetime.now(timezone.utc), timezone="UTC"),
             trigger_type="date",
             coalesce=job.coalesce,
             kwargs={"job_id": job.id, "request_template": job.request_template},

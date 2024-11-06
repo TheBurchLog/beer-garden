@@ -38,3 +38,4 @@ root:
   level: "INFO"
   handlers:
     - "stream"
+    - "file"

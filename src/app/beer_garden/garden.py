@@ -12,7 +12,7 @@ The garden service is responsible for:
 import copy
 import json
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List
 
@@ -785,7 +785,7 @@ def garden_unresponsive_trigger():
         interval_value = garden.metadata.get("_unresponsive_timeout", -1)
 
         if interval_value > 0:
-            timeout = datetime.utcnow() - timedelta(minutes=interval_value)
+            timeout = datetime.now(timezone.utc) - timedelta(minutes=interval_value)
 
             for connection in garden.receiving_connections:
                 if connection.status in ["RECEIVING"]:

@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 import logging
 
+from beer_garden.api.http.handlers import AuthorizationHandler
+from beer_garden.garden import local_garden
+from beer_garden.metrics import collect_metrics
 from brewtils.errors import ModelValidationError
 from brewtils.models import Garden, Operation, Permissions
 from brewtils.schema_parser import SchemaParser
-
-from beer_garden.api.http.handlers import AuthorizationHandler
-from beer_garden.api.http.schemas.v1.garden import GardenRemoveStatusInfoSchema
-from beer_garden.garden import local_garden
-from beer_garden.metrics import collect_metrics
+from brewtils.schemas import GardenSchema as BrewtilsGardenSchema
 
 logger = logging.getLogger(__name__)
 
@@ -19,15 +18,26 @@ def _remove_heartbeat_history(response: str, many: bool = False) -> str:
     This balloons out the size of the returned object, and isn't currently
     required for the UI for display purposes, so we are clearing the list
     """
-    return response
-    # if response == "" or response == "null":
-    #     return response
-    # system_data = GardenRemoveStatusInfoSchema(many=many).loads(response).data
-    # return GardenRemoveStatusInfoSchema(many=many).dumps(system_data).data
+
+    if response == "" or response == "null":
+        return response
+    system_data = BrewtilsGardenSchema(many=many).loads(response).data
+    return (
+        BrewtilsGardenSchema(
+            many=many,
+            exclude=(
+                "status_info.history",
+                "systems.instances.status_info.history",
+                "receiving_connections.status_info.history",
+                "publishing_connections.status_info.history",
+            ),
+        )
+        .dumps(system_data)
+        .data
+    )
 
 
 class GardenAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="GardenAPI")
     async def get(self, garden_name):
         """
@@ -202,7 +212,6 @@ class GardenAPI(AuthorizationHandler):
 
 
 class GardenListAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="GardenListAPI")
     async def get(self):
         """
