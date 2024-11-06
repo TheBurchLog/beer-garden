@@ -350,7 +350,7 @@ def _load_swagger(url_specs, title=None):
     api_spec = APISpec(
         title=title,
         version="2.0",
-        openapi_version="3.1.0",
+        openapi_version="3.0.0",
         plugins=[MarshmallowPlugin(), TornadoPlugin()],
         info=dict(description="Beer Garden API"),
         securityDefinitions={

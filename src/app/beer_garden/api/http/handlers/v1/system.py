@@ -44,12 +44,21 @@ class SystemAPI(AuthorizationHandler):
         responses:
           200:
             description: System with the given ID
-            schema:
-              $ref: '#/definitions/System'
+            content:
+              application/json:
+                schema: 'System'
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Systems
         """
@@ -95,9 +104,17 @@ class SystemAPI(AuthorizationHandler):
           204:
             description: System has been successfully deleted
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Systems
         """
@@ -156,11 +173,23 @@ class SystemAPI(AuthorizationHandler):
             schema:
               $ref: '#/definitions/System'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Systems
         """
@@ -299,12 +328,23 @@ class SystemListAPI(AuthorizationHandler):
         responses:
           200:
             description: All Systems
-            schema:
-              type: array
-              items:
-                $ref: '#/definitions/System'
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items:
+                    type: 'System'
+          200:
+            description: An existing System has been updated
+            content:
+              application/json:
+                schema: 'System'
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Systems
         """
@@ -376,25 +416,34 @@ class SystemListAPI(AuthorizationHandler):
         description: |
             If the System does not exist it will be created. If the System
             already exists it will be updated (assuming it passes validation).
-        parameters:
-          - name: system
-            in: body
-            description: The System definition to create / update
-            schema:
-              $ref: '#/definitions/System'
+        requestBody:
+          description: The System definition to create / update
+          content:
+              application/json:
+                schema: 'System'
         responses:
           200:
             description: An existing System has been updated
-            schema:
-              $ref: '#/definitions/System'
+            content:
+              application/json:
+                schema: 'System'
           201:
             description: A new System has been created
-            schema:
-              $ref: '#/definitions/System'
+            content:
+              application/json:
+                schema: 'System'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Systems
         """
