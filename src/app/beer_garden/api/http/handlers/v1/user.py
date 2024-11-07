@@ -28,12 +28,21 @@ class UserAPI(AuthorizationHandler):
         responses:
           200:
             description: User with the given username
-            schema:
-              $ref: '#/definitions/User'
+            content:
+              application/json:
+                schema: 'User'
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Users
         """
@@ -62,9 +71,17 @@ class UserAPI(AuthorizationHandler):
           204:
             description: User has been successfully deleted
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Users
         """
@@ -85,30 +102,43 @@ class UserAPI(AuthorizationHandler):
         """
         ---
         summary: Partially update a User
+        requestBody:
+          name: patch
+          description: |
+              A subset of User attributes to update, most commonly the password.
+          content:
+              application/json:
+                schema: 'Patch'
         parameters:
           - name: username
             in: path
             required: true
             description: The username of the User
             type: string
-          - name: patch
-            in: body
-            required: true
-            description: |
-              A subset of User attributes to update, most commonly the password.
-            schema:
-              $ref: '#/definitions/UserPatch'
         responses:
           200:
             description: User with the given username
-            schema:
-              $ref: '#/definitions/User'
+            content:
+              application/json:
+                schema: 'User'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Users
         """
@@ -177,10 +207,15 @@ class UserListAPI(AuthorizationHandler):
         responses:
           200:
             description: All Users
-            schema:
-              $ref: '#/definitions/UserList'
+            content:
+              application/json:
+                schema: 'UserList'
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Users
         """
@@ -198,23 +233,32 @@ class UserListAPI(AuthorizationHandler):
         """
         ---
         summary: Create a new User
-        parameters:
-          - name: user
-            in: body
-            description: The user
-            schema:
-              $ref: '#/definitions/UserCreate'
+        requestBody:
+          name: patch
+          description: The user
+          content:
+              application/json:
+                schema: 'UserCreate'
         consumes:
           - application/json
         responses:
           201:
             description: A new User has been created
-            schema:
-              $ref: '#/definitions/User'
+            content:
+              application/json:
+                schema: 'User'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Users
         """
@@ -247,23 +291,33 @@ class UserListAPI(AuthorizationHandler):
             { "operation": "" }
           ]
           ```
-        parameters:
-          - name: patch
-            in: body
-            required: true
-            description: |
-              Instructions for how to update the User
-            schema:
-              $ref: '#/definitions/Patch'
+        requestBody:
+          name: patch
+          description: Instructions for how to update the User
+          content:
+              application/json:
+                schema: 'Patch'
         responses:
           204:
             description: Patch operation has been successfully forwarded
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Users
         """
@@ -290,21 +344,29 @@ class UserPasswordChangeAPI(AuthorizationHandler):
         """
         ---
         summary: Allows a user to change their own password
-        parameters:
-          - name: password_change
-            in: body
-            description: The current password for verification and the new password
-            schema:
-              $ref: '#/definitions/UserPasswordChange'
+        requestBody:
+          name: password_change
+          description: The current password for verification and the new password
+          content:
+              application/json:
+                schema: 'UserPasswordChange'
         consumes:
           - application/json
         responses:
           204:
             description: The password has been changed
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Password
         """
@@ -344,12 +406,21 @@ class WhoAmIAPI(AuthorizationHandler):
         responses:
           200:
             description: Requesting User
-            schema:
-              $ref: '#/definitions/User'
+            content:
+              application/json:
+                schema: 'User'
           401:
-            $ref: '#/definitions/401Error'
+            description: Authorization required
+            content:
+              application/json:
+                schema: 'string'
+                example: Authorization required
           403:
-            $ref: '#/definitions/403Error'
+            description: Access denied
+            content:
+              application/json:
+                schema: 'string'
+                example: Access denied
         tags:
           - Users
         """

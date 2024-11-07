@@ -26,12 +26,21 @@ class RawFileAPI(AuthorizationHandler):
         responses:
           200:
             description: The requested File or FileChunk data
-            schema:
-              $ref: '#/definitions/FileStatus'
+            content:
+              application/json:
+                schema: 'FileStatus'
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Files
         """
@@ -57,12 +66,21 @@ class RawFileAPI(AuthorizationHandler):
         responses:
           204:
             description: The file and all of its contents have been removed.
-            schema:
-              $ref: '#/definitions/FileStatus'
+            content:
+              application/json:
+                schema: 'FileStatus'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Files
         """
@@ -83,20 +101,32 @@ class RawFileListAPI(AuthorizationHandler):
         """
         ---
         summary: Create a new File
-        parameters:
-          - name: body
-            in: body
-            required: true
-            description: The data
+        requestBody:
+          name: body
+          description: The data
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
         responses:
           201:
             description: A new File is created
-            schema:
-              $ref: '#/definitions/FileStatus'
+            content:
+              application/json:
+                schema: 'FileStatus'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Files
         """

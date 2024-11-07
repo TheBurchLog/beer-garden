@@ -38,18 +38,21 @@ class AdminAPI(AuthorizationHandler):
             }
           ]
           ```
-        parameters:
-          - name: patch
-            in: body
-            required: true
-            description: Instructions for operations
-            schema:
-              $ref: '#/definitions/Patch'
+        requestBody:
+          name: patch
+          description: Instructions for operations
+          content:
+              application/json:
+                schema: 'Patch'
         responses:
           204:
             description: Operation successfully initiated
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Admin
         """

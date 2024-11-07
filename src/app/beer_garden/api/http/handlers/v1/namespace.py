@@ -17,7 +17,11 @@ class NamespaceListAPI(AuthorizationHandler):
           200:
             description: List of Namespaces
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Namespace
         """

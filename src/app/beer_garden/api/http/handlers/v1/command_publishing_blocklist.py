@@ -17,12 +17,21 @@ class CommandPublishingBlocklistPathAPI(AuthorizationHandler):
         responses:
           204:
             description: Command has been successfully removed from block list
-            schema:
-              $ref: '#/definitions/CommandPublishingBlocklist'
+            content:
+              application/json:
+                schema: 'CommandPublishingBlocklist'
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Deprecated
         """
@@ -40,12 +49,21 @@ class CommandPublishingBlocklistAPI(AuthorizationHandler):
         responses:
           200:
             description: list of commands in publishing block list
-            schema:
-              $ref: '#/definitions/CommandPublishingBlocklistListSchema'
+            content:
+              application/json:
+                schema: 'CommandPublishingBlocklistListSchema'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Deprecated
         """
@@ -58,23 +76,32 @@ class CommandPublishingBlocklistAPI(AuthorizationHandler):
         ---
         summary: Add a list of commands to event publishing block list
         deprecated: true
-        parameters:
-          - name: CommandPublishingBlocklist
-            in: body
-            description: The system, namespace and command name
-            schema:
-              $ref: '#/definitions/CommandPublishingBlocklistListInputSchema'
+        requestBody:
+          name: CommandPublishingBlocklist
+          description: The system, namespace and command name
+          content:
+              application/json:
+                schema: 'CommandPublishingBlocklistListInputSchema'
         consumes:
           - application/json
         responses:
           201:
             description: list of commands that have been added to publishing block list
-            schema:
-              $ref: '#/definitions/CommandPublishingBlocklistListSchema'
+            content:
+              application/json:
+                schema: 'CommandPublishingBlocklistListSchema'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Deprecated
         """

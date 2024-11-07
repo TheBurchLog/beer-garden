@@ -155,23 +155,24 @@ class SystemAPI(AuthorizationHandler):
           ]
           ```
           Where `value` is a list of new Commands.
+        requestBody:
+          name: patch
+          description: Instructions for how to update the System
+          content:
+              application/json:
+                schema: 'Patch'
         parameters:
           - name: system_id
             in: path
             required: true
             description: The ID of the System
             type: string
-          - name: patch
-            in: body
-            required: true
-            description: Instructions for how to update the System
-            schema:
-              $ref: '#/definitions/Patch'
         responses:
           200:
             description: System with the given ID
-            schema:
-              $ref: '#/definitions/System'
+            content:
+              application/json:
+                schema: 'System'
           400:
             description: Parameter validation error
             content:
@@ -334,11 +335,6 @@ class SystemListAPI(AuthorizationHandler):
                   type: array
                   items:
                     type: 'System'
-          200:
-            description: An existing System has been updated
-            content:
-              application/json:
-                schema: 'System'
           50x:
             description: Server exception
             content:

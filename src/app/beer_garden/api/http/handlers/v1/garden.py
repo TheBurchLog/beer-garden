@@ -21,7 +21,7 @@ def _remove_heartbeat_history(response: str, many: bool = False) -> str:
 
     if response == "" or response == "null":
         return response
-    system_data = BrewtilsGardenSchema(many=many).loads(response).data
+    system_data = BrewtilsGardenSchema(many=many).loads(response)
     return (
         BrewtilsGardenSchema(
             many=many,
@@ -33,7 +33,6 @@ def _remove_heartbeat_history(response: str, many: bool = False) -> str:
             ),
         )
         .dumps(system_data)
-        .data
     )
 
 
@@ -52,12 +51,21 @@ class GardenAPI(AuthorizationHandler):
         responses:
           200:
             description: Garden with the given garden_name
-            schema:
-              $ref: '#/definitions/Garden'
+            content:
+              application/json:
+                schema: 'Garden'
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Garden
         """
@@ -83,9 +91,17 @@ class GardenAPI(AuthorizationHandler):
           204:
             description: Garden has been successfully deleted
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Garden
         """
@@ -118,29 +134,43 @@ class GardenAPI(AuthorizationHandler):
             { "operation": "" }
           ]
           ```
+
+        requestBody:
+          name: patch
+          description: Instructions for how to update the Garden
+          content:
+              application/json:
+                schema: 'Patch'
         parameters:
           - name: garden_name
             in: path
             required: true
             description: Garden to use
             type: string
-          - name: patch
-            in: body
-            required: true
-            description: Instructions for how to update the Garden
-            schema:
-              $ref: '#/definitions/Patch'
         responses:
           200:
             description: Garden with the given garden_name
-            schema:
-              $ref: '#/definitions/Garden'
+            content:
+              application/json:
+                schema: 'Garden'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Garden
         """
@@ -220,14 +250,24 @@ class GardenListAPI(AuthorizationHandler):
         responses:
           200:
             description: A list of all gardens
-            schema:
-              type: array
-              items:
-                $ref: '#/definitions/Garden'
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items:
+                    type: 'Garden'
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Garden
         """
@@ -242,21 +282,30 @@ class GardenListAPI(AuthorizationHandler):
         """
         ---
         summary: Create a new Garden
-        parameters:
-          - name: garden
-            in: body
-            description: The Garden definition to create
-            schema:
-              $ref: '#/definitions/Garden'
+        requestBody:
+          name: garden
+          description: The Garden definition to create
+          content:
+              application/json:
+                schema: 'Garden'
         responses:
           201:
             description: A new Garden has been created
-            schema:
-              $ref: '#/definitions/Garden'
+            content:
+              application/json:
+                schema: 'Garden'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Garden
         """
@@ -293,22 +342,34 @@ class GardenListAPI(AuthorizationHandler):
             { "operation": "" }
           ]
           ```
-        parameters:
-          - name: patch
-            in: body
-            required: true
-            description: Instructions for how to update the Garden
-            schema:
-              $ref: '#/definitions/Patch'
+
+        requestBody:
+          name: patch
+          description: Instructions for how to update the Garden
+          content:
+              application/json:
+                schema: 'Patch'
         responses:
           204:
             description: Patch operation has been successfully forwarded
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Garden
         """

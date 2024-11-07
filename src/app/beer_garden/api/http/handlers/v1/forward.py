@@ -19,6 +19,12 @@ class ForwardAPI(AuthorizationHandler):
         description: |
             When a Beer Garden needs to forward a request, this API will support routing
             to all CRUD actions exposed by the entry points.
+
+        requestBody:
+          description: The Forward Object
+          content:
+              application/json:
+                schema: 'Forward'
         parameters:
           - name: blocking
             in: query
@@ -32,19 +38,21 @@ class ForwardAPI(AuthorizationHandler):
             description: Max seconds to wait for request completion. (-1 = wait forever)
             type: float
             default: -1
-          - name: forward
-            in: body
-            required: true
-            description: The Forward Object
-            schema:
-                $ref: '#/definitions/Forward'
         responses:
           204:
             description: Forward Request Accepted
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Forward
         """

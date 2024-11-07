@@ -408,10 +408,10 @@ def _load_swagger(url_specs, title=None):
     # TODO: Figure out how to do this for components.schema
     # trigger_properties = {
     #     "allOf": [
-    #         {"$ref": "#/definitions/CronTrigger"},
-    #         {"$ref": "#/definitions/DateTrigger"},
-    #         {"$ref": "#/definitions/FileTrigger"},
-    #         {"$ref": "#/definitions/IntervalTrigger"},
+    #         {"$ref": "#/components/schemas/CronTrigger"},
+    #         {"$ref": "#/components/schemas/DateTrigger"},
+    #         {"$ref": "#/components/schemas/FileTrigger"},
+    #         {"$ref": "#/components/schemas/IntervalTrigger"},
     #     ]
     # }
     # api_spec._definitions["Job"]["properties"]["trigger"] = trigger_properties  # noqa

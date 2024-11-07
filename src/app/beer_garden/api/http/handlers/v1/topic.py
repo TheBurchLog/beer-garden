@@ -25,12 +25,21 @@ class TopicAPI(BaseHandler):
         responses:
           200:
             description: List of topic states
-            schema:
-              $ref: '#/definitions/Topic'
+            content:
+              application/json:
+                schema: 'Topic'
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Topics
         """
@@ -56,12 +65,21 @@ class TopicAPI(BaseHandler):
         responses:
           200:
             description: List of topic states
-            schema:
-              $ref: '#/definitions/Topic'
+            content:
+              application/json:
+                schema: 'Topic'
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Topics
         """
@@ -90,29 +108,42 @@ class TopicAPI(BaseHandler):
             { "operation": "remove", "value": {subscriber} }
           ]
           ```
+        requestBody:
+          name: patch
+          description: Instructions for how to update the Topic
+          content:
+              application/json:
+                schema: 'Patch'
         parameters:
           - name: topic_id
             in: path
             required: true
             description: The id of the Topic
             type: string
-          - name: patch
-            in: body
-            required: true
-            description: Instructions for how to update the Topic
-            schema:
-              $ref: '#/definitions/Patch'
         responses:
           200:
             description: Topic with the given name
-            schema:
-              $ref: '#/definitions/Topic'
+            content:
+              application/json:
+                schema: 'Topic'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Topics
         """
@@ -161,12 +192,21 @@ class TopicNameAPI(BaseHandler):
         responses:
           200:
             description: List of topic states
-            schema:
-              $ref: '#/definitions/Topic'
+            content:
+              application/json:
+                schema: 'Topic'
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Topics
         """
@@ -191,12 +231,21 @@ class TopicNameAPI(BaseHandler):
         responses:
           200:
             description: List of topic states
-            schema:
-              $ref: '#/definitions/Topic'
+            content:
+              application/json:
+                schema: 'Topic'
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Topics
         """
@@ -224,29 +273,42 @@ class TopicNameAPI(BaseHandler):
             { "operation": "remove", "value": {subscriber} }
           ]
           ```
+        requestBody:
+          name: patch
+          description: Instructions for how to update the Topic
+          content:
+              application/json:
+                schema: 'Patch'
         parameters:
           - name: topic_name
             in: path
             required: true
             description: The name of the Topic
             type: string
-          - name: patch
-            in: body
-            required: true
-            description: Instructions for how to update the Topic
-            schema:
-              $ref: '#/definitions/Patch'
         responses:
           200:
             description: Topic with the given name
-            schema:
-              $ref: '#/definitions/Topic'
+            content:
+              application/json:
+                schema: 'Topic'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Topics
         """
@@ -290,12 +352,21 @@ class TopicListAPI(BaseHandler):
         responses:
           200:
             description: List of topics
-            schema:
-              $ref: '#/definitions/Topic'
+            content:
+              application/json:
+                schema: 'Topic'
           404:
-            $ref: '#/definitions/404Error'
+            description: Resource does not exist
+            content:
+              application/json:
+                schema: 'string'
+                example: Resource does not exist
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Topics
         """
@@ -310,21 +381,30 @@ class TopicListAPI(BaseHandler):
         """
         ---
         summary: Create a new topic
-        parameters:
-          - name: topic
-            in: body
-            description: The Topic definition to create
-            schema:
-              $ref: '#/definitions/Topic'
+        requestBody:
+          name: topic
+          description: The Topic definition to create
+          content:
+              application/json:
+                schema: 'Topic'
         responses:
           201:
             description: A new Topic has been created
-            schema:
-              $ref: '#/definitions/Topic'
+            content:
+              application/json:
+                schema: 'Topic'
           400:
-            $ref: '#/definitions/400Error'
+            description: Parameter validation error
+            content:
+              application/json:
+                schema: 'string'
+                example: Parameter validation error
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Topics
         """

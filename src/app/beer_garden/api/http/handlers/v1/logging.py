@@ -29,7 +29,11 @@ class LoggingAPI(AuthorizationHandler):
           200:
             description: Logging Configuration for system
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Logging
         """
@@ -67,10 +71,15 @@ class LoggingConfigAPI(AuthorizationHandler):
         responses:
           200:
             description: Logging Configuration for system
-            schema:
-                $ref: '#/definitions/LoggingConfig'
+            content:
+              application/json:
+                schema: 'LoggingConfig'
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Deprecated
         """
@@ -96,20 +105,24 @@ class LoggingConfigAPI(AuthorizationHandler):
           ```JSON
           { "operation": "reload" }
           ```
-        parameters:
-          - name: patch
-            in: body
-            required: true
-            description: Operation to perform
-            schema:
-              $ref: '#/definitions/Patch'
+        requestBody:
+          name: patch
+          description: Instructions for how to update the Logging
+          content:
+              application/json:
+                schema: 'Patch'
         responses:
           200:
             description: Updated plugin logging configuration
-            schema:
-              $ref: '#/definitions/LoggingConfig'
+            content:
+              application/json:
+                schema: 'LoggingConfig'
           50x:
-            $ref: '#/definitions/50xError'
+            description: Server exception
+            content:
+              application/json:
+                schema: 'string'
+                example: Server exception
         tags:
           - Deprecated
         """
