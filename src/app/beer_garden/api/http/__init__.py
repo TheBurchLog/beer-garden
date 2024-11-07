@@ -414,11 +414,11 @@ def _load_swagger(url_specs, title=None):
     #         {"$ref": "#/components/schemas/IntervalTrigger"},
     #     ]
     # }
-    # api_spec._definitions["Job"]["properties"]["trigger"] = trigger_properties  # noqa
+    # api_spec.components.schemas["Job"]["properties"]["trigger"] = trigger_properties  # noqa
 
     api_spec.components.schema("JobExport", schema=JobExportInputSchema)
     api_spec.components.schema("JobImport", schema=JobExportSchema)
-    # api_spec._definitions["JobImport"]["properties"][  # noqa
+    # api_spec.components.schemas["JobImport"]["properties"][  # noqa
     #     "trigger"
     # ] = trigger_properties
 

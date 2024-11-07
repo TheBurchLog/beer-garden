@@ -19,8 +19,9 @@ class NamespaceListAPI(AuthorizationHandler):
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Namespace

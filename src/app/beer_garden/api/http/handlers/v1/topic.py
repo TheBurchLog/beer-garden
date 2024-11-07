@@ -31,14 +31,16 @@ class TopicAPI(BaseHandler):
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Topics
@@ -71,14 +73,16 @@ class TopicAPI(BaseHandler):
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Topics
@@ -129,20 +133,23 @@ class TopicAPI(BaseHandler):
           400:
             description: Parameter validation error
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Topics
@@ -198,14 +205,16 @@ class TopicNameAPI(BaseHandler):
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Topics
@@ -237,14 +246,16 @@ class TopicNameAPI(BaseHandler):
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Topics
@@ -294,20 +305,23 @@ class TopicNameAPI(BaseHandler):
           400:
             description: Parameter validation error
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Topics
@@ -358,14 +372,16 @@ class TopicListAPI(BaseHandler):
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Topics
@@ -396,14 +412,16 @@ class TopicListAPI(BaseHandler):
           400:
             description: Parameter validation error
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Topics

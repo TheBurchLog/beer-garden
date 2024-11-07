@@ -33,14 +33,16 @@ class CommandAPI(AuthorizationHandler):
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Commands
@@ -78,14 +80,16 @@ class CommandAPIOld(AuthorizationHandler):
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Deprecated
@@ -118,8 +122,9 @@ class CommandListAPI(AuthorizationHandler):
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Deprecated

@@ -44,14 +44,16 @@ class ForwardAPI(AuthorizationHandler):
           400:
             description: Parameter validation error
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Forward

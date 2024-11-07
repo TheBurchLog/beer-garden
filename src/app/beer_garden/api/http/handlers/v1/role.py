@@ -30,14 +30,16 @@ class RoleAPI(AuthorizationHandler):
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Roles
@@ -75,14 +77,16 @@ class RoleAPI(AuthorizationHandler):
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Roles
@@ -127,20 +131,23 @@ class RoleAPI(AuthorizationHandler):
           400:
             description: Parameter validation error
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Users
@@ -185,8 +192,9 @@ class RoleListAPI(AuthorizationHandler):
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Roles
@@ -223,14 +231,16 @@ class RoleListAPI(AuthorizationHandler):
           400:
             description: Parameter validation error
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Users
@@ -276,20 +286,23 @@ class RoleListAPI(AuthorizationHandler):
           400:
             description: Parameter validation error
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Users

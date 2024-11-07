@@ -34,14 +34,16 @@ class UserAPI(AuthorizationHandler):
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Users
@@ -73,14 +75,16 @@ class UserAPI(AuthorizationHandler):
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Users
@@ -124,20 +128,23 @@ class UserAPI(AuthorizationHandler):
           400:
             description: Parameter validation error
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Users
@@ -213,8 +220,9 @@ class UserListAPI(AuthorizationHandler):
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Users
@@ -250,14 +258,16 @@ class UserListAPI(AuthorizationHandler):
           400:
             description: Parameter validation error
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Users
@@ -303,20 +313,23 @@ class UserListAPI(AuthorizationHandler):
           400:
             description: Parameter validation error
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Users
@@ -358,14 +371,16 @@ class UserPasswordChangeAPI(AuthorizationHandler):
           400:
             description: Parameter validation error
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Server exception
         tags:
           - Password
@@ -412,14 +427,16 @@ class WhoAmIAPI(AuthorizationHandler):
           401:
             description: Authorization required
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Authorization required
           403:
             description: Access denied
             content:
-              application/json:
-                schema: 'string'
+              text/plain:
+                schema: 
+                  type: 'string'
                 example: Access denied
         tags:
           - Users
