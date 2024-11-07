@@ -21,20 +21,46 @@ def _remove_heartbeat_history(response: str, many: bool = False) -> str:
 
     if response == "" or response == "null":
         return response
-    system_data = BrewtilsGardenSchema(many=many).loads(response)
+    garden_data = BrewtilsGardenSchema(many=many).loads(response)
+
+    if many:
+        for garden in garden_data:
+            _remove_garden_history(garden)
+    
     return (
         BrewtilsGardenSchema(
             many=many,
-            exclude=(
-                "status_info.history",
-                "systems.instances.status_info.history",
-                "receiving_connections.status_info.history",
-                "publishing_connections.status_info.history",
-            ),
         )
-        .dumps(system_data)
+        .dumps(_remove_garden_history(garden_data))
     )
 
+def _remove_status_info_history(value):
+    if "status_info" in value and "history" in value["status_info"]:
+        del value["status_info"]["history"]
+    return value
+
+def _remove_garden_history(garden: Garden):
+    garden = _remove_status_info_history(garden)
+    
+    if "systems" in garden:
+      for system in garden["systems"]:
+          if "instances" in system:
+            for instance in system["instances"]:
+                instance = _remove_status_info_history(instance)
+
+    if "receiving_connections" in garden:
+      for receiving_connection in garden["receiving_connections"]:
+          receiving_connection = _remove_status_info_history(receiving_connection)
+
+    if "publishing_connection" in garden:
+      for publishing_connection in garden["publishing_connections"]:
+          publishing_connection = _remove_status_info_history(publishing_connection)
+
+    if "children" in garden:
+        for child in garden["children"]:
+            child = _remove_garden_history(child)
+        
+    return garden
 
 class GardenAPI(AuthorizationHandler):
     @collect_metrics(transaction_type="API", group="GardenAPI")
