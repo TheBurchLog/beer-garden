@@ -122,7 +122,7 @@ class RunnerAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         parameters:
           - name: runner_id
             in: path
@@ -250,7 +250,7 @@ class RunnerListAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         responses:
           200:
             description: Reloaded Runners

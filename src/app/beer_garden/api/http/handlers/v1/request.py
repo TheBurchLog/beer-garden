@@ -88,7 +88,7 @@ class RequestAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         parameters:
           - name: request_id
             in: path

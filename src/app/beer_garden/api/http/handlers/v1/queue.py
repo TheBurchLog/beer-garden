@@ -64,8 +64,7 @@ class QueueListAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    schema:
-                      $ref: '#/components/schemas/Queue'
+                    $ref: '#/components/schemas/Queue'
           50x:
             description: Server exception
             content:

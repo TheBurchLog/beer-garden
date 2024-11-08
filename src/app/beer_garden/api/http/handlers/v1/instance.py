@@ -123,7 +123,7 @@ class InstanceAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         parameters:
           - name: instance_id
             in: path
@@ -360,8 +360,7 @@ class InstanceQueuesAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    schema:
-                      $ref: '#/components/schemas/Queue'
+                    $ref: '#/components/schemas/Queue'
           50x:
             description: Server exception
             content:

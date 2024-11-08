@@ -28,6 +28,10 @@ class LoggingAPI(AuthorizationHandler):
         responses:
           200:
             description: Logging Configuration for system
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/LoggingConfig'
           50x:
             description: Server exception
             content:
@@ -114,7 +118,7 @@ class LoggingConfigAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         responses:
           200:
             description: Updated plugin logging configuration

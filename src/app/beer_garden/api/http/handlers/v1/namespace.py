@@ -16,6 +16,13 @@ class NamespaceListAPI(AuthorizationHandler):
         responses:
           200:
             description: List of Namespaces
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items:
+                    schema:
+                      type: 'string'
           50x:
             description: Server exception
             content:

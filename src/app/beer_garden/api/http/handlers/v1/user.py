@@ -114,7 +114,7 @@ class UserAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         parameters:
           - name: username
             in: path
@@ -219,8 +219,10 @@ class UserListAPI(AuthorizationHandler):
             description: All Users
             content:
               application/json:
-                schema:
-                  $ref: '#/components/schemas/UserList'
+                schema: 
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/User'
           50x:
             description: Server exception
             content:
@@ -251,7 +253,7 @@ class UserListAPI(AuthorizationHandler):
           content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/UserCreate'
+                  $ref: '#/components/schemas/User'
         consumes:
           - application/json
         responses:
@@ -313,7 +315,7 @@ class UserListAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         responses:
           204:
             description: Patch operation has been successfully forwarded

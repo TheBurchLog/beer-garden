@@ -44,7 +44,7 @@ class AdminAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         responses:
           204:
             description: Operation successfully initiated

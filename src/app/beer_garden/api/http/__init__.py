@@ -59,6 +59,8 @@ from beer_garden.api.http.schemas.v1.command_publishing_blocklist import (
     CommandPublishingBlocklistSchema,
 )
 from beer_garden.api.http.schemas.v1.user import UserPasswordChangeSchema
+from beer_garden.api.http.schemas.v1.operation import PatchOperationSchema
+from beer_garden.api.http.schemas.v1.token import TokenInputSchema, TokenRefreshInputSchema, TokenResponseSchema
 from beer_garden.events import publish
 from beer_garden.metrics import initialize_elastic_client
 
@@ -392,19 +394,16 @@ def _load_swagger(url_specs, title=None):
     api_spec.components.schema("Garden", schema=GardenSchema)
     api_spec.components.schema("Runner", schema=RunnerSchema)
 
-    api_spec.components.schema("_patch", schema=PatchSchema)
-    api_spec.components.schema(
-        "Patch",
-        properties={
-            "operations": {"type": "array", "items": {"$ref": "#/components/schemas/_patch"}}
-        },
-    )
+    api_spec.components.schema("PatchOperation", schema=PatchOperationSchema)
 
     api_spec.components.schema("DateTrigger", schema=DateTriggerSchema)
     api_spec.components.schema("CronTrigger", schema=CronTriggerSchema)
     api_spec.components.schema("FileTrigger", schema=FileTriggerSchema)
     api_spec.components.schema("IntervalTrigger", schema=IntervalTriggerSchema)
     api_spec.components.schema("Job", schema=JobSchema)
+    api_spec.components.schema("TokenInput", schema=TokenInputSchema)
+    api_spec.components.schema("TokenRefreshInput", schema=TokenRefreshInputSchema)
+    api_spec.components.schema("TokenResponse", schema=TokenResponseSchema)
 
     # TODO: Figure out how to do this for components.schema
     trigger_properties = {

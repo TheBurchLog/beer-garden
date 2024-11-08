@@ -120,7 +120,7 @@ class TopicAPI(BaseHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         parameters:
           - name: topic_id
             in: path
@@ -296,7 +296,7 @@ class TopicNameAPI(BaseHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         parameters:
           - name: topic_name
             in: path

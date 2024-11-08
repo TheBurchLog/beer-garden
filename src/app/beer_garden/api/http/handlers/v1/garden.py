@@ -172,7 +172,7 @@ class GardenAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         parameters:
           - name: garden_name
             in: path
@@ -291,8 +291,7 @@ class GardenListAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    schema:
-                      $ref: '#/components/schemas/Garden'
+                    $ref: '#/components/schemas/Garden'
           404:
             description: Resource does not exist
             content:
@@ -392,7 +391,7 @@ class GardenListAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         responses:
           204:
             description: Patch operation has been successfully forwarded

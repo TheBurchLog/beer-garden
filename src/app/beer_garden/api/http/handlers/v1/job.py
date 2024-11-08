@@ -84,7 +84,7 @@ class JobAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         parameters:
           - name: job_id
             in: path
@@ -214,8 +214,7 @@ class JobListAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    schema:
-                      $ref: '#/components/schemas/Job'
+                    $ref: '#/components/schemas/Job'
           50x:
             description: Server exception
             content:
@@ -322,8 +321,7 @@ class JobImportAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    schema:
-                      $ref: '#/components/schemas/Job'
+                    $ref: '#/components/schemas/Job'
         responses:
           201:
             description: All new jobs have been created
@@ -385,8 +383,7 @@ class JobExportAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    schema:
-                      $ref: '#/components/schemas/JobExportInput'
+                    $ref: '#/components/schemas/JobExportInput'
         responses:
           201:
             description: A list of jobs has been exported.
@@ -395,8 +392,7 @@ class JobExportAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    schema:
-                      $ref: '#/components/schemas/Job'
+                    $ref: '#/components/schemas/Job'
           400:
             description: Parameter validation error
             content:

@@ -166,7 +166,7 @@ class SystemAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         parameters:
           - name: system_id
             in: path
@@ -344,8 +344,7 @@ class SystemListAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    schema:
-                      $ref: '#/components/schemas/System'
+                    $ref: '#/components/schemas/System'
           50x:
             description: Server exception
             content:

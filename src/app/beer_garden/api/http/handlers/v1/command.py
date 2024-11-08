@@ -120,8 +120,7 @@ class CommandListAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    schema:
-                      $ref: '#/components/schemas/Command'
+                    $ref: '#/components/schemas/Command'
           50x:
             description: Server exception
             content:

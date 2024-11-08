@@ -117,7 +117,7 @@ class RoleAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         parameters:
           - name: role_id
             in: path
@@ -191,8 +191,10 @@ class RoleListAPI(AuthorizationHandler):
             description: All Roles
             content:
               application/json:
-                schema:
-                  $ref: '#/components/schemas/RoleList'
+                schema: 
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Role'
           50x:
             description: Server exception
             content:
@@ -286,7 +288,7 @@ class RoleListAPI(AuthorizationHandler):
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patch'
+                $ref: '#/components/schemas/PatchOperation'
         responses:
           204:
             description: Patch operation has been successfully forwarded
