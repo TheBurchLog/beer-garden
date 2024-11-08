@@ -79,7 +79,8 @@ class GardenAPI(AuthorizationHandler):
             description: Garden with the given garden_name
             content:
               application/json:
-                schema: 'Garden'
+                schema:
+                  $ref: '#/components/schemas/Garden'
           404:
             description: Resource does not exist
             content:
@@ -169,8 +170,9 @@ class GardenAPI(AuthorizationHandler):
           name: patch
           description: Instructions for how to update the Garden
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         parameters:
           - name: garden_name
             in: path
@@ -182,7 +184,8 @@ class GardenAPI(AuthorizationHandler):
             description: Garden with the given garden_name
             content:
               application/json:
-                schema: 'Garden'
+                schema:
+                  $ref: '#/components/schemas/Garden'
           400:
             description: Parameter validation error
             content:
@@ -288,7 +291,8 @@ class GardenListAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    type: 'Garden'
+                    schema:
+                      $ref: '#/components/schemas/Garden'
           404:
             description: Resource does not exist
             content:
@@ -322,13 +326,15 @@ class GardenListAPI(AuthorizationHandler):
           description: The Garden definition to create
           content:
               application/json:
-                schema: 'Garden'
+                schema:
+                  $ref: '#/components/schemas/Garden'
         responses:
           201:
             description: A new Garden has been created
             content:
               application/json:
-                schema: 'Garden'
+                schema:
+                  $ref: '#/components/schemas/Garden'
           400:
             description: Parameter validation error
             content:
@@ -384,8 +390,9 @@ class GardenListAPI(AuthorizationHandler):
           name: patch
           description: Instructions for how to update the Garden
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         responses:
           204:
             description: Patch operation has been successfully forwarded

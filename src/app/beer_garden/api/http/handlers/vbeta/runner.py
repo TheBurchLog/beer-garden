@@ -26,7 +26,8 @@ class RunnerAPI(AuthorizationHandler):
             description: List of runner states
             content:
               application/json:
-                schema: 'Runner'
+                schema:
+                  $ref: '#/components/schemas/Runner'
           404:
             description: Resource does not exist
             content:
@@ -68,7 +69,8 @@ class RunnerAPI(AuthorizationHandler):
             description: List of runner states
             content:
               application/json:
-                schema: 'Runner'
+                schema:
+                  $ref: '#/components/schemas/Runner'
           404:
             description: Resource does not exist
             content:
@@ -118,8 +120,9 @@ class RunnerAPI(AuthorizationHandler):
           name: patch
           description: Instructions for how to update the Runner
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         parameters:
           - name: runner_id
             in: path
@@ -131,7 +134,8 @@ class RunnerAPI(AuthorizationHandler):
             description: Runner with the given ID
             content:
               application/json:
-                schema: 'Runner'
+                schema:
+                  $ref: '#/components/schemas/Runner'
           400:
             description: Parameter validation error
             content:
@@ -197,7 +201,8 @@ class RunnerListAPI(AuthorizationHandler):
             description: List of runner states
             content:
               application/json:
-                schema: 'Runner'
+                schema:
+                  $ref: '#/components/schemas/Runner'
           404:
             description: Resource does not exist
             content:
@@ -243,14 +248,16 @@ class RunnerListAPI(AuthorizationHandler):
           name: patch
           description: Instructions for how to update the Runner
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         responses:
           200:
             description: Reloaded Runners
             content:
               application/json:
-                schema: 'Runner'
+                schema:
+                  $ref: '#/components/schemas/Runner'
           400:
             description: Parameter validation error
             content:

@@ -26,7 +26,8 @@ class RoleAPI(AuthorizationHandler):
             description: Role with the given role name
             content:
               application/json:
-                schema: 'Role'
+                schema:
+                  $ref: '#/components/schemas/Role'
           404:
             description: Resource does not exist
             content:
@@ -114,8 +115,9 @@ class RoleAPI(AuthorizationHandler):
           name: patch
           description: A subset of Role attributes to update
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         parameters:
           - name: role_id
             in: path
@@ -127,7 +129,8 @@ class RoleAPI(AuthorizationHandler):
             description: Role with the given role name
             content:
               application/json:
-                schema: 'Role'
+                schema:
+                  $ref: '#/components/schemas/Role'
           400:
             description: Parameter validation error
             content:
@@ -188,7 +191,8 @@ class RoleListAPI(AuthorizationHandler):
             description: All Roles
             content:
               application/json:
-                schema: 'RoleList'
+                schema:
+                  $ref: '#/components/schemas/RoleList'
           50x:
             description: Server exception
             content:
@@ -219,7 +223,8 @@ class RoleListAPI(AuthorizationHandler):
           description: The Role definition to create
           content:
               application/json:
-                schema: 'Role'
+                schema:
+                  $ref: '#/components/schemas/Role'
         consumes:
           - application/json
         responses:
@@ -227,7 +232,8 @@ class RoleListAPI(AuthorizationHandler):
             description: A new Role has been created
             content:
               application/json:
-                schema: 'Role'
+                schema:
+                  $ref: '#/components/schemas/Role'
           400:
             description: Parameter validation error
             content:
@@ -278,8 +284,9 @@ class RoleListAPI(AuthorizationHandler):
           name: patch
           description: Instructions for how to update the Role
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         responses:
           204:
             description: Patch operation has been successfully forwarded

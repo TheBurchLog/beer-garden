@@ -28,7 +28,8 @@ class RawFileAPI(AuthorizationHandler):
             description: The requested File or FileChunk data
             content:
               application/json:
-                schema: 'FileStatus'
+                schema:
+                  $ref: '#/components/schemas/FileStatus'
           404:
             description: Resource does not exist
             content:
@@ -70,7 +71,8 @@ class RawFileAPI(AuthorizationHandler):
             description: The file and all of its contents have been removed.
             content:
               application/json:
-                schema: 'FileStatus'
+                schema:
+                  $ref: '#/components/schemas/FileStatus'
           400:
             description: Parameter validation error
             content:
@@ -118,7 +120,8 @@ class RawFileListAPI(AuthorizationHandler):
             description: A new File is created
             content:
               application/json:
-                schema: 'FileStatus'
+                schema:
+                  $ref: '#/components/schemas/FileStatus'
           400:
             description: Parameter validation error
             content:

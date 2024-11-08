@@ -24,7 +24,8 @@ class ForwardAPI(AuthorizationHandler):
           description: The Forward Object
           content:
               application/json:
-                schema: 'Forward'
+                schema:
+                  $ref: '#/components/schemas/Forward'
         parameters:
           - name: blocking
             in: query

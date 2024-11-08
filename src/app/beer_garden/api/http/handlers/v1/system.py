@@ -46,7 +46,8 @@ class SystemAPI(AuthorizationHandler):
             description: System with the given ID
             content:
               application/json:
-                schema: 'System'
+                schema:
+                  $ref: '#/components/schemas/System'
           404:
             description: Resource does not exist
             content:
@@ -163,8 +164,9 @@ class SystemAPI(AuthorizationHandler):
           name: patch
           description: Instructions for how to update the System
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         parameters:
           - name: system_id
             in: path
@@ -176,7 +178,8 @@ class SystemAPI(AuthorizationHandler):
             description: System with the given ID
             content:
               application/json:
-                schema: 'System'
+                schema:
+                  $ref: '#/components/schemas/System'
           400:
             description: Parameter validation error
             content:
@@ -341,7 +344,8 @@ class SystemListAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    type: 'System'
+                    schema:
+                      $ref: '#/components/schemas/System'
           50x:
             description: Server exception
             content:
@@ -424,18 +428,21 @@ class SystemListAPI(AuthorizationHandler):
           description: The System definition to create / update
           content:
               application/json:
-                schema: 'System'
+                schema:
+                  $ref: '#/components/schemas/System'
         responses:
           200:
             description: An existing System has been updated
             content:
               application/json:
-                schema: 'System'
+                schema:
+                  $ref: '#/components/schemas/System'
           201:
             description: A new System has been created
             content:
               application/json:
-                schema: 'System'
+                schema:
+                  $ref: '#/components/schemas/System'
           400:
             description: Parameter validation error
             content:

@@ -37,7 +37,8 @@ class RequestAPI(AuthorizationHandler):
             description: Request with the given ID
             content:
               application/json:
-                schema: 'Request'
+                schema:
+                  $ref: '#/components/schemas/Request'
           404:
             description: Resource does not exist
             content:
@@ -85,8 +86,9 @@ class RequestAPI(AuthorizationHandler):
           name: patch
           description: Instructions for how to update the Request
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         parameters:
           - name: request_id
             in: path
@@ -98,7 +100,8 @@ class RequestAPI(AuthorizationHandler):
             description: Request with the given ID
             content:
               application/json:
-                schema: 'Request'
+                schema:
+                  $ref: '#/components/schemas/Request'
           400:
             description: Parameter validation error
             content:
@@ -376,14 +379,14 @@ class RequestListAPI(AuthorizationHandler):
             description: Datatables order object
             type: string
         responses:
-          200:
+          '200':
             description: A page of Requests
             content:
               application/json:
                 schema: 
                   type: array
                   items:
-                    type: 'Request'
+                    $ref: '#/components/schemas/Request'
             headers:
               start:
                 type: integer
@@ -464,7 +467,8 @@ class RequestListAPI(AuthorizationHandler):
           description: The Request definition
           content:
               application/json:
-                schema: 'Request'
+                schema:
+                  $ref: '#/components/schemas/Request'
         parameters:
           - name: blocking
             in: query
@@ -505,7 +509,8 @@ class RequestListAPI(AuthorizationHandler):
             description: A new Request has been created
             content:
               application/json:
-                schema: 'Request'
+                schema:
+                  $ref: '#/components/schemas/Request'
             headers:
               Instance-Status:
                 type: string
@@ -610,7 +615,8 @@ class RequestListAPI(AuthorizationHandler):
           description: The Request definition
           content:
               application/json:
-                schema: 'Request'
+                schema:
+                  $ref: '#/components/schemas/Request'
         consumes:
           - application/json
         responses:
@@ -618,7 +624,8 @@ class RequestListAPI(AuthorizationHandler):
             description: A updated Request
             content:
               application/json:
-                schema: 'Request'
+                schema:
+                  $ref: '#/components/schemas/Request'
             headers:
               Instance-Status:
                 type: string

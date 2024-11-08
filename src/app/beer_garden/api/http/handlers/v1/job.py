@@ -29,7 +29,8 @@ class JobAPI(AuthorizationHandler):
             description: Job with the given ID
             content:
               application/json:
-                schema: 'Job'
+                schema:
+                  $ref: '#/components/schemas/Job'
           404:
             description: Resource does not exist
             content:
@@ -81,8 +82,9 @@ class JobAPI(AuthorizationHandler):
           name: patch
           description: Instructions for how to update the Job
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         parameters:
           - name: job_id
             in: path
@@ -94,7 +96,8 @@ class JobAPI(AuthorizationHandler):
             description: Job with the given ID
             content:
               application/json:
-                schema: 'Job'
+                schema:
+                  $ref: '#/components/schemas/Job'
           400:
             description: Parameter validation error
             content:
@@ -211,7 +214,8 @@ class JobListAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    type: 'Job'
+                    schema:
+                      $ref: '#/components/schemas/Job'
           50x:
             description: Server exception
             content:
@@ -256,13 +260,15 @@ class JobListAPI(AuthorizationHandler):
           description: The Job to create/schedule
           content:
               application/json:
-                schema: 'Job'
+                schema:
+                  $ref: '#/components/schemas/Job'
         responses:
           201:
             description: A new job has been created
             content:
               application/json:
-                schema: 'Job'
+                schema:
+                  $ref: '#/components/schemas/Job'
           400:
             description: Parameter validation error
             content:
@@ -316,13 +322,15 @@ class JobImportAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    type: 'JobImport'
+                    schema:
+                      $ref: '#/components/schemas/Job'
         responses:
           201:
             description: All new jobs have been created
             content:
               application/json:
-                schema: 'JobImport'
+                schema:
+                  $ref: '#/components/schemas/Job'
           400:
             description: Parameter validation error
             content:
@@ -377,7 +385,8 @@ class JobExportAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    type: 'JobExport'
+                    schema:
+                      $ref: '#/components/schemas/JobExportInput'
         responses:
           201:
             description: A list of jobs has been exported.
@@ -386,7 +395,8 @@ class JobExportAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    type: 'JobImport'
+                    schema:
+                      $ref: '#/components/schemas/Job'
           400:
             description: Parameter validation error
             content:
@@ -414,7 +424,7 @@ class JobExportAPI(AuthorizationHandler):
 
             if len(decoded_body_as_dict) > 0:  # i.e. it has keys
                 input_schema = JobExportInputSchema()
-                validated_input_data_dict = input_schema.load(decoded_body_as_dict).data
+                validated_input_data_dict = input_schema.load(decoded_body_as_dict)
                 filter_params_dict["id__in"] = validated_input_data_dict["ids"]
 
         response_objects = await self.process_operation(

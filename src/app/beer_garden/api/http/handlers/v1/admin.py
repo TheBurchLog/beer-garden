@@ -42,8 +42,9 @@ class AdminAPI(AuthorizationHandler):
           name: patch
           description: Instructions for operations
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         responses:
           204:
             description: Operation successfully initiated

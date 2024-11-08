@@ -29,7 +29,8 @@ class CommandAPI(AuthorizationHandler):
             description: Command with the given name
             content:
               application/json:
-                schema: 'Command'
+                schema:
+                  $ref: '#/components/schemas/Command'
           404:
             description: Resource does not exist
             content:
@@ -76,7 +77,8 @@ class CommandAPIOld(AuthorizationHandler):
             description: Command with the given ID
             content:
               application/json:
-                schema: 'Command'
+                schema:
+                  $ref: '#/components/schemas/Command'
           404:
             description: Resource does not exist
             content:
@@ -118,7 +120,8 @@ class CommandListAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    type: 'Command'
+                    schema:
+                      $ref: '#/components/schemas/Command'
           50x:
             description: Server exception
             content:

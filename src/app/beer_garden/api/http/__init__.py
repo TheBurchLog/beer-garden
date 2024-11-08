@@ -396,9 +396,10 @@ def _load_swagger(url_specs, title=None):
     api_spec.components.schema(
         "Patch",
         properties={
-            "operations": {"type": "array", "items": {"$ref": "#/definitions/_patch"}}
+            "operations": {"type": "array", "items": {"$ref": "#/components/schemas/_patch"}}
         },
     )
+
     api_spec.components.schema("DateTrigger", schema=DateTriggerSchema)
     api_spec.components.schema("CronTrigger", schema=CronTriggerSchema)
     api_spec.components.schema("FileTrigger", schema=FileTriggerSchema)
@@ -406,21 +407,22 @@ def _load_swagger(url_specs, title=None):
     api_spec.components.schema("Job", schema=JobSchema)
 
     # TODO: Figure out how to do this for components.schema
-    # trigger_properties = {
-    #     "allOf": [
-    #         {"$ref": "#/components/schemas/CronTrigger"},
-    #         {"$ref": "#/components/schemas/DateTrigger"},
-    #         {"$ref": "#/components/schemas/FileTrigger"},
-    #         {"$ref": "#/components/schemas/IntervalTrigger"},
-    #     ]
-    # }
-    # api_spec.components.schemas["Job"]["properties"]["trigger"] = trigger_properties  # noqa
+    trigger_properties = {
+        "allOf": [
+            {"type": "object", "nullable": True},
+            {"$ref": "#/components/schemas/CronTrigger"},
+            {"$ref": "#/components/schemas/DateTrigger"},
+            {"$ref": "#/components/schemas/FileTrigger"},
+            {"$ref": "#/components/schemas/IntervalTrigger"},
+        ]
+    }
+    api_spec.components.schemas["Job"]["properties"]["trigger"] = trigger_properties  # noqa
 
-    api_spec.components.schema("JobExport", schema=JobExportInputSchema)
-    api_spec.components.schema("JobImport", schema=JobExportSchema)
-    # api_spec.components.schemas["JobImport"]["properties"][  # noqa
-    #     "trigger"
-    # ] = trigger_properties
+    api_spec.components.schema("JobExportInput", schema=JobExportInputSchema)
+    api_spec.components.schema("JobExport", schema=JobExportSchema)
+    api_spec.components.schemas["JobExport"]["properties"][  # noqa
+        "trigger"
+    ] = trigger_properties
 
     error = {"message": {"type": "string"}}
     api_spec.components.schema(

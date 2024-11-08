@@ -19,7 +19,8 @@ class EventPublisherAPI(AuthorizationHandler):
           description: The the Event object
           content:
               application/json:
-                schema: 'Event'
+                schema:
+                  $ref: '#/components/schemas/Event'
         parameters:
           - name: bg-namespace
             in: header

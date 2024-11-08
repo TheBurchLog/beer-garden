@@ -28,7 +28,8 @@ class InstanceAPI(AuthorizationHandler):
             description: Instance with the given ID
             content:
               application/json:
-                schema: 'Instance'
+                schema:
+                  $ref: '#/components/schemas/Instance'
           404:
             description: Resource does not exist
             content:
@@ -120,8 +121,9 @@ class InstanceAPI(AuthorizationHandler):
           name: patch
           description: Instructions for how to update the Instance
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         parameters:
           - name: instance_id
             in: path
@@ -133,7 +135,8 @@ class InstanceAPI(AuthorizationHandler):
             description: Instance with the given ID
             content:
               application/json:
-                schema: 'Instance'
+                schema:
+                  $ref: '#/components/schemas/Instance'
           400:
             description: Parameter validation error
             content:
@@ -264,7 +267,8 @@ class InstanceLogAPI(AuthorizationHandler):
             description: Instance with the given ID
             content:
               application/json:
-                schema: 'Instance'
+                schema:
+                  $ref: '#/components/schemas/Instance'
           404:
             description: Resource does not exist
             content:
@@ -356,7 +360,8 @@ class InstanceQueuesAPI(AuthorizationHandler):
                 schema: 
                   type: array
                   items:
-                    type: 'Queue'
+                    schema:
+                      $ref: '#/components/schemas/Queue'
           50x:
             description: Server exception
             content:

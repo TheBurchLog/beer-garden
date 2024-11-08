@@ -19,7 +19,8 @@ class CommandPublishingBlocklistPathAPI(AuthorizationHandler):
             description: Command has been successfully removed from block list
             content:
               application/json:
-                schema: 'CommandPublishingBlocklist'
+                schema:
+                  $ref: '#/components/schemas/CommandPublishingBlocklist'
           404:
             description: Resource does not exist
             content:
@@ -53,7 +54,8 @@ class CommandPublishingBlocklistAPI(AuthorizationHandler):
             description: list of commands in publishing block list
             content:
               application/json:
-                schema: 'CommandPublishingBlocklistListSchema'
+                schema:
+                  $ref: '#/components/schemas/CommandPublishingBlocklistListSchema'
           400:
             description: Parameter validation error
             content:
@@ -85,7 +87,8 @@ class CommandPublishingBlocklistAPI(AuthorizationHandler):
           description: The system, namespace and command name
           content:
               application/json:
-                schema: 'CommandPublishingBlocklistListInputSchema'
+                schema:
+                  $ref: '#/components/schemas/CommandPublishingBlocklistListInputSchema'
         consumes:
           - application/json
         responses:
@@ -93,7 +96,8 @@ class CommandPublishingBlocklistAPI(AuthorizationHandler):
             description: list of commands that have been added to publishing block list
             content:
               application/json:
-                schema: 'CommandPublishingBlocklistListSchema'
+                schema:
+                  $ref: '#/components/schemas/CommandPublishingBlocklistListSchema'
           400:
             description: Parameter validation error
             content:

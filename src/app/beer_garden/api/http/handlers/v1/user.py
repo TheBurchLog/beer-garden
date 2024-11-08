@@ -30,7 +30,8 @@ class UserAPI(AuthorizationHandler):
             description: User with the given username
             content:
               application/json:
-                schema: 'User'
+                schema:
+                  $ref: '#/components/schemas/User'
           404:
             description: Resource does not exist
             content:
@@ -111,8 +112,9 @@ class UserAPI(AuthorizationHandler):
           description: |
               A subset of User attributes to update, most commonly the password.
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         parameters:
           - name: username
             in: path
@@ -124,7 +126,8 @@ class UserAPI(AuthorizationHandler):
             description: User with the given username
             content:
               application/json:
-                schema: 'User'
+                schema:
+                  $ref: '#/components/schemas/User'
           400:
             description: Parameter validation error
             content:
@@ -216,7 +219,8 @@ class UserListAPI(AuthorizationHandler):
             description: All Users
             content:
               application/json:
-                schema: 'UserList'
+                schema:
+                  $ref: '#/components/schemas/UserList'
           50x:
             description: Server exception
             content:
@@ -246,7 +250,8 @@ class UserListAPI(AuthorizationHandler):
           description: The user
           content:
               application/json:
-                schema: 'UserCreate'
+                schema:
+                  $ref: '#/components/schemas/UserCreate'
         consumes:
           - application/json
         responses:
@@ -254,7 +259,8 @@ class UserListAPI(AuthorizationHandler):
             description: A new User has been created
             content:
               application/json:
-                schema: 'User'
+                schema:
+                  $ref: '#/components/schemas/User'
           400:
             description: Parameter validation error
             content:
@@ -305,8 +311,9 @@ class UserListAPI(AuthorizationHandler):
           name: patch
           description: Instructions for how to update the User
           content:
-              application/json:
-                schema: 'Patch'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
         responses:
           204:
             description: Patch operation has been successfully forwarded
@@ -362,7 +369,8 @@ class UserPasswordChangeAPI(AuthorizationHandler):
           description: The current password for verification and the new password
           content:
               application/json:
-                schema: 'UserPasswordChange'
+                schema:
+                  $ref: '#/components/schemas/UserPasswordChange'
         consumes:
           - application/json
         responses:
@@ -423,7 +431,8 @@ class WhoAmIAPI(AuthorizationHandler):
             description: Requesting User
             content:
               application/json:
-                schema: 'User'
+                schema:
+                  $ref: '#/components/schemas/User'
           401:
             description: Authorization required
             content:

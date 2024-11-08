@@ -31,7 +31,8 @@ class TokenAPI(BaseHandler):
           description: The login credentials of the User
           content:
               application/json:
-                schema: 'TokenInput'
+                schema:
+                  $ref: '#/components/schemas/TokenInput'
         responses:
           200:
             description: On successful authentication, a token to be used on subsequent
@@ -39,7 +40,8 @@ class TokenAPI(BaseHandler):
                          token.
             content:
               application/json:
-                schema: 'TokenResponse'
+                schema:
+                  $ref: '#/components/schemas/TokenResponse'
           400:
             description: Authentication failed.
         tags:
@@ -120,7 +122,8 @@ class TokenRefreshAPI(BaseHandler):
             /token /token/refresh endpoints.
           content:
               application/json:
-                schema: 'TokenRefreshInput'
+                schema:
+                  $ref: '#/components/schemas/TokenRefreshInput'
         responses:
           200:
             description: An access and refresh token pair. The issued pair will replace
@@ -129,7 +132,8 @@ class TokenRefreshAPI(BaseHandler):
                          refresh token will be the same as that of the supplied token.
             content:
               application/json:
-                schema: 'TokenResponse'
+                schema:
+                  $ref: '#/components/schemas/TokenResponse'
           400:
             description: The provided refresh token is invalid, possibly because it has
               expired or been revoked.
@@ -161,7 +165,8 @@ class TokenRevokeAPI(BaseHandler):
           description: The refresh token to revoke.
           content:
               application/json:
-                schema: 'TokenRefreshInput'
+                schema:
+                  $ref: '#/components/schemas/TokenRefreshInput'
         responses:
           204:
             description: Token successfully revoked
