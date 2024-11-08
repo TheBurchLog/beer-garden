@@ -379,7 +379,7 @@ class RequestListAPI(AuthorizationHandler):
             description: Datatables order object
             type: string
         responses:
-          '200':
+          200:
             description: A page of Requests
             content:
               application/json:

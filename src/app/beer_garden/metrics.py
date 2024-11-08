@@ -90,7 +90,7 @@ in_progress_request_gauge = Gauge(
 
 def request_latency(start_time):
     """Measure request latency in seconds as a float."""
-    return (datetime.datetime.now(datetime.timezone.utc) - start_time).total_seconds()
+    return (datetime.datetime.now(datetime.timezone.utc) - start_time.replace(tzinfo=datetime.timezone.utc)).total_seconds()
 
 
 def initialize_counts():
