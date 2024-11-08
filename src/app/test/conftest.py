@@ -25,7 +25,7 @@ pytest_plugins = ["brewtils.test.fixtures"]
 
 @pytest.fixture(scope="module", autouse=True)
 def mongo_conn():
-    connect("beer_garden", host="mongomock://localhost")
+    connect("beer_garden", host="mongo_client_class=mongomock.MongoClient")
 
 
 @pytest.fixture(scope="module", autouse=True)
