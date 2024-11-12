@@ -123,7 +123,7 @@ class TestTokenRefreshAPI:
         self, app_config_auth_enabled, http_client, base_url, user
     ):
         url = f"{base_url}/api/v1/token/refresh"
-        refresh_token = issue_token_pair(user, refresh_expiration=datetime.utcnow())[
+        refresh_token = issue_token_pair(user, refresh_expiration=datetime.now(timezone.utc))[
             "refresh"
         ]
         body = json.dumps({"refresh": refresh_token})
@@ -138,7 +138,7 @@ class TestTokenRefreshAPI:
         self, app_config_auth_enabled, http_client, base_url, user
     ):
         url = f"{base_url}/api/v1/token/refresh"
-        refresh_token = issue_token_pair(user, refresh_expiration=datetime.utcnow())[
+        refresh_token = issue_token_pair(user, refresh_expiration=datetime.now(timezone.utc))[
             "refresh"
         ]
         body = json.dumps({"refresh": refresh_token})
@@ -193,7 +193,7 @@ class TestTokenRevokeAPI:
         self, app_config_auth_enabled, http_client, base_url, user
     ):
         url = f"{base_url}/api/v1/token/revoke"
-        refresh_token = issue_token_pair(user, refresh_expiration=datetime.utcnow())[
+        refresh_token = issue_token_pair(user, refresh_expiration=datetime.now(timezone.utc))[
             "refresh"
         ]
         body = json.dumps({"refresh": refresh_token})

@@ -1111,7 +1111,7 @@ class TestHandleEvent:
     def test_status_updated_at_preserved_on_child_garden_requests(
         self, child_garden_request
     ):
-        status_updated_at = datetime.utcnow() - timedelta(days=1)
+        status_updated_at = datetime.now(timezone.utc) - timedelta(days=1)
         status_updated_at = status_updated_at.replace(microsecond=0)
         child_garden_request.status = "SUCCESS"
         child_garden_request.status_updated_at = status_updated_at

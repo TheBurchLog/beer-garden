@@ -136,7 +136,7 @@ def user_token(user):
         UserToken(
             uuid=uuid4(),
             username=user.username,
-            expires_at=datetime.utcnow() + timedelta(hours=12),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=12),
         )
     )
 

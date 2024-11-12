@@ -1,3 +1,4 @@
+import mongomock
 import pytest
 from brewtils.models import Command, Garden, Instance
 from brewtils.models import Subscriber as BrewtilsSubscriber
@@ -83,7 +84,7 @@ def topic2():
 class TestTopic:
     @classmethod
     def setup_class(cls):
-        connect("beer_garden", host="mongomock://localhost")
+        connect("beer_garden", host='mongodb://localhost', mongo_client_class=mongomock.MongoClient)
 
     def test_get_topic_id(self, topic1):
         """get_topic should allow for retrieval by name"""

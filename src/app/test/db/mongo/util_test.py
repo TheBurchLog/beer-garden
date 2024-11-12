@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import mongomock
 import pytest
 from mock import MagicMock, Mock, patch
 from mongoengine import connect
@@ -206,7 +207,7 @@ class TestCheckIndexes(object):
 class TestEnsureLocalGarden:
     @classmethod
     def setup_class(cls):
-        connect("beer_garden", host="mongomock://localhost")
+        connect("beer_garden", host='mongodb://localhost', mongo_client_class=mongomock.MongoClient)
 
     def teardown_method(self):
         beer_garden.db.mongo.models.Garden.drop_collection()

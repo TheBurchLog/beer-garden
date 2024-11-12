@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import brewtils.test
+import mongomock
 import pytest
 from box import Box
 from mongoengine import connect
@@ -25,7 +26,7 @@ pytest_plugins = ["brewtils.test.fixtures"]
 
 @pytest.fixture(scope="module", autouse=True)
 def mongo_conn():
-    connect("beer_garden", host="mongo_client_class=mongomock.MongoClient")
+    connect("beer_garden", host='mongodb://localhost', mongo_client_class=mongomock.MongoClient)
 
 
 @pytest.fixture(scope="module", autouse=True)
