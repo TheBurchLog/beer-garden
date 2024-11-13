@@ -19,7 +19,6 @@ from brewtils.errors import ModelValidationError
 from brewtils.models import DateTrigger, Event, Events, Job, Operation, Request
 from brewtils.schema_parser import SchemaParser
 from mongoengine import ValidationError
-from pytz import utc
 
 import beer_garden
 import beer_garden.config as config
@@ -178,7 +177,7 @@ class MixedScheduler(object):
                 "jobstores": job_stores,
                 "executors": executors,
                 "job_defaults": job_defaults,
-                "timezone": utc,
+                "timezone": timezone.utc,
             }
             self._sync_scheduler.configure(**ap_config)
             self._sync_scheduler.add_listener(
