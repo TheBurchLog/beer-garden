@@ -62,7 +62,9 @@ mccabe==0.7.0
     # via flake8
 mock==5.1.0
     # via -r requirements-dev.in
-mongomock==4.1.2
+# mongomock==4.3.0
+# gridfs support is in 4.3
+-e git+https://github.com/mongomock/mongomock@develop#egg=mongomock
     # via -r requirements-dev.in
 mypy-extensions==1.0.0
     # via black

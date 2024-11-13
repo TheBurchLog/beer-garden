@@ -15,7 +15,7 @@ coverage
 flake8
 flake8-bugbear
 mock
-mongomock
+#mongomock
 pytest < 7
 pytest-mock
 pytest-lazy-fixture
