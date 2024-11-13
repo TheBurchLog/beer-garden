@@ -7,7 +7,6 @@ from beer_garden.metrics import collect_metrics
 
 
 class QueueAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="QueueAPI")
     async def delete(self, queue_name):
         """
@@ -26,14 +25,14 @@ class QueueAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -50,7 +49,6 @@ class QueueAPI(AuthorizationHandler):
 
 
 class QueueListAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="QueueListAPI")
     async def get(self):
         """
@@ -61,7 +59,7 @@ class QueueListAPI(AuthorizationHandler):
             description: List of all queue information objects
             content:
               application/json:
-                schema: 
+                schema:
                   type: array
                   items:
                     $ref: '#/components/schemas/Queue'
@@ -69,7 +67,7 @@ class QueueListAPI(AuthorizationHandler):
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -102,7 +100,7 @@ class QueueListAPI(AuthorizationHandler):
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:

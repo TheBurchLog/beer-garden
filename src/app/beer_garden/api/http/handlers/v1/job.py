@@ -12,7 +12,6 @@ from beer_garden.scheduler import create_jobs
 
 
 class JobAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="JobAPI")
     async def get(self, job_id):
         """
@@ -35,14 +34,14 @@ class JobAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -102,21 +101,21 @@ class JobAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -176,14 +175,14 @@ class JobAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -200,7 +199,6 @@ class JobAPI(AuthorizationHandler):
 
 
 class JobListAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="JobListAPI")
     async def get(self):
         """
@@ -211,7 +209,7 @@ class JobListAPI(AuthorizationHandler):
             description: Successfully retrieved all systems.
             content:
               application/json:
-                schema: 
+                schema:
                   type: array
                   items:
                     $ref: '#/components/schemas/Job'
@@ -219,7 +217,7 @@ class JobListAPI(AuthorizationHandler):
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -272,14 +270,14 @@ class JobListAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -305,7 +303,6 @@ class JobListAPI(AuthorizationHandler):
 
 
 class JobImportAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="JobImportAPI")
     async def post(self):
         """
@@ -318,7 +315,7 @@ class JobImportAPI(AuthorizationHandler):
           description: The Jobs to create/schedule
           content:
               application/json:
-                schema: 
+                schema:
                   type: array
                   items:
                     $ref: '#/components/schemas/Job'
@@ -333,14 +330,14 @@ class JobImportAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -363,7 +360,6 @@ class JobImportAPI(AuthorizationHandler):
 
 
 class JobExportAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="JobExportAPI")
     async def post(self):
         """
@@ -375,12 +371,12 @@ class JobExportAPI(AuthorizationHandler):
         requestBody:
           name: ids
           description: |
-            A list of the Jobs IDs whose job definitions should be 
-            exported. Omitting this parameter or providing an empty 
-            map will export 
+            A list of the Jobs IDs whose job definitions should be
+            exported. Omitting this parameter or providing an empty
+            map will export
           content:
               application/json:
-                schema: 
+                schema:
                   type: array
                   items:
                     $ref: '#/components/schemas/JobExportInput'
@@ -389,7 +385,7 @@ class JobExportAPI(AuthorizationHandler):
             description: A list of jobs has been exported.
             content:
               application/json:
-                schema: 
+                schema:
                   type: array
                   items:
                     $ref: '#/components/schemas/Job'
@@ -397,14 +393,14 @@ class JobExportAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -442,7 +438,6 @@ class JobExportAPI(AuthorizationHandler):
 
 
 class JobExecutionAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="JobExecutionAPI")
     async def post(self, job_id):
         """

@@ -36,14 +36,14 @@ class UserAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -77,14 +77,14 @@ class UserAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -132,21 +132,21 @@ class UserAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -219,7 +219,7 @@ class UserListAPI(AuthorizationHandler):
             description: All Users
             content:
               application/json:
-                schema: 
+                schema:
                   type: array
                   items:
                     $ref: '#/components/schemas/User'
@@ -227,7 +227,7 @@ class UserListAPI(AuthorizationHandler):
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -267,14 +267,14 @@ class UserListAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -323,21 +323,21 @@ class UserListAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -360,7 +360,6 @@ class UserListAPI(AuthorizationHandler):
 
 
 class UserPasswordChangeAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="UserPasswordChangeAPI")
     async def post(self):
         """
@@ -382,14 +381,14 @@ class UserPasswordChangeAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -398,9 +397,7 @@ class UserPasswordChangeAPI(AuthorizationHandler):
         user = self.current_user
 
         try:
-            password_data = (
-                UserPasswordChangeSchema(strict=True).load(self.request_body).data
-            )
+            password_data = UserPasswordChangeSchema().load(self.request_body)
         except ValidationError as exc:
             raise BadRequest(reason=f"{exc}")
 
@@ -422,7 +419,6 @@ class UserPasswordChangeAPI(AuthorizationHandler):
 
 
 class WhoAmIAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="WhoAmIAPI")
     def get(self):
         """
@@ -439,14 +435,14 @@ class WhoAmIAPI(AuthorizationHandler):
             description: Authorization required
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Authorization required
           403:
             description: Access denied
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Access denied
         tags:

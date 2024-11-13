@@ -648,7 +648,9 @@ class StatusMonitor(StoppableThread):
                 if self.stopped():
                     break
 
-                last_heartbeat = instance.status_info.heartbeat.replace(tzinfo=timezone.utc)
+                last_heartbeat = instance.status_info.heartbeat.replace(
+                    tzinfo=timezone.utc
+                )
 
                 if last_heartbeat:
                     if (

@@ -34,14 +34,14 @@ class EventPublisherAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:

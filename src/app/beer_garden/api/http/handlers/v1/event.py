@@ -15,7 +15,6 @@ from beer_garden.authorization import ModelFilter
 from beer_garden.errors import ExpiredTokenException, InvalidTokenException
 
 if TYPE_CHECKING:
-
     from beer_garden.db.mongo.models import User
 
 
@@ -68,7 +67,7 @@ class EventSocket(WebSocketHandler):
         """Process incoming messages. Called by WebSocketHandler automatically when
         a message is received."""
         try:
-            token = IncomingMessageSchema(strict=True).loads(message).data["payload"]
+            token = IncomingMessageSchema().loads(message)["payload"]
             self._update_access_token(token)
         except (ValidationError, JSONDecodeError) as exc:
             self._message_processing_error(

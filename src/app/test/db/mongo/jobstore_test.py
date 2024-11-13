@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import copy
+from datetime import timezone
 
 import pytest
 from apscheduler.job import Job as APJob
@@ -11,7 +12,6 @@ from mock import Mock, patch
 from beer_garden.db.mongo.jobstore import construct_job, localize_datetime
 from beer_garden.db.mongo.models import DateTrigger as MongoDateTrigger
 from beer_garden.db.mongo.models import Job, RequestTemplate
-from datetime import timezone
 
 
 @pytest.fixture
@@ -126,4 +126,6 @@ class TestJobStore(object):
         assert jobstore.get_next_run_time() is None
 
         mongo_job.save()
-        assert jobstore.get_next_run_time() == localize_datetime(mongo_job.next_run_time)
+        assert jobstore.get_next_run_time() == localize_datetime(
+            mongo_job.next_run_time
+        )

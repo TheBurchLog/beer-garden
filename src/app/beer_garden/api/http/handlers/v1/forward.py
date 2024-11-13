@@ -10,7 +10,6 @@ from beer_garden.metrics import collect_metrics
 
 
 class ForwardAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="ForwardAPI")
     async def post(self):
         """
@@ -46,14 +45,14 @@ class ForwardAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:

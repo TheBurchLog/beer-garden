@@ -20,7 +20,6 @@ from beer_garden.requests import remove_bytes_parameter_base64
 
 
 class RequestAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="RequestAPI")
     async def get(self, request_id):
         """
@@ -43,14 +42,14 @@ class RequestAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -106,21 +105,21 @@ class RequestAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -168,7 +167,6 @@ class RequestAPI(AuthorizationHandler):
 
 
 class RequestOutputAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="RequestOutputAPI")
     async def get(self, request_id):
         """
@@ -188,14 +186,14 @@ class RequestOutputAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -383,7 +381,7 @@ class RequestListAPI(AuthorizationHandler):
             description: A page of Requests
             content:
               application/json:
-                schema: 
+                schema:
                   type: array
                   items:
                     $ref: '#/components/schemas/Request'
@@ -407,7 +405,7 @@ class RequestListAPI(AuthorizationHandler):
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -521,14 +519,14 @@ class RequestListAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -636,14 +634,14 @@ class RequestListAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -790,7 +788,7 @@ class RequestListAPI(AuthorizationHandler):
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:

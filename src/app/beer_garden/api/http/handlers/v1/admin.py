@@ -9,7 +9,6 @@ from beer_garden.metrics import collect_metrics
 
 
 class AdminAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="AdminAPI")
     async def patch(self):
         """
@@ -52,7 +51,7 @@ class AdminAPI(AuthorizationHandler):
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:

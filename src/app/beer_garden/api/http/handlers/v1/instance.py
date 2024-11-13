@@ -11,7 +11,6 @@ from beer_garden.metrics import collect_metrics
 
 
 class InstanceAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="InstanceAPI")
     async def get(self, instance_id):
         """
@@ -34,14 +33,14 @@ class InstanceAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -75,14 +74,14 @@ class InstanceAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -141,21 +140,21 @@ class InstanceAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -234,7 +233,6 @@ class InstanceAPI(AuthorizationHandler):
 
 
 class InstanceLogAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="InstanceLogAPI")
     async def get(self, instance_id):
         """
@@ -273,14 +271,14 @@ class InstanceLogAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -340,7 +338,6 @@ class InstanceLogAPI(AuthorizationHandler):
 
 
 class InstanceQueuesAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="InstanceQueuesAPI")
     async def get(self, instance_id):
         """
@@ -357,7 +354,7 @@ class InstanceQueuesAPI(AuthorizationHandler):
             description: List of queue information objects for this instance
             content:
               application/json:
-                schema: 
+                schema:
                   type: array
                   items:
                     $ref: '#/components/schemas/Queue'
@@ -365,7 +362,7 @@ class InstanceQueuesAPI(AuthorizationHandler):
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:

@@ -1,4 +1,3 @@
-import mongomock
 import pytest
 from brewtils.models import Command, Garden, Instance
 from brewtils.models import Subscriber as BrewtilsSubscriber
@@ -7,6 +6,7 @@ from brewtils.models import Topic as BrewtilsTopic
 from mock import Mock
 from mongoengine import connect
 
+import mongomock
 from beer_garden import topic
 from beer_garden.db.mongo.models import Topic
 from beer_garden.topic import (
@@ -84,7 +84,11 @@ def topic2():
 class TestTopic:
     @classmethod
     def setup_class(cls):
-        connect("beer_garden", host='mongodb://localhost', mongo_client_class=mongomock.MongoClient)
+        connect(
+            "beer_garden",
+            host="mongodb://localhost",
+            mongo_client_class=mongomock.MongoClient,
+        )
 
     def test_get_topic_id(self, topic1):
         """get_topic should allow for retrieval by name"""
@@ -141,7 +145,6 @@ class TestTopic:
         assert (subscriber_match(subscriber1, subscriber3)) is True
 
     def test_prune_topics(self, monkeypatch):
-
         garden = Garden(
             name="garden",
             children=[],
@@ -187,7 +190,6 @@ class TestTopic:
         assert mock_update_topic.call_count == 0
 
     def test_prune_topics_remove_one(self, monkeypatch):
-
         garden = Garden(
             name="garden",
             children=[],
@@ -242,7 +244,6 @@ class TestTopic:
         assert mock_update_topic.call_count == 1
 
     def test_prune_topics_remove_none(self, monkeypatch):
-
         garden = Garden(
             name="garden",
             children=[],

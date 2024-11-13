@@ -21,7 +21,7 @@ def garden():
 
 @pytest.fixture
 def operation_data():
-    yield {"operation_type": "GARDEN_READ", "garden_name": "somegarden"}
+    yield {"operation_type": "GARDEN_READ", "kwargs": {"garden_name": "somegarden"}}
 
 
 @pytest.fixture

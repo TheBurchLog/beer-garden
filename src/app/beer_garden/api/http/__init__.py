@@ -6,10 +6,9 @@ import types
 from copy import deepcopy
 from typing import List, Optional, Tuple
 
-from apispec_webframeworks.tornado import TornadoPlugin
-from apispec.ext.marshmallow import MarshmallowPlugin
-
 from apispec import APISpec
+from apispec.ext.marshmallow import MarshmallowPlugin
+from apispec_webframeworks.tornado import TornadoPlugin
 from brewtils.models import Event, Events, User
 from brewtils.schemas import (
     CommandSchema,
@@ -58,9 +57,13 @@ from beer_garden.api.http.schemas.v1.command_publishing_blocklist import (
     CommandPublishingBlocklistListSchema,
     CommandPublishingBlocklistSchema,
 )
-from beer_garden.api.http.schemas.v1.user import UserPasswordChangeSchema
 from beer_garden.api.http.schemas.v1.operation import PatchOperationSchema
-from beer_garden.api.http.schemas.v1.token import TokenInputSchema, TokenRefreshInputSchema, TokenResponseSchema
+from beer_garden.api.http.schemas.v1.token import (
+    TokenInputSchema,
+    TokenRefreshInputSchema,
+    TokenResponseSchema,
+)
+from beer_garden.api.http.schemas.v1.user import UserPasswordChangeSchema
 from beer_garden.events import publish
 from beer_garden.metrics import initialize_elastic_client
 
@@ -346,7 +349,6 @@ def _setup_ssl_context() -> Tuple[Optional[ssl.SSLContext], Optional[ssl.SSLCont
     return server_ssl, client_ssl
 
 
-
 def _load_swagger(url_specs, title=None):
     global api_spec
     api_spec = APISpec(
@@ -383,7 +385,6 @@ def _load_swagger(url_specs, title=None):
         schema=CommandPublishingBlocklistListInputSchema,
     )
     api_spec.components.schema("UserPasswordChange", schema=UserPasswordChangeSchema)
-    
 
     api_spec.components.schema("Queue", schema=QueueSchema)
     api_spec.components.schema("Operation", schema=OperationSchema)
@@ -415,7 +416,9 @@ def _load_swagger(url_specs, title=None):
             {"$ref": "#/components/schemas/IntervalTrigger"},
         ]
     }
-    api_spec.components.schemas["Job"]["properties"]["trigger"] = trigger_properties  # noqa
+    api_spec.components.schemas["Job"]["properties"][
+        "trigger"
+    ] = trigger_properties  # noqa
 
     api_spec.components.schema("JobExportInput", schema=JobExportInputSchema)
     api_spec.components.schema("JobExport", schema=JobExportSchema)
@@ -430,14 +433,18 @@ def _load_swagger(url_specs, title=None):
     api_spec.components.schema(
         "401Error", properties=error, description="Authorization required"
     )
-    api_spec.components.schema("403Error", properties=error, description="Access denied")
+    api_spec.components.schema(
+        "403Error", properties=error, description="Access denied"
+    )
     api_spec.components.schema(
         "404Error", properties=error, description="Resource does not exist"
     )
     api_spec.components.schema(
         "409Error", properties=error, description="Resource already exists"
     )
-    api_spec.components.schema("50xError", properties=error, description="Server exception")
+    api_spec.components.schema(
+        "50xError", properties=error, description="Server exception"
+    )
 
     # Finally, add documentation for all our published paths
     for url_spec in url_specs:

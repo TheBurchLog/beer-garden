@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import mongomock
 import pytest
 from mock import MagicMock, Mock, patch
 from mongoengine import connect
@@ -7,6 +6,7 @@ from mongoengine.errors import FieldDoesNotExist
 
 import beer_garden.db.mongo.models
 import beer_garden.db.mongo.util
+import mongomock
 from beer_garden import config
 from beer_garden.db.mongo.models import Garden
 from beer_garden.db.mongo.util import (  # ensure_roles,; ensure_users,
@@ -207,7 +207,11 @@ class TestCheckIndexes(object):
 class TestEnsureLocalGarden:
     @classmethod
     def setup_class(cls):
-        connect("beer_garden", host='mongodb://localhost', mongo_client_class=mongomock.MongoClient)
+        connect(
+            "beer_garden",
+            host="mongodb://localhost",
+            mongo_client_class=mongomock.MongoClient,
+        )
 
     def teardown_method(self):
         beer_garden.db.mongo.models.Garden.drop_collection()

@@ -7,7 +7,6 @@ from beer_garden.metrics import collect_metrics
 
 
 class CommandAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="CommandAPI")
     async def get(self, system_id, command_name):
         """
@@ -35,14 +34,14 @@ class CommandAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -59,7 +58,6 @@ class CommandAPI(AuthorizationHandler):
 
 
 class CommandAPIOld(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="CommandAPIOld")
     async def get(self, command_id):
         """
@@ -83,14 +81,14 @@ class CommandAPIOld(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -105,7 +103,6 @@ class CommandAPIOld(AuthorizationHandler):
 
 
 class CommandListAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="CommandListAPI")
     async def get(self):
         """
@@ -117,7 +114,7 @@ class CommandListAPI(AuthorizationHandler):
             description: All Commands
             content:
               application/json:
-                schema: 
+                schema:
                   type: array
                   items:
                     $ref: '#/components/schemas/Command'
@@ -125,7 +122,7 @@ class CommandListAPI(AuthorizationHandler):
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:

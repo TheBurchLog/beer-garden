@@ -4,7 +4,6 @@ from datetime import timedelta
 
 import pytest
 from mock import MagicMock, Mock
-from mongomock.gridfs import enable_gridfs_integration
 
 from beer_garden import config
 from beer_garden.db.mongo.models import File, RawFile, Request
@@ -17,6 +16,7 @@ from beer_garden.db.mongo.pruner import (
     prune_outstanding,
     prune_temp_requests,
 )
+from mongomock.gridfs import enable_gridfs_integration
 
 enable_gridfs_integration()
 

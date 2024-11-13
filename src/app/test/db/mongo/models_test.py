@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 import copy
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 
-import mongomock
 import pytest
 from brewtils.errors import ModelValidationError, RequestStatusTransitionError
 from brewtils.schemas import RequestTemplateSchema
 from mock import Mock
 from mongoengine import NotUniqueError, connect
-from mongomock.gridfs import enable_gridfs_integration
 
 import beer_garden.db.api as db
 import beer_garden.db.mongo.models
+import mongomock
 from beer_garden.db.mongo.models import (
     Choices,
     Command,
@@ -28,6 +27,7 @@ from beer_garden.db.mongo.models import (
     User,
     UserToken,
 )
+from mongomock.gridfs import enable_gridfs_integration
 
 enable_gridfs_integration()
 
@@ -524,7 +524,11 @@ class TestRole:
 class TestUser:
     @classmethod
     def setup_class(cls):
-        connect("beer_garden", host='mongodb://localhost', mongo_client_class=mongomock.MongoClient)
+        connect(
+            "beer_garden",
+            host="mongodb://localhost",
+            mongo_client_class=mongomock.MongoClient,
+        )
 
     @pytest.fixture()
     def role(self):
@@ -592,7 +596,11 @@ class TestGarden:
 
     @classmethod
     def setup_class(cls):
-        connect("beer_garden", host='mongodb://localhost', mongo_client_class=mongomock.MongoClient)
+        connect(
+            "beer_garden",
+            host="mongodb://localhost",
+            mongo_client_class=mongomock.MongoClient,
+        )
         Garden.drop_collection()
         Garden.ensure_indexes()
 
@@ -734,7 +742,6 @@ class TestFileUpdates:
 
     @pytest.fixture()
     def request_model(self, raw_file, local_garden_name):
-
         req = Request(
             system="foo",
             command="bar",
@@ -783,7 +790,6 @@ class TestFileUpdates:
     def test_save_stores_in_gridfs_after_maxsize(
         self, request_model, request_local_system, max_size
     ):
-
         request_model.parameters = {"message": "a" * max_size}
         request_model.output = "a" * max_size
         request_model.save()

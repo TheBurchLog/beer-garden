@@ -70,7 +70,6 @@ def handle_event(event: Event):
         )
     ):
         if event.name == Events.REQUEST_CREATED.name:
-
             if "_topic" in event.payload.metadata:
                 event.metadata["topic"] = event.payload.metadata["_topic"]
             else:
@@ -114,7 +113,6 @@ def handle_event(event: Event):
             if event.metadata["topic"] in re.findall(
                 topic.name, event.metadata["topic"]
             ):
-
                 topic = increase_publish_count(topic)
                 topics.append(topic)
 
@@ -123,7 +121,6 @@ def handle_event(event: Event):
 
 
 def process_publish_event(garden: Garden, event: Event, topics: List[Topic]):
-
     requests = []
     requests_hash = []
 

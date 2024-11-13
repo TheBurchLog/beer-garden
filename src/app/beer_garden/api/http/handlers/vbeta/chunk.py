@@ -10,7 +10,6 @@ from beer_garden.metrics import collect_metrics
 
 
 class FileChunkAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="FileChunkAPI")
     async def get(self):
         """
@@ -44,14 +43,14 @@ class FileChunkAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -86,7 +85,7 @@ class FileChunkAPI(AuthorizationHandler):
           description: Data - A Base64 string encoding your data;
                         Offset - The chunk number (0, 1, ... N)
           content:
-              application/json:              
+              application/json:
                 schema:
                   properties:
                     "data":
@@ -116,14 +115,14 @@ class FileChunkAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -179,14 +178,14 @@ class FileChunkAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -206,7 +205,6 @@ class FileChunkAPI(AuthorizationHandler):
 
 
 class ChunkNameAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="ChunkNameAPI")
     async def get(self):
         """
@@ -264,14 +262,14 @@ class ChunkNameAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:

@@ -7,7 +7,6 @@ from beer_garden.metrics import collect_metrics
 
 
 class NamespaceListAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="NamespaceListAPI")
     async def get(self):
         """
@@ -18,7 +17,7 @@ class NamespaceListAPI(AuthorizationHandler):
             description: List of Namespaces
             content:
               application/json:
-                schema: 
+                schema:
                   type: array
                   items:
                     schema:
@@ -27,7 +26,7 @@ class NamespaceListAPI(AuthorizationHandler):
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:

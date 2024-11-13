@@ -18,12 +18,17 @@ def _remove_queue_info(response: str, many: bool = False) -> str:
     Schema that strips out the queue info.
     """
 
-    system_data = BrewtilsSystemSchema(many=many).loads(response)
-    return BrewtilsSystemSchema(many=many, exclude=("instances.queue_type", "instances.queue_info")).dumps(system_data)
+    if isinstance(response, str):
+        system_data = SchemaParser.parse_system(response, many=many, from_string=True)
+    else:
+        system_data = response
+
+    return BrewtilsSystemSchema(
+        many=many, exclude=("instances.queue_type", "instances.queue_info")
+    ).dumps(system_data)
 
 
 class SystemAPI(AuthorizationHandler):
-
     @collect_metrics(transaction_type="API", group="SystemAPI")
     async def get(self, system_id):
         """
@@ -52,14 +57,14 @@ class SystemAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -110,14 +115,14 @@ class SystemAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -184,21 +189,21 @@ class SystemAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -341,7 +346,7 @@ class SystemListAPI(AuthorizationHandler):
             description: All Systems
             content:
               application/json:
-                schema: 
+                schema:
                   type: array
                   items:
                     $ref: '#/components/schemas/System'
@@ -349,7 +354,7 @@ class SystemListAPI(AuthorizationHandler):
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -446,14 +451,14 @@ class SystemListAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:

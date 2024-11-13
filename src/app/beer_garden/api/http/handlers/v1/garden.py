@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from beer_garden.api.http.handlers import AuthorizationHandler
-from beer_garden.garden import local_garden
-from beer_garden.metrics import collect_metrics
 from brewtils.errors import ModelValidationError
 from brewtils.models import Garden, Operation, Permissions
 from brewtils.schema_parser import SchemaParser
 from brewtils.schemas import GardenSchema as BrewtilsGardenSchema
+
+from beer_garden.api.http.handlers import AuthorizationHandler
+from beer_garden.garden import local_garden
+from beer_garden.metrics import collect_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -26,41 +27,41 @@ def _remove_heartbeat_history(response: str, many: bool = False) -> str:
     if many:
         for garden in garden_data:
             _remove_garden_history(garden)
-    
-    return (
-        BrewtilsGardenSchema(
-            many=many,
-        )
-        .dumps(_remove_garden_history(garden_data))
-    )
+
+    return BrewtilsGardenSchema(
+        many=many,
+    ).dumps(_remove_garden_history(garden_data))
+
 
 def _remove_status_info_history(value):
     if "status_info" in value and "history" in value["status_info"]:
         del value["status_info"]["history"]
     return value
 
+
 def _remove_garden_history(garden: Garden):
     garden = _remove_status_info_history(garden)
-    
+
     if "systems" in garden:
-      for system in garden["systems"]:
-          if "instances" in system:
-            for instance in system["instances"]:
-                instance = _remove_status_info_history(instance)
+        for system in garden["systems"]:
+            if "instances" in system:
+                for instance in system["instances"]:
+                    instance = _remove_status_info_history(instance)
 
     if "receiving_connections" in garden:
-      for receiving_connection in garden["receiving_connections"]:
-          receiving_connection = _remove_status_info_history(receiving_connection)
+        for receiving_connection in garden["receiving_connections"]:
+            receiving_connection = _remove_status_info_history(receiving_connection)
 
     if "publishing_connection" in garden:
-      for publishing_connection in garden["publishing_connections"]:
-          publishing_connection = _remove_status_info_history(publishing_connection)
+        for publishing_connection in garden["publishing_connections"]:
+            publishing_connection = _remove_status_info_history(publishing_connection)
 
     if "children" in garden:
         for child in garden["children"]:
             child = _remove_garden_history(child)
-        
+
     return garden
+
 
 class GardenAPI(AuthorizationHandler):
     @collect_metrics(transaction_type="API", group="GardenAPI")
@@ -85,14 +86,14 @@ class GardenAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -123,14 +124,14 @@ class GardenAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -190,21 +191,21 @@ class GardenAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -288,7 +289,7 @@ class GardenListAPI(AuthorizationHandler):
             description: A list of all gardens
             content:
               application/json:
-                schema: 
+                schema:
                   type: array
                   items:
                     $ref: '#/components/schemas/Garden'
@@ -296,14 +297,14 @@ class GardenListAPI(AuthorizationHandler):
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -338,14 +339,14 @@ class GardenListAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
@@ -399,21 +400,21 @@ class GardenListAPI(AuthorizationHandler):
             description: Parameter validation error
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Parameter validation error
           404:
             description: Resource does not exist
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Resource does not exist
           50x:
             description: Server exception
             content:
               text/plain:
-                schema: 
+                schema:
                   type: 'string'
                 example: Server exception
         tags:
