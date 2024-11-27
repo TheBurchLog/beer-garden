@@ -26,7 +26,6 @@ from brewtils.schemas import (
     LoggingConfigSchema,
     OperationSchema,
     ParameterSchema,
-    PatchSchema,
     QueueSchema,
     RequestSchema,
     RoleSchema,
