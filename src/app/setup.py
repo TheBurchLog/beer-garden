@@ -28,7 +28,7 @@ setup(
     license="MIT",
     keywords="beer beer-garden beergarden",
     install_requires=[
-        # "brewtils>=3.28.0",
+        # "brewtils>=3.29.0",
         
         "apispec>=6.7,<7",
         "apispec-webframeworks>1,<2",
