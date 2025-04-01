@@ -51,7 +51,6 @@ setup(
         "pyyaml<7",
         "pyasn1<0.6.0",
         "pyrabbit2<2",
-        "pytz",
         "pyjwt>=2.4.0",
 
         # Can go to 18 after yapconf 0.4 is released
