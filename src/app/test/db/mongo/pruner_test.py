@@ -254,12 +254,12 @@ class TestMongoPruner(object):
 
         db["request"].delete_one({})
         # Orphaned Gridfs files
-        assert db["fs.files"].count() == 2
-        assert db["fs.chunks"].count() == 2
+        assert db["fs.files"].count_documents({}) == 2
+        assert db["fs.chunks"].count_documents({})== 2
 
         prune_grid_fs()
-        assert db["fs.files"].count() == 0
-        assert db["fs.chunks"].count() == 0
+        assert db["fs.files"].count_documents({}) == 0
+        assert db["fs.chunks"].count_documents({}) == 0
 
     def test_prune_raw_file_gridfs_files(self, monkeypatch):
         db = get_db()
@@ -285,12 +285,12 @@ class TestMongoPruner(object):
 
         db["raw_file"].delete_one({})
         # Orphaned Gridfs files
-        assert db["fs.files"].count() == 1
-        assert db["fs.chunks"].count() == 1
+        assert db["fs.files"].count_documents({}) == 1
+        assert db["fs.chunks"].count_documents({}) == 1
 
         prune_grid_fs()
-        assert db["fs.files"].count() == 0
-        assert db["fs.chunks"].count() == 0
+        assert db["fs.files"].count_documents({}) == 0
+        assert db["fs.chunks"].count_documents({}) == 0
 
     def test_run_cancels_outstanding_requests(self, task, in_progress, created):
         config._CONFIG = {"db": {"prune": {"in_progress_request_expiration": 15}}}
