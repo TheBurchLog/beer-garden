@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, timedelta, timezone
 import copy
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from box import Box

@@ -12,9 +12,8 @@ The garden service is responsible for:
 import copy
 import json
 import logging
-from datetime import datetime, timedelta, timezone
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List
 

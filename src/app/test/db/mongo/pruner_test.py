@@ -5,7 +5,6 @@ from datetime import timedelta, timezone
 import pytest
 from mock import MagicMock, Mock
 from mongoengine.connection import get_db
-from mongomock.gridfs import enable_gridfs_integration
 
 import beer_garden
 from beer_garden import config

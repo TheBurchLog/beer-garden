@@ -7,8 +7,8 @@ from brewtils.models import System as BrewtilsSystem
 from brewtils.models import Topic as BrewtilsTopic
 from mongoengine import connect
 
-import mongomock
 import beer_garden
+import mongomock
 from beer_garden.db.mongo.models import Garden, System, Topic
 from beer_garden.garden import create_garden, update_garden
 from beer_garden.systems import create_system, remove_system
