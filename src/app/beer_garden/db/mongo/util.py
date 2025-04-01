@@ -135,7 +135,7 @@ def contains_field(collection_name, field):
     db = get_db()
     collection = db.get_collection(collection_name)
 
-    if collection.find({field: {"$exists": True}}).count() > 0:
+    if collection.count_documents({field: {"$exists": True}})> 0:
         return True
     return False
 
@@ -145,7 +145,7 @@ def missing_field(collection_name, field):
     db = get_db()
     collection = db.get_collection(collection_name)
 
-    if collection.find({field: {"$exists": False}}).count() > 0:
+    if collection.count_documents({field: {"$exists": False}}) > 0:
         return True
     return False
 
@@ -171,7 +171,7 @@ def ensure_v3_24_model_migration():
 
         garden_collection = db.get_collection("garden")
 
-        if garden_collection.find().count() > 1:
+        if garden_collection.count_documents({}) > 1:
             if not os.path.exists(config.get("children.directory")):
                 os.makedirs(config.get("children.directory"))
 
