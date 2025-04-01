@@ -135,7 +135,7 @@ def contains_field(collection_name, field):
     db = get_db()
     collection = db.get_collection(collection_name)
 
-    if collection.count_documents({field: {"$exists": True}})> 0:
+    if collection.count_documents({field: {"$exists": True}}) > 0:
         return True
     return False
 
