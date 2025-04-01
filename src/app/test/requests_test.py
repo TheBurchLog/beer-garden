@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timedelta, timezone
+import copy
 
 import pytest
 from box import Box
 from brewtils.errors import ModelValidationError
 from brewtils.models import Choices, Command, Event, Events
 from brewtils.models import Garden as BrewtilsGarden
-from brewtils.models import Parameter
+from brewtils.models import Instance, Parameter
 from brewtils.models import Request as BrewtilsRequest
 from brewtils.models import System
 from mock import Mock, call, patch
@@ -1130,6 +1131,36 @@ class TestHandleEvent:
 
         assert updated_request.status_updated_at == status_updated_at
 
+    def test_metadata_merged_on_child_garden_requests(self, child_garden_request):
+        child_garden_request.metadata = {
+            "CREATED_child": 1737558145883,
+        }
+        request_event = Event(
+            payload=copy.deepcopy(child_garden_request),
+            name=Events.REQUEST_UPDATED.name,
+            garden="child",
+        )
+        request_event.payload.status = "IN_PROGRESS"
+        request_event.payload.metadata = {
+            "CREATED_child": 1737558145883,
+            "IN_PROGRESS_child": 1737558153258,
+        }
+
+        beer_garden.config._CONFIG = {"garden": {"name": "parent"}}
+
+        beer_garden.requests.handle_event(request_event)
+
+        updated_request = Request.objects.get(id=child_garden_request.id)
+
+        # Updated_request contains all metadata from child_garden_request and event.payload
+        assert all(
+            updated_request.metadata.get(key) == val
+            for key, val in {
+                **child_garden_request.metadata,
+                **request_event.payload.metadata,
+            }.items()
+        )
+
 
 class TestLatestRequest(object):
     @pytest.fixture
@@ -1139,6 +1170,7 @@ class TestLatestRequest(object):
                 name="original",
                 version="1.0.0dev",
                 namespace="beer_garden",
+                instances=[Instance(name="1"), Instance(name="2")],
                 commands=[Command(name="original")],
             )
         )
@@ -1152,6 +1184,7 @@ class TestLatestRequest(object):
                 name="original",
                 version="2.0.0",
                 namespace="beer_garden",
+                instances=[Instance(name="2"), Instance(name="3")],
                 commands=[Command(name="original")],
             )
         )
@@ -1179,6 +1212,32 @@ class TestLatestRequest(object):
 
         assert latest_request.system_version != system_v1.version
         assert latest_request.system_version == system_v2.version
+
+    def test_latest_instance_request(self, system_v1, system_v2):
+        latest_request = determine_latest_system_version(
+            Request(
+                system="original",
+                namespace="beer_garden",
+                instance_name="2",
+                system_version="latest",
+            )
+        )
+
+        assert latest_request.system_version != system_v1.version
+        assert latest_request.system_version == system_v2.version
+
+    def test_latest_instance_request_unique_instance(self, system_v1, system_v2):
+        latest_request = determine_latest_system_version(
+            Request(
+                system="original",
+                namespace="beer_garden",
+                instance_name="1",
+                system_version="latest",
+            )
+        )
+
+        assert latest_request.system_version == system_v1.version
+        assert latest_request.system_version != system_v2.version
 
     def test_v1_request_no_version(self, system_v1):
         latest_request = determine_latest_system_version(

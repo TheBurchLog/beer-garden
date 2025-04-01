@@ -134,6 +134,7 @@ services:
             BG_PARENT_STOMP_PASSWORD: password
             BG_PARENT_STOMP_SEND_DESTINATION: Beer_Garden_Operations_Parent
             BG_PARENT_STOMP_SUBSCRIBE_DESTINATION: Beer_Garden_Forward_Parent
+            BG_PARENT_SYNC_INTERVAL: 1
             
             BG_PARENT_SYNC_INTERVAL: 1
 
@@ -166,7 +167,9 @@ services:
             BG_METRICS_PROMETHEUS_ENABLED: "false"
 
         depends_on:
-            - beer-garden-grandparent
+            - mongodb
+            - rabbitmq
+            - activemq
 
     beer-garden-child:
         image: bgio/beer-garden:child
@@ -184,6 +187,7 @@ services:
             BG_GARDEN_NAME: child
             BG_PARENT_HTTP_ENABLED: "true"
             BG_PARENT_HTTP_HOST: beer-garden-parent
+            BG_PARENT_SYNC_INTERVAL: 1
 
             BG_PARENT_SYNC_INTERVAL: 1
 
@@ -214,7 +218,8 @@ services:
             BG_METRICS_PROMETHEUS_ENABLED: "false"
 
         depends_on:
-            - beer-garden-parent
+            - mongodb
+            - rabbitmq
 
 networks:
     bg-network:

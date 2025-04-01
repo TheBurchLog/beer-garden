@@ -4,13 +4,11 @@ from brewtils.models import Operation, Permissions
 from brewtils.schema_parser import SchemaParser
 
 from beer_garden.api.http.handlers import AuthorizationHandler
-from beer_garden.metrics import collect_metrics
 
 
 class RunnerAPI(AuthorizationHandler):
     parser = SchemaParser()
 
-    @collect_metrics(transaction_type="API", group="RunnerAPI")
     async def get(self, runner_id):
         """
         ---
@@ -53,7 +51,6 @@ class RunnerAPI(AuthorizationHandler):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         self.write(response)
 
-    @collect_metrics(transaction_type="API", group="RunnerAPI")
     async def delete(self, runner_id):
         """
         ---
@@ -99,7 +96,6 @@ class RunnerAPI(AuthorizationHandler):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         self.write(response)
 
-    @collect_metrics(transaction_type="API", group="RunnerAPI")
     async def patch(self, runner_id):
         """
         ---
@@ -191,7 +187,6 @@ class RunnerAPI(AuthorizationHandler):
 class RunnerListAPI(AuthorizationHandler):
     parser = SchemaParser()
 
-    @collect_metrics(transaction_type="API", group="RunnerListAPI")
     async def get(self):
         """
         ---
@@ -228,7 +223,6 @@ class RunnerListAPI(AuthorizationHandler):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         self.write(response)
 
-    @collect_metrics(transaction_type="API", group="RunnerListAPI")
     async def patch(self):
         """
         ---
