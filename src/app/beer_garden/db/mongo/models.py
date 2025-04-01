@@ -12,6 +12,7 @@ except ImportError:
     from lark.common import ParseError
 
     LarkError = ParseError
+import zoneinfo
 from typing import Tuple
 
 import brewtils.models
@@ -44,7 +45,7 @@ from mongoengine import (
     StringField,
 )
 from mongoengine.errors import DoesNotExist
-import zoneinfo
+
 from beer_garden import config
 from beer_garden.db.mongo.querysets import FileFieldHandlingQuerySet
 
@@ -886,7 +887,9 @@ class DateTrigger(MongoModel, EmbeddedDocument):
     brewtils_model = brewtils.models.DateTrigger
 
     run_date = DateTimeField(required=True)
-    timezone = StringField(required=False, default="utc", chocies=zoneinfo.available_timezones())
+    timezone = StringField(
+        required=False, default="utc", chocies=zoneinfo.available_timezones()
+    )
 
 
 class IntervalTrigger(MongoModel, EmbeddedDocument):
@@ -899,7 +902,9 @@ class IntervalTrigger(MongoModel, EmbeddedDocument):
     seconds = IntField(default=0)
     start_date = DateTimeField(required=False)
     end_date = DateTimeField(required=False)
-    timezone = StringField(required=False, default="utc", chocies=zoneinfo.available_timezones())
+    timezone = StringField(
+        required=False, default="utc", chocies=zoneinfo.available_timezones()
+    )
     jitter = IntField(required=False)
     reschedule_on_finish = BooleanField(required=False, default=False)
 
@@ -917,7 +922,9 @@ class CronTrigger(MongoModel, EmbeddedDocument):
     second = StringField(default="0")
     start_date = DateTimeField(required=False)
     end_date = DateTimeField(required=False)
-    timezone = StringField(required=False, default="utc", chocies=zoneinfo.available_timezones())
+    timezone = StringField(
+        required=False, default="utc", chocies=zoneinfo.available_timezones()
+    )
     jitter = IntField(required=False)
 
 

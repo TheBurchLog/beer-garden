@@ -10,9 +10,7 @@ import beer_garden.config as config
 import beer_garden.db.api as db
 from beer_garden.garden import get_garden
 from beer_garden.systems import get_systems
-from beer_garden.topic import (
-    get_topics_regex,
-)
+from beer_garden.topic import get_topics_regex
 
 logger = logging.getLogger(__name__)
 

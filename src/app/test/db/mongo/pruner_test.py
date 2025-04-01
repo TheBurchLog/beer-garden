@@ -255,7 +255,7 @@ class TestMongoPruner(object):
         db["request"].delete_one({})
         # Orphaned Gridfs files
         assert db["fs.files"].count_documents({}) == 2
-        assert db["fs.chunks"].count_documents({})== 2
+        assert db["fs.chunks"].count_documents({}) == 2
 
         prune_grid_fs()
         assert db["fs.files"].count_documents({}) == 0
