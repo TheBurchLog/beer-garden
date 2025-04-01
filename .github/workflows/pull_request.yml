@@ -214,7 +214,7 @@ jobs:
 
   Local-Plugin-Testing:
     runs-on: ${{ matrix.os }}
-    # needs: PyTest
+    needs: PyTest
 
     strategy:
       matrix:
@@ -323,7 +323,7 @@ jobs:
 
   Grandchild-Testing:
     runs-on: ${{ matrix.os }}
-    # needs: Local-Plugin-Testing
+    needs: Local-Plugin-Testing
 
     strategy:
       matrix:
@@ -474,7 +474,7 @@ jobs:
 
   Replication-Testing:
     runs-on: ${{ matrix.os }}
-    # needs: Local-Plugin-Testing
+    needs: Local-Plugin-Testing
 
     strategy:
       matrix:
