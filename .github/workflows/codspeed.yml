@@ -22,6 +22,7 @@ jobs:
 
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v3
+        working-directory: ./src/app
         with:
           token: ${{ secrets.CODSPEED_TOKEN }}
           run: make test-codspeed
