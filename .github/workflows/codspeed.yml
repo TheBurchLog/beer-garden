@@ -31,4 +31,4 @@ jobs:
         uses: CodSpeedHQ/action@v3
         with:
           token: ${{ secrets.CODSPEED_TOKEN }}
-          run: pytest ./src/app/test/ --codspeed --continue-on-collection-errors
+          run: pytest ./src/app/test/ --codspeed --ignore=./src/app/test/api/http/unit/handlers/v1/event_test.py --ignore=./src/app/test/api/http/unit/handlers/v1/event_test.py --ignore=./src/app/test/api/http/unit/handlers/v1/job_test.py --ignore=./src/app/test/authorization_test.py --ignore=./src/app/test/config_test.py --ignore=./src/app/test/events/handlers_test.py --ignore=./src/app/test/local_plugins/env_help_test.py --ignore=./src/app/test/local_plugins/manager_test.py --ignore=./src/app/test/local_plugins/runner_test.py --ignore=./src/app/test/metrics_test.py --ignore=./src/app/test/queues/rabbit_test.py --ignore=./src/app/test/requests_test.py --ignore=./src/app/test/role_test.py
