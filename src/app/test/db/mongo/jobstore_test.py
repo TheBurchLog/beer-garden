@@ -13,6 +13,7 @@ from beer_garden.db.mongo.jobstore import construct_job
 from beer_garden.db.mongo.models import DateTrigger as MongoDateTrigger
 from beer_garden.db.mongo.models import Job, RequestTemplate
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def ap_job(mongo_job, mongo_request_template):

@@ -19,6 +19,7 @@ import beer_garden.db.api as db
 import beer_garden.files as files
 from beer_garden.errors import NotUniqueException
 
+pytestmark = pytest.mark.benchmark
 
 class TestFileOperations(object):
     @pytest.fixture

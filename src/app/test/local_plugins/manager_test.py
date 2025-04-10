@@ -16,6 +16,7 @@ from beer_garden.errors import PluginValidationError
 from beer_garden.local_plugins.manager import CONFIG_NAME, ConfigLoader, PluginManager
 from beer_garden.systems import create_system
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def config_all():

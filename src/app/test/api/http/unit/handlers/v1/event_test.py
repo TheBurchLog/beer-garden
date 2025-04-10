@@ -14,6 +14,7 @@ from beer_garden.api.http.handlers.v1.event import (
     EventSocket,
 )
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def get_current_user_mock(monkeypatch):

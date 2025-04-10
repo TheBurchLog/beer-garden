@@ -9,6 +9,7 @@ from mock import Mock, call
 
 from beer_garden.local_plugins.runner import ProcessRunner
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def runner(tmp_path):

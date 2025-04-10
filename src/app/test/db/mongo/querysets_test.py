@@ -10,6 +10,7 @@ FILE_COUNT = 3
 
 enable_gridfs_integration()
 
+pytestmark = pytest.mark.benchmark
 
 class ModelWithFileField(Document):
     file_field = fields.FileField()

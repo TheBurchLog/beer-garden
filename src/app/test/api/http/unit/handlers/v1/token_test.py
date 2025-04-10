@@ -13,6 +13,7 @@ from beer_garden.db.mongo.models import UserToken as MongoUserToken
 from beer_garden.errors import ExpiredTokenException, InvalidTokenException
 from beer_garden.user import create_user, delete_user, get_token
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def user_password():

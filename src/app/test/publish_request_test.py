@@ -14,6 +14,7 @@ from mock import Mock
 
 from beer_garden import config, publish_request
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def command_topic_one():

@@ -32,6 +32,7 @@ from beer_garden.db.mongo.pruner import (
 
 enable_gridfs_integration()
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def collection_mock():

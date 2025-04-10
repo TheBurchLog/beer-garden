@@ -7,6 +7,7 @@ from mock import Mock
 
 import beer_garden.metrics as metrics
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def prometheus_mocks(monkeypatch):

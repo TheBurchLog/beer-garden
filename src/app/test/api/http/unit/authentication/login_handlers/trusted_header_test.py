@@ -14,6 +14,7 @@ from beer_garden.db.mongo.models import User as DB_User
 from beer_garden.role import create_role
 from beer_garden.user import create_user
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture(autouse=True)
 def app_config_trusted_handler(monkeypatch):

@@ -6,6 +6,7 @@ from mongoengine import ConnectionFailure
 
 import beer_garden.db.mongo.api
 
+pytestmark = pytest.mark.benchmark
 
 class TestCheckConnection(object):
     @pytest.fixture

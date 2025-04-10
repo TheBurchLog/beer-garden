@@ -21,6 +21,7 @@ from beer_garden.role import (
 )
 from beer_garden.user import create_user
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture(autouse=True)
 def drop():

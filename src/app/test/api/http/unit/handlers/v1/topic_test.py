@@ -12,6 +12,7 @@ from beer_garden.api.http.authentication import issue_token_pair
 from beer_garden.db.mongo.models import Topic
 from beer_garden.topic import create_topic
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture(autouse=True)
 def topic_permitted():

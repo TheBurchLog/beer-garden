@@ -5,6 +5,7 @@ from mock import Mock, patch
 import beer_garden.monitor
 from beer_garden.plugin import StatusMonitor
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def queue_mock(monkeypatch):

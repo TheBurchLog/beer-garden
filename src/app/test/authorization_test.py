@@ -21,6 +21,7 @@ from beer_garden.authorization import (
 )
 from beer_garden.db.mongo import models
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture()
 def role_for_garden_scope():

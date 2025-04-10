@@ -8,6 +8,7 @@ from mock import Mock, call, patch
 import beer_garden
 from beer_garden.app import Application, HelperThread
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def app(monkeypatch):

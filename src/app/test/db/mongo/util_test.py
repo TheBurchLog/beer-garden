@@ -13,6 +13,7 @@ from beer_garden.db.mongo.util import (  # ensure_roles,; ensure_users,
 )
 from beer_garden.errors import IndexOperationError
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def model_mocks(monkeypatch):

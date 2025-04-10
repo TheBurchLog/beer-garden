@@ -11,6 +11,7 @@ from beer_garden.log import PluginLoggingManager
 from beer_garden.role import create_role, delete_role
 from beer_garden.user import create_user, delete_user
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture(autouse=True)
 def garden_permitted():

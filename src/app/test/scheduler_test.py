@@ -8,6 +8,7 @@ from brewtils.models import RequestTemplate
 from beer_garden.db.mongo.models import Job
 from beer_garden.scheduler import create_jobs
 
+pytestmark = pytest.mark.benchmark
 
 class TestScheduler:
     @pytest.fixture(autouse=True)

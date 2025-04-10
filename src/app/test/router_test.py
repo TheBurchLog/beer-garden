@@ -8,6 +8,7 @@ import beer_garden.router
 from beer_garden.errors import UnknownGardenException
 from beer_garden.router import _determine_target
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def op():

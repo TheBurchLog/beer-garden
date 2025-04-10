@@ -6,6 +6,7 @@ from pyrabbit2.http import HTTPError, NetworkError
 import beer_garden.requests
 from beer_garden.queue.rabbit import PyrabbitClient, get_routing_key, get_routing_keys
 
+pytestmark = pytest.mark.benchmark
 
 class TestGetRoutingKey(object):
     def test_basic(self):

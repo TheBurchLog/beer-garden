@@ -22,6 +22,7 @@ from beer_garden.db.mongo.models import (
 
 pytest_plugins = ["brewtils.test.fixtures"]
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture(scope="module", autouse=True)
 def mongo_conn():

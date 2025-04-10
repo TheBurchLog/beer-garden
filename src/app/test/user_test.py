@@ -49,6 +49,7 @@ from beer_garden.user import (
     verify_password,
 )
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture(autouse=True)
 def drop():

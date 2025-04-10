@@ -6,6 +6,7 @@ from brewtils.models import Role
 from beer_garden.db.mongo.models import Garden
 from beer_garden.role import create_role, delete_role
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture()
 def roles():

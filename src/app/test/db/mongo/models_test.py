@@ -30,6 +30,7 @@ from beer_garden.db.mongo.models import (
 
 enable_gridfs_integration()
 
+pytestmark = pytest.mark.benchmark
 
 class TestCommand(object):
     def test_str(self):

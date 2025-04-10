@@ -9,6 +9,7 @@ from mock import Mock
 import beer_garden.log
 from beer_garden.log import default_app_config
 
+pytestmark = pytest.mark.benchmark
 
 class TestLoad(object):
     @pytest.fixture(autouse=True)

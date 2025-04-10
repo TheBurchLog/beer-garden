@@ -25,6 +25,7 @@ from beer_garden.topic import (
     topic_remove_subscriber,
 )
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture(autouse=True)
 def drop():

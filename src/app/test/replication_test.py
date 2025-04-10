@@ -10,6 +10,7 @@ from beer_garden.replication import (
     update_replication,
 )
 
+pytestmark = pytest.mark.benchmark
 
 class TestReplication(object):
 

@@ -17,6 +17,7 @@ from beer_garden.role import create_role, delete_role
 from beer_garden.systems import create_system
 from beer_garden.user import create_user, delete_user
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture(autouse=True)
 def garden(system_permitted, system_not_permitted):

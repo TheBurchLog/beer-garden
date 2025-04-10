@@ -11,6 +11,7 @@ from yapconf import YapconfSpec
 import beer_garden.config
 from beer_garden.log import default_app_config
 
+pytestmark = pytest.mark.benchmark
 
 class TestLoadConfig(object):
     def test_no_config_file(self):

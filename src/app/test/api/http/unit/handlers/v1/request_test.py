@@ -17,6 +17,7 @@ from beer_garden.user import create_user, delete_user
 
 enable_gridfs_integration()
 
+pytestmark = pytest.mark.benchmark
 
 def format_form_data(metadata: list, data: str, boundary: str):
     form_data = "\r\n"

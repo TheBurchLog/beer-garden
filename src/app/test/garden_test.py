@@ -28,6 +28,7 @@ from beer_garden.garden import (
 )
 from beer_garden.systems import create_system
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture(autouse=True)
 def drop():

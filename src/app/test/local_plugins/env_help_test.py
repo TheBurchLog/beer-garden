@@ -12,6 +12,7 @@ from beer_garden.local_plugins.env_help import (
     var_name,
 )
 
+pytestmark = pytest.mark.benchmark
 
 @contextmanager
 def mangle_env(updates):

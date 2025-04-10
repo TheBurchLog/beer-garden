@@ -10,6 +10,7 @@ from beer_garden import config
 from beer_garden.db.mongo.models import System
 from beer_garden.systems import create_system, get_systems, update_system
 
+pytestmark = pytest.mark.benchmark
 
 @pytest.fixture
 def system():

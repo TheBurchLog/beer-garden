@@ -9,6 +9,7 @@ from beer_garden import config
 from beer_garden.events.handlers import add_internal_events_handler
 from beer_garden.events.processors import FanoutProcessor
 
+pytestmark = pytest.mark.benchmark
 
 class TestHandlers:
 
