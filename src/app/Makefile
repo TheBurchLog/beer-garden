@@ -121,6 +121,9 @@ security: ## check code for insecure settings and functions
 test: ## run tests quickly with the default Python
 	pytest $(TEST_DIR)
 
+test-codspeed: ## run tests quickly with the default Python
+	pytest $(TEST_DIR) --codspeed
+
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source $(MODULE_NAME) -m pytest $(TEST_DIR) --tb=no 
 	coverage report -m
