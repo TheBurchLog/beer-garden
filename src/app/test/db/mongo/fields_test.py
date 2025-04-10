@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from beer_garden.db.mongo.fields import DummyField
-
+import pytest
 
 class TestDummyField(object):
     @pytest.mark.benchmark
