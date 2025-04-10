@@ -85,6 +85,7 @@ class TestSystem:
     def setup_class(cls):
         connect("beer_garden", host="mongomock://localhost")
 
+    @pytest.mark.benchmark
     def test_disallow_command_updates(self, system):
         """System commands should not be allowed to update if the
         allow_command_updates config is set to False
@@ -96,6 +97,7 @@ class TestSystem:
                 system=system, new_commands=[BrewtilsCommand(name="changed_command")]
             )
 
+    @pytest.mark.benchmark
     def test_allow_command_updates(self, system):
         """System commands should be allowed to update if the
         allow_command_updates config is set to True
@@ -108,6 +110,7 @@ class TestSystem:
             updated_system.commands[0].name == "changed_command"
         ), "System command should be updated with the new command name"
 
+    @pytest.mark.benchmark
     def test_get_systems(self, system, system2):
         systems = get_systems()
 
@@ -124,6 +127,7 @@ class TestSystem:
         assert system_1_found
         assert system_2_found
 
+    @pytest.mark.benchmark
     def test_get_systems_filtered(self, system, system2):
         systems = get_systems(filter_latest=True)
 
@@ -140,6 +144,7 @@ class TestSystem:
         assert not system_1_found
         assert system_2_found
 
+    @pytest.mark.benchmark
     def test_get_systems_running(self, system, system2, system3, system4):
         systems = get_systems(filter_running=True)
 
@@ -163,6 +168,7 @@ class TestSystem:
         assert system_3_found
         assert system_4_found
 
+    @pytest.mark.benchmark
     def test_get_systems_running_and_filtered(self, system, system2, system3, system4):
         systems = get_systems(filter_latest=True, filter_running=True)
 

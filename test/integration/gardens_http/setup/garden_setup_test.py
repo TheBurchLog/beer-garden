@@ -28,6 +28,7 @@ def system_spec():
 class TestGardenSetup(object):
     child_garden_name = "childdocker"
 
+    @pytest.mark.benchmark
     def test_garden_auto_register_successful(self):
         response = self.easy_client.client.session.get(
             self.easy_client.client.base_url + "api/v1/gardens/"
@@ -38,6 +39,7 @@ class TestGardenSetup(object):
         print(gardens)
         assert len(gardens) == 2
 
+    @pytest.mark.benchmark
     def test_update_garden_connection_info(self):
         response = self.easy_client.client.session.get(
             self.easy_client.client.base_url + "api/v1/gardens/"
@@ -74,6 +76,7 @@ class TestGardenSetup(object):
 
         assert response.ok
 
+    @pytest.mark.benchmark
     def test_child_systems_register_successful(self):
         systems = self.easy_client.find_systems()
 
@@ -91,6 +94,7 @@ class TestGardenSetup(object):
             and namespaces[self.child_garden_name] > 0
         )
 
+    @pytest.mark.benchmark
     def test_child_request_from_parent(self):
         request = self.request_generator.generate_request(
             parameters={"message": "test_string", "loud": True}
@@ -98,6 +102,7 @@ class TestGardenSetup(object):
         response = wait_for_response(self.easy_client, request)
         assert_successful_request(response, output="test_string!!!!!!!!!")
 
+    @pytest.mark.benchmark
     def test_child_request_from_child(self):
         request = self.request_generator.generate_request(
             parameters={"message": "test_string", "loud": True}
@@ -105,6 +110,7 @@ class TestGardenSetup(object):
         response = wait_for_response(self.child_easy_client, request)
         assert_successful_request(response, output="test_string!!!!!!!!!")
 
+    @pytest.mark.benchmark
     def test_verify_requests(self):
         sleep(0.5)  # TODO: it is ridiculous that this is necessary
         orig_requests_len = len(self.easy_client.find_requests())

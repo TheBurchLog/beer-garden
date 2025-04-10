@@ -21,6 +21,7 @@ def app(monkeypatch):
 class TestApplication(object):
     @patch("beer_garden.app.Application._shutdown")
     @patch("beer_garden.app.Application._startup")
+    @pytest.mark.benchmark
     def test_run(self, app, startup_mock, shutdown_mock):
         app.helper_threads = []
         app.stopped = Mock(side_effect=[False, True])
@@ -31,6 +32,7 @@ class TestApplication(object):
 
     @patch("beer_garden.app.Application._shutdown", Mock())
     @patch("beer_garden.app.Application._startup", Mock())
+    @pytest.mark.benchmark
     def test_helper_thread_restart(self):
         helper_mock = Mock()
         helper_mock.thread.is_alive.return_value = False
@@ -43,6 +45,7 @@ class TestApplication(object):
     @patch("beer_garden.app.Application._shutdown", Mock())
     @patch("beer_garden.app.Application._setup_database", Mock())
     @patch("beer_garden.app.Application._setup_queues", Mock())
+    @pytest.mark.benchmark
     def test_startup(self):
         self.app.stopped = Mock(return_value=True)
         self.app.thrift_server = self.thrift_server
@@ -66,6 +69,7 @@ class TestApplication(object):
             helper.start.assert_called_once_with()
 
     @patch("beer_garden.app.Application._startup", Mock())
+    @pytest.mark.benchmark
     def test_shutdown(self):
         self.app.stopped = Mock(return_value=True)
         self.app.plugin_manager = self.plugin_manager
@@ -84,6 +88,7 @@ class TestApplication(object):
 
     @pytest.mark.skip(reason="Event notification subsystem not complete")
     @patch("beer_garden.bv_client")
+    @pytest.mark.benchmark
     def test_startup_notification_error(self, client_mock):
         self.app.plugin_manager = self.plugin_manager
         self.app.clients = self.clients
@@ -95,6 +100,7 @@ class TestApplication(object):
 
     @pytest.mark.skip(reason="Event notification subsystem not complete")
     @patch("beer_garden.bv_client")
+    @pytest.mark.benchmark
     def test_shutdown_notification_error(self, client_mock):
         self.app.plugin_manager = self.plugin_manager
         self.app.clients = self.clients
@@ -106,6 +112,7 @@ class TestApplication(object):
 
 
 class TestProgressiveBackoff(object):
+    @pytest.mark.benchmark
     def test_increments(self, monkeypatch, app):
         func_mock = Mock(side_effect=[False, False, False, True])
 
@@ -115,6 +122,7 @@ class TestProgressiveBackoff(object):
         app._progressive_backoff(func_mock, "test_func")
         wait_mock.assert_has_calls([call(0.1), call(0.2), call(0.4)])
 
+    @pytest.mark.benchmark
     def test_max_timeout(self, monkeypatch, app):
         side_effect = [False] * 15
         side_effect[-1] = True
@@ -137,17 +145,20 @@ class TestHelperThread(object):
     def helper(self, callable_mock):
         return HelperThread(callable_mock)
 
+    @pytest.mark.benchmark
     def test_start(self, helper, callable_mock):
         helper.start()
         assert callable_mock.called is True
         assert helper.thread.start.called is True
 
+    @pytest.mark.benchmark
     def test_stop_never_started(self, caplog, helper):
         with caplog.at_level(logging.DEBUG):
             helper.stop()
 
         assert len(caplog.records) == 0
 
+    @pytest.mark.benchmark
     def test_stop_thread_alive_successful(self, caplog, helper):
         helper.thread = Mock(is_alive=Mock(side_effect=[True, False]))
 
@@ -158,6 +169,7 @@ class TestHelperThread(object):
         assert helper.thread.join.called is True
         assert caplog.records[-1].levelname == "DEBUG"
 
+    @pytest.mark.benchmark
     def test_stop_thread_alive_unsuccessful(self, caplog, helper):
         helper.thread = Mock(is_alive=Mock(return_value=True))
 
@@ -168,6 +180,7 @@ class TestHelperThread(object):
         assert helper.thread.join.called is True
         assert caplog.records[-1].levelname == "WARNING"
 
+    @pytest.mark.benchmark
     def test_stop_thread_dead(self, caplog, helper):
         helper.thread = Mock(is_alive=Mock(return_value=False))
 

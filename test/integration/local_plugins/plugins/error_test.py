@@ -22,12 +22,14 @@ def system_spec():
 
 @pytest.mark.usefixtures("easy_client", "request_generator")
 class TestError(object):
-    def test_error_on_request(self):
+    @pytest.mark.benchmark
+def test_error_on_request(self):
         request = self.request_generator.generate_request()
         response = wait_for_response(self.easy_client, request)
         assert_errored_request(response)
 
-    def test_format_output_on_json_request(self):
+    @pytest.mark.benchmark
+def test_format_output_on_json_request(self):
         request = self.request_generator.generate_request(
             command="error_string_output_type_json"
         )

@@ -27,6 +27,7 @@ def local_garden():
 
 class TestRoleAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_get_returns_all_roles(self, http_client, base_url, roles):
         url = f"{base_url}/api/v1/roles/"
 

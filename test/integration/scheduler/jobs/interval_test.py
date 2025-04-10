@@ -27,6 +27,7 @@ def system_spec():
 
 @pytest.mark.usefixtures("easy_client")
 class TestInterval(object):
+    @pytest.mark.benchmark
     def test_no_namespace_job(self, system_spec):
         job_name = "test_no_namespace_job"
         job_wait = 30

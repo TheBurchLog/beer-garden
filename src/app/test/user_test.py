@@ -213,37 +213,45 @@ def app_config_invalid_ttl(monkeypatch):
 
 
 class TestUserToken:
+    @pytest.mark.benchmark
     def test_get_user_token(self, user_token):
         assert get_token(user_token.uuid) is not None
 
+    @pytest.mark.benchmark
     def test_delete_user_token(self, user_token):
         delete_token(user_token)
 
         with pytest.raises(DoesNotExist):
             get_token(user_token.uuid)
 
+    @pytest.mark.benchmark
     def test_has_token(self, user_token):
         assert has_token(user_token.username)
         assert not has_token("NO_MATCH")
 
+    @pytest.mark.benchmark
     def test_revoke_tokens_by_username(self, user_token):
         revoke_tokens(username=user_token.username)
         assert not has_token(user_token.username)
 
+    @pytest.mark.benchmark
     def test_revoke_tokens_by_user(self, user_token, user):
         revoke_tokens(user=user)
         assert not has_token(user.username)
 
+    @pytest.mark.benchmark
     def test_validated_token_ttl(self, app_config_valid_ttl):
         validated_token_ttl()
         assert True
 
+    @pytest.mark.benchmark
     def test_validated_invalid_token_ttl(self, app_config_invalid_ttl):
         with pytest.raises(ConfigurationError):
             validated_token_ttl()
 
 
 class TestUser:
+    @pytest.mark.benchmark
     def test_create_user(self, local_role, upstream_role):
         user_created = create_user(
             User(
@@ -255,23 +263,28 @@ class TestUser:
 
         assert user_created.id is not None
 
+    @pytest.mark.benchmark
     def test_get_user(self, user):
         db_user = get_user(username=user.username)
         assert db_user == user
 
+    @pytest.mark.benchmark
     def test_get_user_skip_roles(self, user):
         db_user = get_user(username=user.username, include_roles=False)
         assert len(db_user.roles) == 1
         assert len(db_user.local_roles) == 0
 
+    @pytest.mark.benchmark
     def test_get_users(self, user):
         assert len(get_users()) == 1
 
+    @pytest.mark.benchmark
     def test_delete_user(self, user):
         delete_user(user=user)
         with pytest.raises(DoesNotExist):
             get_user(username=user.username)
 
+    @pytest.mark.benchmark
     def test_update_user(self, user, monkeypatch, roles_loaded):
         revoke_mock = Mock()
         monkeypatch.setattr(beer_garden.user, "revoke_tokens", revoke_mock)
@@ -281,11 +294,13 @@ class TestUser:
         assert len(updated_user.roles) == 2
         revoke_mock.assert_called_once()
 
+    @pytest.mark.benchmark
     def test_update_user_invalid_password(self, user):
         set_password(user, password="good")
         with pytest.raises(InvalidPasswordException):
             update_user(user=user, new_password="bad", current_password="bad")
 
+    @pytest.mark.benchmark
     def test_update_user_local_roles(self, user, monkeypatch, roles_loaded):
         revoke_mock = Mock()
         monkeypatch.setattr(beer_garden.user, "revoke_tokens", revoke_mock)
@@ -297,6 +312,7 @@ class TestUser:
         assert len(updated_user.roles) == 2
         revoke_mock.assert_called_once()
 
+    @pytest.mark.benchmark
     def test_update_user_remote(self, user):
         user.is_remote = True
         user = update_user(user=user)
@@ -312,22 +328,26 @@ class TestUser:
 
         assert len(db_user.upstream_roles) == 2
 
+    @pytest.mark.benchmark
     def test_update_user_change_invalid_password(self, user):
         password = "test"
         set_password(user, password=password)
         update_user(user=user, current_password="bad", password="new")
 
+    @pytest.mark.benchmark
     def test_update_user_change_valid_password(self, user):
         password = "test"
         set_password(user, password=password)
         update_user(user=user, current_password=password, password="new")
 
+    @pytest.mark.benchmark
     def test_set_password(self, user):
         password = "test"
         set_password(user, password=password)
 
         assert user.password != password
 
+    @pytest.mark.benchmark
     def test_verify_password(self, user):
         password = "test"
         set_password(user, password=password)
@@ -336,12 +356,14 @@ class TestUser:
 
         assert verify_password(user, password)
 
+    @pytest.mark.benchmark
     def test_verify_invalid_password(self, user):
         password = "test"
         set_password(user, password=password)
 
         assert not verify_password(user, "invalid")
 
+    @pytest.mark.benchmark
     def test_rescan_users(self, app_config_users_file):
         role_rescan()
         rescan()
@@ -366,6 +388,7 @@ class TestUser:
 
 
 class TestUserForwarding:
+    @pytest.mark.benchmark
     def test_flatten_user_role(self):
         role = Role(
             name="test",
@@ -447,6 +470,7 @@ class TestUserForwarding:
         for flatten_role in flatten_roles:
             assert SchemaParser.serialize_role(flatten_role) in valid_roles
 
+    @pytest.mark.benchmark
     def test_flatten_user_role_no_change(self):
         role = Role(
             name="test",
@@ -468,6 +492,7 @@ class TestUserForwarding:
             )
         )
 
+    @pytest.mark.benchmark
     def test_upstream_role_match_garden(self):
         role_1 = Role(
             name="test_1",
@@ -524,6 +549,7 @@ class TestUserForwarding:
         assert upstream_role_match_garden(role_5, garden_2)
         assert upstream_role_match_garden(role_5, garden_3)
 
+    @pytest.mark.benchmark
     def test_generate_downstream_user(self):
         garden_1 = Garden(
             name="A",
@@ -593,6 +619,7 @@ class TestUserForwarding:
             local_user.user_alias_mapping
         )
 
+    @pytest.mark.benchmark
     def test_generate_user_alias_mappings(self, user):
         user_alias_mapping = [
             AliasUserMap(target_garden="a", username="test"),
@@ -633,6 +660,7 @@ class TestUserForwarding:
 
 
 class TestUpstreamSync:
+    @pytest.mark.benchmark
     def test_upstream_user_sync_create(self):
         new_user = User(
             username="test_user",
@@ -646,6 +674,7 @@ class TestUpstreamSync:
         assert len(db_user.upstream_roles) == 1
         assert db_user.is_remote
 
+    @pytest.mark.benchmark
     def test_upstream_user_sync_local(self, user):
         new_user = User(
             username=user.username,
@@ -659,6 +688,7 @@ class TestUpstreamSync:
         assert len(db_user.upstream_roles) == 1
         assert not db_user.is_remote
 
+    @pytest.mark.benchmark
     def test_upstream_user_sync_override(self, roles_loaded):
         username = "test_user"
         user.is_remote = True

@@ -116,6 +116,7 @@ def error_logged(caplog, module) -> bool:
 
 
 class TestTrustedHeaderLoginHandler:
+    @pytest.mark.benchmark
     def test_get_user_returns_existing_user(self, user, role_1, role_2):
         handler = TrustedHeaderLoginHandler()
         headers = HTTPHeaders(
@@ -131,6 +132,7 @@ class TestTrustedHeaderLoginHandler:
         assert authenticated_user.username == user.username
         assert len(authenticated_user.roles) == 2
 
+    @pytest.mark.benchmark
     def test_get_user_returns_existing_user_upstream_roles(self, user):
         handler = TrustedHeaderLoginHandler()
         headers = HTTPHeaders(
@@ -152,6 +154,7 @@ class TestTrustedHeaderLoginHandler:
         assert authenticated_user.username == user.username
         assert len(authenticated_user.upstream_roles) == 2
 
+    @pytest.mark.benchmark
     def test_get_user_creates_new_user(self, role_1, role_2):
         handler = TrustedHeaderLoginHandler()
         headers = HTTPHeaders(
@@ -167,6 +170,7 @@ class TestTrustedHeaderLoginHandler:
         assert authenticated_user.username == "createNewUser"
         assert len(authenticated_user.roles) == 2
 
+    @pytest.mark.benchmark
     def test_get_user_handles_create_users_set_to_false(
         self, app_config_trusted_handler_create_users_false, caplog, role_1, role_2
     ):
@@ -182,6 +186,7 @@ class TestTrustedHeaderLoginHandler:
 
         assert authenticated_user is None
 
+    @pytest.mark.benchmark
     def test_get_user_logs_error_for_invalid_role(self, user, role_1, role_2):
         handler = TrustedHeaderLoginHandler()
         headers = HTTPHeaders(
@@ -197,6 +202,7 @@ class TestTrustedHeaderLoginHandler:
         assert authenticated_user.username == user.username
         assert len(authenticated_user.roles) == 1
 
+    @pytest.mark.benchmark
     def test_get_user_returns_existing_user_upstream_roles_malformed(
         self, user, malformed_role
     ):
@@ -212,6 +218,7 @@ class TestTrustedHeaderLoginHandler:
         with pytest.raises(ValidationError):
             handler.get_user(request)
 
+    @pytest.mark.benchmark
     def test_get_user_returns_existing_user_local_roles_malformed(self, user):
         handler = TrustedHeaderLoginHandler()
         headers = HTTPHeaders(
@@ -225,6 +232,7 @@ class TestTrustedHeaderLoginHandler:
         with pytest.raises(ValidationError):
             handler.get_user(request)
 
+    @pytest.mark.benchmark
     def test_get_user_returns_existing_user_alias_mapping_malformed(self, user):
         handler = TrustedHeaderLoginHandler()
         headers = HTTPHeaders(

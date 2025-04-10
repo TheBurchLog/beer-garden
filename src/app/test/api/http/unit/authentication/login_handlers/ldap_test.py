@@ -391,6 +391,7 @@ class TestLdapLoginHandler:
     @patch(
         "beer_garden.api.http.authentication.login_handlers.ldap.LdapLoginHandler.get_connection"
     )
+    @pytest.mark.benchmark
     def test_user_login_bad_default_role(self, mock_connection, valid_user):
         mock_connection.return_value = valid_user
         handler = LdapLoginHandler()
@@ -405,6 +406,7 @@ class TestLdapLoginHandler:
     @patch(
         "beer_garden.api.http.authentication.login_handlers.ldap.LdapLoginHandler.get_connection"
     )
+    @pytest.mark.benchmark
     def test_user_login_default_role(self, mock_connection, valid_user, role1):
         mock_connection.return_value = valid_user
         handler = LdapLoginHandler()
@@ -419,6 +421,7 @@ class TestLdapLoginHandler:
     @patch(
         "beer_garden.api.http.authentication.login_handlers.ldap.LdapLoginHandler.get_connection"
     )
+    @pytest.mark.benchmark
     def test_bad_password(self, mock_connection, bad_password):
         mock_connection.return_value = bad_password
         handler = LdapLoginHandler()
@@ -431,6 +434,7 @@ class TestLdapLoginHandler:
     @patch(
         "beer_garden.api.http.authentication.login_handlers.ldap.LdapLoginHandler.get_connection"
     )
+    @pytest.mark.benchmark
     def test_invalid_user(self, mock_connection, no_user):
         mock_connection.return_value = no_user
         handler = LdapLoginHandler()
@@ -445,6 +449,7 @@ class TestLdapLoginHandler:
     @patch(
         "beer_garden.api.http.authentication.login_handlers.ldap.LdapLoginHandler.get_connection"
     )
+    @pytest.mark.benchmark
     def test_no_added_group(self, mock_connection, ldap_connection):
         mock_connection.return_value = ldap_connection
         handler = LdapLoginHandler()
@@ -459,6 +464,7 @@ class TestLdapLoginHandler:
     @patch(
         "beer_garden.api.http.authentication.login_handlers.ldap.LdapLoginHandler.get_connection"
     )
+    @pytest.mark.benchmark
     def test_default_matches_group(self, mock_connection, ldap_connection, role1):
         mock_connection.return_value = ldap_connection
         handler = LdapLoginHandler()
@@ -473,6 +479,7 @@ class TestLdapLoginHandler:
     @patch(
         "beer_garden.api.http.authentication.login_handlers.ldap.LdapLoginHandler.get_connection"
     )
+    @pytest.mark.benchmark
     def test_added_group(self, mock_connection, ldap_connection, role1, role2):
         mock_connection.return_value = ldap_connection
         handler = LdapLoginHandler()
@@ -487,6 +494,7 @@ class TestLdapLoginHandler:
     @patch(
         "beer_garden.api.http.authentication.login_handlers.ldap.LdapLoginHandler.get_connection"
     )
+    @pytest.mark.benchmark
     def test_user_groups_replaced(
         self, mock_connection, ldap_connection2, role0, role2, role3, role4
     ):

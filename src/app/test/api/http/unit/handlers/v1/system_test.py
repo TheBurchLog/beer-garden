@@ -193,6 +193,7 @@ def systems_mock(monkeypatch, brewtils_system_with_instance):
 
 class TestSystemAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_returns_any_system(
         self, http_client, base_url, system_not_permitted
     ):
@@ -205,6 +206,7 @@ class TestSystemAPI:
         assert response_body["id"] == str(system_not_permitted.id)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_returns_permitted_system(
         self,
         http_client,
@@ -223,6 +225,7 @@ class TestSystemAPI:
         assert response_body["id"] == str(system_permitted.id)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_returns_403_for_not_permitted_system(
         self,
         http_client,
@@ -240,6 +243,7 @@ class TestSystemAPI:
         assert excinfo.value.code == 403
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_delete_for_permitted_system(
         self,
         http_client,
@@ -258,6 +262,7 @@ class TestSystemAPI:
         assert len(System.objects.filter(id=system_permitted.id)) == 0
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_delete_for_not_permitted_system(
         self,
         http_client,
@@ -277,6 +282,7 @@ class TestSystemAPI:
         assert len(System.objects.filter(id=system_not_permitted.id)) == 1
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_patch_for_permitted_system(
         self,
         http_client,
@@ -305,6 +311,7 @@ class TestSystemAPI:
         )
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_patch_for_not_permitted_system(
         self,
         http_client,
@@ -335,6 +342,7 @@ class TestSystemAPI:
         )
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_get_does_not_include_queue_info(
         self, http_client, base_url, system_with_instance
     ):
@@ -348,6 +356,7 @@ class TestSystemAPI:
         assert "queue_type" not in instance
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_patch_does_not_include_queue_info(
         self, http_client, base_url, system_with_instance, system_mock
     ):
@@ -372,6 +381,7 @@ class TestSystemAPI:
 
 class TestSystemListAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_returns_all_systems(self, http_client, base_url):
         url = f"{base_url}/api/v1/systems"
 
@@ -382,6 +392,7 @@ class TestSystemListAPI:
         assert len(response_body) == 2
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_returns_permitted_systems(
         self,
         http_client,
@@ -401,6 +412,7 @@ class TestSystemListAPI:
         assert response_body[0]["id"] == str(system_permitted.id)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_post_permitted_system(
         self,
         http_client,
@@ -436,6 +448,7 @@ class TestSystemListAPI:
         assert len(System.objects.filter(name="newsystem", namespace=garden.name)) == 1
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_post_for_not_permitted_system(
         self,
         http_client,
@@ -469,6 +482,7 @@ class TestSystemListAPI:
         assert len(System.objects.all()) == system_count_before
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_get_does_not_include_queue_info(self, http_client, base_url, systems_mock):
         url = f"{base_url}/api/v1/systems"
 

@@ -86,6 +86,7 @@ class TestAuthorizationHandler:
         connect("beer_garden", host="mongomock://localhost")
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_anonymous_access(
         self, http_client, app_config_auth_disabled, base_url
     ):
@@ -96,6 +97,7 @@ class TestAuthorizationHandler:
         assert response.code == 200
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_blocks_anonymous_access(
         self, http_client, app_config_auth_enabled, base_url
     ):
@@ -107,6 +109,7 @@ class TestAuthorizationHandler:
         assert excinfo.value.code == 401
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_access_with_valid_token(
         self, http_client, base_url, app_config_auth_enabled, user, access_token
     ):
@@ -118,6 +121,7 @@ class TestAuthorizationHandler:
         assert response.code == 200
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_blocks_access_with_invalid_token_signature(
         self, http_client, base_url, app_config_auth_enabled, user, access_token
     ):
@@ -137,6 +141,7 @@ class TestAuthorizationHandler:
         assert "invalid" in response_body["message"]
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_blocks_access_with_invalid_token_header(
         self, http_client, base_url, app_config_auth_enabled, user, access_token
     ):
@@ -156,6 +161,7 @@ class TestAuthorizationHandler:
         assert "invalid" in response_body["message"]
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_blocks_access_with_invalid_token_payload(
         self, http_client, base_url, app_config_auth_enabled, user, access_token
     ):
@@ -175,6 +181,7 @@ class TestAuthorizationHandler:
         assert "invalid" in response_body["message"]
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_blocks_access_with_expired_token(
         self, monkeypatch, http_client, base_url, app_config_auth_enabled, user
     ):
@@ -201,6 +208,7 @@ class TestAuthorizationHandler:
         assert "expired" in response_body["message"]
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_blocks_access_with_refresh_token(
         self, http_client, base_url, app_config_auth_enabled, user
     ):

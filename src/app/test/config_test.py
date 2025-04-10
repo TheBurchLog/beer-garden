@@ -14,6 +14,7 @@ from beer_garden.log import default_app_config
 pytestmark = pytest.mark.benchmark
 
 class TestLoadConfig(object):
+    @pytest.mark.benchmark
     def test_no_config_file(self):
         beer_garden.config.load([], force=True)
         spec = YapconfSpec(beer_garden.config._SPECIFICATION)
@@ -29,6 +30,7 @@ class TestLoadConfig(object):
             ("", '{"log":{"fallback_level": "DEBUG"}}'),
         ],
     )
+    @pytest.mark.benchmark
     def test_config_file(self, tmpdir, extension, contents):
         config_file = Path(tmpdir, f"config.{extension}")
 
@@ -52,6 +54,7 @@ class TestLoadConfig(object):
             ("/beer/garden/", "/beer/garden/"),
         ],
     )
+    @pytest.mark.benchmark
     def test_normalize_url_prefix(self, normalized, initial):
         cli_args = ["--entry-http-url-prefix", initial]
 
@@ -60,6 +63,7 @@ class TestLoadConfig(object):
 
 
 class TestGenerateConfig(object):
+    @pytest.mark.benchmark
     def test_correctness(self, tmpdir):
         config_file = os.path.join(str(tmpdir), "config.yaml")
         logging_config_file = os.path.join(str(tmpdir), "logging.json")
@@ -84,18 +88,21 @@ class TestGenerateConfig(object):
             yaml_config = yaml.safe_load(f)
         assert "configuration" not in yaml_config
 
+    @pytest.mark.benchmark
     def test_create_file(self, tmpdir):
         filename = os.path.join(str(tmpdir), "config.yaml")
         beer_garden.config.generate(["-c", filename])
 
         assert os.path.getsize(filename) > 0
 
+    @pytest.mark.benchmark
     def test_stdout(self, capsys):
         beer_garden.config.generate([])
 
         # Just make sure we printed something
         assert capsys.readouterr().out
 
+    @pytest.mark.benchmark
     def test_omit_bootstrap(self, tmpdir):
         filename = os.path.join(str(tmpdir), "temp.yaml")
         beer_garden.config.generate(["-c", filename])
@@ -109,6 +116,7 @@ class TestGenerateConfig(object):
 
 class TestUpdateConfig(object):
     @pytest.mark.parametrize("extension", ["yaml", "yml"])
+    @pytest.mark.benchmark
     def test_success(self, tmpdir, extension):
         config_file = os.path.join(str(tmpdir), "config." + extension)
 
@@ -122,6 +130,7 @@ class TestUpdateConfig(object):
         beer_garden.config.load(["-c", config_file], force=True)
         assert beer_garden.config.get("log.fallback_level") == "DEBUG"
 
+    @pytest.mark.benchmark
     def test_change_type(self, tmpdir):
         current_config = os.path.join(str(tmpdir), "config.json")
         new_config = os.path.join(str(tmpdir), "config.yaml")
@@ -137,6 +146,7 @@ class TestUpdateConfig(object):
         beer_garden.config.load(["-c", new_config], force=True)
         assert beer_garden.config.get("log.fallback_level") == "DEBUG"
 
+    @pytest.mark.benchmark
     def test_change_type_error(self, monkeypatch, tmpdir):
         config_file = os.path.join(str(tmpdir), "config.json")
         beer_garden.config.generate(["-c", config_file])
@@ -149,10 +159,12 @@ class TestUpdateConfig(object):
 
         assert os.path.exists(config_file)
 
+    @pytest.mark.benchmark
     def test_no_file_specified(self):
         with pytest.raises(SystemExit):
             beer_garden.config.migrate([])
 
+    @pytest.mark.benchmark
     def test_migrate_update_defaults(self, tmpdir):
         config_file = os.path.join(str(tmpdir), "config.yaml")
 
@@ -169,6 +181,7 @@ class TestUpdateConfig(object):
 
 
 class TestGenerateAppLogging(object):
+    @pytest.mark.benchmark
     def test_no_file(self, capsys):
         logging_config = beer_garden.config.generate_app_logging([])
         captured = capsys.readouterr()
@@ -176,6 +189,7 @@ class TestGenerateAppLogging(object):
         assert not captured.out == ""
         assert logging_config == default_app_config("INFO", None)
 
+    @pytest.mark.benchmark
     def test_with_file(self, tmpdir, capsys):
         logging_config_file = Path(tmpdir, "logging.yaml")
         logging_config = beer_garden.config.generate_app_logging(
@@ -202,9 +216,11 @@ class TestConfigGet(object):
             ("", None),
         ],
     )
+    @pytest.mark.benchmark
     def test_get(self, key, expected):
         assert beer_garden.config.get(key) == expected
 
+    @pytest.mark.benchmark
     def test_get_all(self):
         assert beer_garden.config.get() == beer_garden.config._CONFIG
 
@@ -288,6 +304,7 @@ class TestSafeMigrate(object):
     def config_file(self, tmpdir):
         return Path(tmpdir, "config.yaml")
 
+    @pytest.mark.benchmark
     def test_success(self, tmpdir, spec, config_file, old_config, new_config):
         old_config["configuration"]["file"] = str(config_file)
 
@@ -305,6 +322,7 @@ class TestSafeMigrate(object):
         assert new_config_value == new_config
         assert len(os.listdir(tmpdir)) == 2
 
+    @pytest.mark.benchmark
     def test_no_change(self, tmpdir, spec, config_file, new_config):
         with open(config_file, "w") as f:
             yaml.safe_dump(
@@ -320,6 +338,7 @@ class TestSafeMigrate(object):
         assert new_config_value == new_config
         assert len(os.listdir(tmpdir)) == 1
 
+    @pytest.mark.benchmark
     def test_migration_failure(
         self, monkeypatch, caplog, tmpdir, spec, config_file, old_config
     ):
@@ -348,6 +367,7 @@ class TestSafeMigrate(object):
         # And the values should be unchanged
         assert beer_garden.config.get("log.level") == "INFO"
 
+    @pytest.mark.benchmark
     def test_rename_failure(self, capsys, tmpdir, spec, config_file, old_config):
         with open(config_file, "w") as f:
             yaml.safe_dump(
@@ -372,6 +392,7 @@ class TestSafeMigrate(object):
 
         assert new_config_value == old_config
 
+    @pytest.mark.benchmark
     def test_catastrophe(self, capsys, tmpdir, spec, config_file, old_config):
         with open(config_file, "w") as f:
             yaml.safe_dump(

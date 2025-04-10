@@ -64,6 +64,7 @@ def access_token_permitted(user_with_permission):
 
 class TestGardenAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_returns_namespaces(
         self,
         http_client,
@@ -80,6 +81,7 @@ class TestGardenAPI:
         assert len(response_body) == 2
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_returns_permitted_namespaces(
         self,
         http_client,

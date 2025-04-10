@@ -103,6 +103,7 @@ def common_mocks(monkeypatch, garden, instance_function_mock):
 
 class TestInstanceAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_get(self, http_client, base_url, system):
         instance_id = str(system.instances[0].id)
         url = f"{base_url}/api/v1/instances/{instance_id}"
@@ -114,6 +115,7 @@ class TestInstanceAPI:
         assert response_body["id"] == instance_id
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_get_for_user_with_permission(
         self,
         http_client,
@@ -133,6 +135,7 @@ class TestInstanceAPI:
         assert response_body["id"] == instance_id
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_get_for_user_without_permission(
         self,
         http_client,
@@ -151,6 +154,7 @@ class TestInstanceAPI:
         assert excinfo.value.code == 403
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_delete(
         self,
         http_client,
@@ -169,6 +173,7 @@ class TestInstanceAPI:
         assert instance_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_delete_for_user_with_permission(
         self,
         http_client,
@@ -190,6 +195,7 @@ class TestInstanceAPI:
         assert instance_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_delete_for_user_without_permission(
         self,
         http_client,
@@ -213,6 +219,7 @@ class TestInstanceAPI:
         assert instance_function_mock.called is False
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_patch(
         self,
         http_client,
@@ -235,6 +242,7 @@ class TestInstanceAPI:
         assert instance_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_patch_for_user_with_permission(
         self,
         http_client,
@@ -262,6 +270,7 @@ class TestInstanceAPI:
         assert instance_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_patch_for_user_without_permission(
         self,
         http_client,
@@ -293,6 +302,7 @@ class TestInstanceAPI:
 
 class TestInstanceLogAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_get(
         self,
         http_client,
@@ -310,6 +320,7 @@ class TestInstanceLogAPI:
         assert instance_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_get_for_user_with_permission(
         self,
         http_client,
@@ -330,6 +341,7 @@ class TestInstanceLogAPI:
         assert instance_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_get_for_user_without_permission(
         self,
         http_client,
@@ -353,6 +365,7 @@ class TestInstanceLogAPI:
 
 class TestInstanceQueueAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_get(
         self,
         http_client,
@@ -370,6 +383,7 @@ class TestInstanceQueueAPI:
         assert instance_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_get_for_user_with_permission(
         self,
         http_client,
@@ -390,6 +404,7 @@ class TestInstanceQueueAPI:
         assert instance_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_get_for_user_without_permission(
         self,
         http_client,

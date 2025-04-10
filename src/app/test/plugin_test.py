@@ -21,6 +21,7 @@ def monitor():
 
 @patch("time.sleep", Mock())
 class TestStatusMonitor(object):
+    @pytest.mark.benchmark
     def test_run_stopped(self, monkeypatch, monitor):
         check_mock = Mock()
         request_mock = Mock()
@@ -35,6 +36,7 @@ class TestStatusMonitor(object):
         assert check_mock.called is False
         assert request_mock.called is False
 
+    @pytest.mark.benchmark
     def test_run(self, monkeypatch, monitor):
         check_mock = Mock()
         request_mock = Mock()
@@ -49,6 +51,7 @@ class TestStatusMonitor(object):
         assert check_mock.called is True
         assert request_mock.called is True
 
+    @pytest.mark.benchmark
     def test_request_status(self, monitor, queue_mock):
         monitor.request_status()
         expiration = str(monitor.heartbeat_interval * 1000)
@@ -57,6 +60,7 @@ class TestStatusMonitor(object):
             monitor.status_request, routing_key="admin", expiration=expiration
         )
 
+    @pytest.mark.benchmark
     def test_request_status_exception(self, monitor, queue_mock):
         queue_mock.put.side_effect = IOError
 
@@ -66,6 +70,7 @@ class TestStatusMonitor(object):
             monitor.status_request, routing_key="admin", expiration=expiration
         )
 
+    @pytest.mark.benchmark
     def test_break_on_stop(self, monkeypatch, monitor, bg_system):
         stopped_mock = Mock(return_value=True)
         monkeypatch.setattr(monitor, "stopped", stopped_mock)
@@ -77,6 +82,7 @@ class TestStatusMonitor(object):
         monitor.check_status()
         assert stopped_mock.called is True
 
+    @pytest.mark.benchmark
     def test_mark_as_unresponsive(self, monkeypatch, monitor, bg_system, bg_instance):
         stopped_mock = Mock(side_effect=[False, True])
         monkeypatch.setattr(monitor, "stopped", stopped_mock)
@@ -91,6 +97,7 @@ class TestStatusMonitor(object):
         monitor.check_status()
         assert update_mock.called is True
 
+    @pytest.mark.benchmark
     def test_mark_as_running(self, monkeypatch, monitor, bg_system, bg_instance, ts_dt):
         stopped_mock = Mock(side_effect=[False, True])
         monkeypatch.setattr(monitor, "stopped", stopped_mock)

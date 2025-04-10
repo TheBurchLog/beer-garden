@@ -33,13 +33,16 @@ enable_gridfs_integration()
 pytestmark = pytest.mark.benchmark
 
 class TestCommand(object):
+    @pytest.mark.benchmark
     def test_str(self):
         assert str(Command(name="foo", parameters=[])) == "foo"
 
+    @pytest.mark.benchmark
     def test_repr(self):
         c = Command(name="foo", description="bar", parameters=[])
         assert repr(c) == "<Command: foo>"
 
+    @pytest.mark.benchmark
     def test_clean(self):
         Command(name="foo", parameters=[Parameter(key="foo", optional=False)]).clean()
 
@@ -51,10 +54,12 @@ class TestCommand(object):
             {"name": "foo", "output_type": "BAD", "parameters": []},
         ],
     )
+    @pytest.mark.benchmark
     def test_clean_empty_name(self, params):
         with pytest.raises(ModelValidationError):
             Command(**params).clean()
 
+    @pytest.mark.benchmark
     def test_clean_fail_duplicate_parameter_keys(self):
         parameter = Parameter(key="foo", optional=False)
         command = Command(name="foo", parameters=[parameter, parameter])
@@ -64,23 +69,28 @@ class TestCommand(object):
 
 
 class TestInstance(object):
+    @pytest.mark.benchmark
     def test_str(self):
         assert str(Instance(name="name")) == "name"
 
+    @pytest.mark.benchmark
     def test_repr(self):
         instance = Instance(name="name", status="RUNNING")
         assert "name" in repr(instance)
         assert "RUNNING" in repr(instance)
 
+    @pytest.mark.benchmark
     def test_clean_bad_status(self):
         with pytest.raises(ModelValidationError):
             Instance(status="BAD").clean()
 
 
 class TestChoices(object):
+    @pytest.mark.benchmark
     def test_str(self):
         assert str(Choices(value="value")) == "value"
 
+    @pytest.mark.benchmark
     def test_repr(self):
         choices = Choices(type="static", display="select", strict=True, value=[1])
         assert "static" in repr(choices)
@@ -96,20 +106,24 @@ class TestChoices(object):
             Choices(type="command", value={"command": "foo"}),
         ],
     )
+    @pytest.mark.benchmark
     def test_clean_value_types(self, choice_obj):
         with pytest.raises(ModelValidationError):
             choice_obj.clean()
 
+    @pytest.mark.benchmark
     def test_clean_static(self):
         choice = Choices(type="static", value=["a", "b", "c"])
         choice.clean()
         assert choice.details == {}
 
+    @pytest.mark.benchmark
     def test_clean_parse(self):
         choice = Choices(type="command", value="foo")
         choice.clean()
         assert choice.details == {"name": "foo", "args": []}
 
+    @pytest.mark.benchmark
     def test_clean_with_details(self):
         choice = Choices(type="command", value="foo", details={"non": "empty"})
         choice.clean()
@@ -129,31 +143,38 @@ class TestChoices(object):
             },
         ],
     )
+    @pytest.mark.benchmark
     def test_clean_bad_parse(self, value):
         with pytest.raises(ModelValidationError):
             Choices(type="command", value=value).clean()
 
 
 class TestParameter(object):
+    @pytest.mark.benchmark
     def test_str(self):
         p = Parameter(key="foo", description="bar", type="Boolean", optional=False)
         assert str(p) == "foo"
 
+    @pytest.mark.benchmark
     def test_repr(self):
         p = Parameter(key="foo", description="bar", type="Boolean", optional=False)
         assert repr(p) == "<Parameter: key=foo, type=Boolean, description=bar>"
 
+    @pytest.mark.benchmark
     def test_default_display_name(self):
         p = Parameter(key="foo")
         assert p.display_name == "foo"
 
+    @pytest.mark.benchmark
     def test_clean(self):
         Parameter(key="foo", optional=False).clean()
 
+    @pytest.mark.benchmark
     def test_clean_fail_nullable_optional_but_no_default(self):
         with pytest.raises(ModelValidationError):
             Parameter(key="foo", optional=True, default=None, nullable=False).clean()
 
+    @pytest.mark.benchmark
     def test_clean_fail_duplicate_parameter_keys(self):
         nested = Parameter(key="foo")
         with pytest.raises(ModelValidationError):
@@ -165,9 +186,11 @@ class TestRequest(object):
     def drop(self, mongo_conn):
         Request.drop_collection()
 
+    @pytest.mark.benchmark
     def test_str(self):
         assert str(Request(command="command")) == "command"
 
+    @pytest.mark.benchmark
     def test_repr(self):
         request = Request(command="command", status="CREATED")
         assert "name" in repr(request)
@@ -276,6 +299,7 @@ class TestRequest(object):
     #     self.assertNotEqual(request.updated_at, "this_will_be_updated")
 
     # Namespace was removed from the TEMPLATE_FIELDS list, so reduce by one
+    @pytest.mark.benchmark
     def test_template_check(self):
         assert len(Request.TEMPLATE_FIELDS) == len(
             RequestTemplateSchema.get_attribute_names()
@@ -321,23 +345,28 @@ class TestSystem(object):
 
         return default_system
 
+    @pytest.mark.benchmark
     def test_str(self, default_system):
         assert str(default_system) == "ns:foo-1.0.0"
 
+    @pytest.mark.benchmark
     def test_repr(self, default_system):
         assert "ns" in repr(default_system)
         assert "foo" in repr(default_system)
         assert "1.0.0" in repr(default_system)
 
+    @pytest.mark.benchmark
     def test_clean(self, default_system):
         default_system.clean()
 
+    @pytest.mark.benchmark
     def test_clean_fail_max_instances(self, default_system):
         default_system.max_instances = 1
         default_system.instances.append(Instance(name="default2"))
         with pytest.raises(ModelValidationError):
             default_system.clean()
 
+    @pytest.mark.benchmark
     def test_clean_fail_duplicate_instance_names(self, default_system):
         default_system.max_instances = 2
         default_system.instances.append(Instance(name="default"))
@@ -491,10 +520,12 @@ class TestJob(object):
     def drop(self, mongo_conn):
         Job.drop_collection()
 
+    @pytest.mark.benchmark
     def test_invalid_trigger_type(self):
         with pytest.raises(ModelValidationError):
             Job(trigger_type="INVALID_TRIGGER_TYPE").clean()
 
+    @pytest.mark.benchmark
     def test_trigger_mismatch(self):
         date_trigger = DateTrigger()
         with pytest.raises(ModelValidationError):
@@ -506,12 +537,14 @@ class TestRole:
     def drop(self, mongo_conn):
         Role.drop_collection()
 
+    @pytest.mark.benchmark
     def test_create_with_valid_permissions(self):
         role = Role(name="test_role", permission="READ_ONLY")
         role.save()
 
         assert Role.objects.filter(name="test_role").count() == 1
 
+    @pytest.mark.benchmark
     def test_create_with_invalid_permissions(self):
         role = Role(name="test_role", permission="invalid_permission")
 
@@ -547,9 +580,11 @@ class TestUser:
         yield user_token
         user_token.delete()
 
+    @pytest.mark.benchmark
     def test_create(self, user):
         assert User.objects.filter(username="testuser").count() == 1
 
+    @pytest.mark.benchmark
     def test_local_role_map_to_roles(self, user, role):
         assert len(user.roles) == 0
         user.local_roles = []
@@ -577,6 +612,7 @@ class TestUserToken:
         yield user_token
         user_token.delete()
 
+    @pytest.mark.benchmark
     def test_user_delete_cascades_to_user_token(self, user, user_token):
         assert len(UserToken.objects.filter(id=user_token.id)) == 1
         User.objects.get(username="testuser").delete()
@@ -646,18 +682,21 @@ class TestGarden:
 
         garden.delete()
 
+    @pytest.mark.benchmark
     def test_garden_names_are_required_to_be_unique(self, local_garden):
         """Attempting to create a garden that shares a name with an existing garden
         should raise an exception"""
         with pytest.raises(NotUniqueError):
             Garden(name=local_garden.name, connection_type="HTTP").save()
 
+    @pytest.mark.benchmark
     def test_only_one_local_garden_may_exist(self, local_garden):
         """Attempting to create more than one garden with connection_type of LOCAL
         should raise an exception"""
         with pytest.raises(NotUniqueError):
             Garden(name=f"not{local_garden.name}", connection_type="LOCAL").save()
 
+    @pytest.mark.benchmark
     def test_child_garden_system_attrib_update(self, child_garden, child_system_v2):
         """If the systems of a child garden are updated such that their names,
         namespaces, or versions are changed, the original systems are removed and
@@ -699,6 +738,7 @@ class TestGarden:
         )
         assert new_system_ids.intersection(orig_system_ids) == set()
 
+    @pytest.mark.benchmark
     def test_child_garden_system_id_update(self, child_garden, child_system_v1_diff_id):
         """If the systems of a child garden are updated such that the names, namespaces
         and versions remain constant, but the IDs are different, the original systms
@@ -778,6 +818,7 @@ class TestFileUpdates:
         monkeypatch.setattr(beer_garden.db.mongo.models, "REQUEST_MAX_PARAM_SIZE", 100)
         return beer_garden.db.mongo.models.REQUEST_MAX_PARAM_SIZE + 10
 
+    @pytest.mark.benchmark
     def test_save_stores_in_gridfs_after_maxsize(
         self, request_model, request_local_system, max_size
     ):
@@ -789,6 +830,7 @@ class TestFileUpdates:
         request_model.parameters_gridfs.put.assert_called_once()
         request_model.output_gridfs.put.assert_called_once()
 
+    @pytest.mark.benchmark
     def test_save_retains_if_under_maxsize(
         self, request_model, request_local_system, max_size
     ):
@@ -797,6 +839,7 @@ class TestFileUpdates:
         request_model.parameters_gridfs.put.assert_not_called()
         request_model.output_gridfs.put.assert_not_called()
 
+    @pytest.mark.benchmark
     def test_save_retains_only_parameters(
         self, request_model, request_local_system, max_size
     ):
@@ -806,6 +849,7 @@ class TestFileUpdates:
         request_model.parameters_gridfs.put.assert_not_called()
         request_model.output_gridfs.put.assert_called_once()
 
+    @pytest.mark.benchmark
     def test_save_retains_only_output(
         self, request_model, request_local_system, max_size
     ):
@@ -815,6 +859,7 @@ class TestFileUpdates:
         request_model.parameters_gridfs.put.assert_called_once()
         request_model.output_gridfs.put.assert_not_called()
 
+    @pytest.mark.benchmark
     def test_save_handles_bool(self, request_model, request_local_system, max_size):
         request_model.parameters = {"message": True}
         request_model.save()
@@ -822,6 +867,7 @@ class TestFileUpdates:
         request_model.parameters_gridfs.put.assert_not_called()
         request_model.output_gridfs.put.assert_not_called()
 
+    @pytest.mark.benchmark
     def test_save_preserves_status_updated_at_field_when_status_is_not_updated(
         self, request_model, request_local_system
     ):
@@ -831,6 +877,7 @@ class TestFileUpdates:
 
         assert first_time == request_model.status_updated_at
 
+    @pytest.mark.benchmark
     def test_save_updates_status_updated_at_field_when_status_is_updated(
         self, request_model, request_local_system
     ):
@@ -841,6 +888,7 @@ class TestFileUpdates:
 
         assert first_time != request_model.status_updated_at
 
+    @pytest.mark.benchmark
     def test_save_preserves_status_updated_at_for_child_garden_requests(
         self,
         request_model,
@@ -868,6 +916,7 @@ class TestFileUpdates:
         beer_garden.config._CONFIG = {}
         System.drop_collection()
 
+    @pytest.mark.benchmark
     def test_save_updates_raw_file_reference(
         self, request_model, request_remote_system
     ):
@@ -876,6 +925,7 @@ class TestFileUpdates:
 
         assert len(RawFile.objects.filter(request=request_model)) == 1
 
+    @pytest.mark.benchmark
     def test_delete_cascade_deletes_raw_file(
         self, request_model, request_local_system, raw_file
     ):

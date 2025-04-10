@@ -56,6 +56,7 @@ def logging_config(monkeypatch):
 
 class TestLoggingAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_returns_logging_config(
         self,
         http_client,
@@ -71,6 +72,7 @@ class TestLoggingAPI:
         assert response_body["somekey"] == logging_config["somekey"]
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_logging_returns_results_for_user_with_permission(
         self,
         http_client,
@@ -89,6 +91,7 @@ class TestLoggingAPI:
         assert response_body["somekey"] == logging_config["somekey"]
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_logging_returns_403_for_user_without_permission(
         self,
         http_client,
@@ -107,6 +110,7 @@ class TestLoggingAPI:
 
 class TestLoggingConfigAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_returns_logging_config(
         self,
         http_client,
@@ -122,6 +126,7 @@ class TestLoggingConfigAPI:
         assert response_body["somekey"] == logging_config["somekey"]
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_logging_returns_results_for_user_with_permission(
         self,
         http_client,
@@ -140,6 +145,7 @@ class TestLoggingConfigAPI:
         assert response_body["somekey"] == logging_config["somekey"]
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_logging_returns_403_for_user_without_permission(
         self,
         http_client,

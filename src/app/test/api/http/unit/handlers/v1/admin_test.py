@@ -65,6 +65,7 @@ def common_mocks(monkeypatch, rescan_mock):
 
 class TestAdminAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_patch(self, http_client, base_url, rescan_mock):
         url = f"{base_url}/api/v1/admin"
         headers = {"Content-Type": "application/json"}
@@ -79,6 +80,7 @@ class TestAdminAPI:
         assert rescan_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_patch_for_user_with_permission(
         self,
         http_client,
@@ -103,6 +105,7 @@ class TestAdminAPI:
         assert rescan_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_patch_for_user_without_permission(
         self,
         http_client,

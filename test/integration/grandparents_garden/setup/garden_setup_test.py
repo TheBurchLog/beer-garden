@@ -74,6 +74,7 @@ class TestGardenSetup(object):
     #         if garden.name == 'parent':
     #             assert len(garden.children) == 1
 
+    @pytest.mark.benchmark
     def test_grandparent_counter(self):
         self.sync_parent()
         response = self.grand_parent_easy_client.client.session.get(
@@ -110,6 +111,7 @@ class TestGardenSetup(object):
             else:
                 raise AssertionError()
 
+    @pytest.mark.benchmark
     def test_parent_counter(self):
         self.sync_child()
         response = self.parent_easy_client.client.session.get(
@@ -147,6 +149,7 @@ class TestGardenSetup(object):
             else:
                 raise AssertionError()
 
+    @pytest.mark.benchmark
     def test_child_counter(self):
         response = self.child_easy_client.client.session.get(
             self.child_easy_client.client.base_url + "api/v1/gardens/"
@@ -160,6 +163,7 @@ class TestGardenSetup(object):
         for garden in gardens:
             assert garden.name in ["child"]
 
+    @pytest.mark.benchmark
     def test_grandchildren(self):
         response = self.grand_parent_easy_client.client.session.get(
             self.grand_parent_easy_client.client.base_url + "api/v1/gardens/"
@@ -178,6 +182,7 @@ class TestGardenSetup(object):
 
         assert len(gardens) == 2
 
+    @pytest.mark.benchmark
     def test_parent_systems_register_successful(self):
         systems = self.grand_parent_easy_client.find_systems()
 
@@ -194,6 +199,7 @@ class TestGardenSetup(object):
         assert namespaces["parent"] > 0
         assert namespaces["child"] > 0
 
+    @pytest.mark.benchmark
     def test_child_systems_register_successful(self):
         systems = self.parent_easy_client.find_systems()
 

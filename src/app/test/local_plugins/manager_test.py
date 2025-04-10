@@ -121,6 +121,7 @@ class TestHandlersAndRunnerMethods:
             ("stop_one", (None, None), Exception),
         ],
     )
+    @pytest.mark.benchmark
     def test_runner_or_instance_ops_none_args(
         self, method, method_args, exception, manager
     ):
@@ -134,9 +135,11 @@ class TestHandlersAndRunnerMethods:
 
 @pytest.mark.skip
 class TestLoadPlugins(object):
+    @pytest.mark.benchmark
     def test_empty(self, tmp_path, loader):
         loader.load_plugins(path=tmp_path)
 
+    @pytest.mark.benchmark
     def test_exception(self, monkeypatch, tmp_path, loader):
         monkeypatch.setattr(loader, "load_plugin", Mock(side_effect=ValueError()))
 
@@ -145,10 +148,12 @@ class TestLoadPlugins(object):
 
 
 class TestLoadNew(object):
+    @pytest.mark.benchmark
     def test_path_with_no_plugins(self, tmp_path, manager):
         manager.scan_path([tmp_path])
         assert manager._runners == []
 
+    @pytest.mark.benchmark
     def test_single(self, tmp_path, manager, monkeypatch):
         monkeypatch.setattr(PluginManager, "_environment", _none_returner)
         config._CONFIG = {"plugin": {"local": {"max_concurrent": 1}}}
@@ -162,6 +167,7 @@ class TestLoadNew(object):
         manager.scan_path([plugin_path])
         assert len(manager._runners) == 1
 
+    @pytest.mark.benchmark
     def test_multiple(self, tmp_path, manager, monkeypatch):
         monkeypatch.setattr(PluginManager, "_environment", _none_returner)
         config._CONFIG = {"plugin": {"local": {"max_concurrent": 1}}}
@@ -183,6 +189,7 @@ class TestLoadNew(object):
         manager.scan_path([plugin_path])
         assert len(manager._runners) == 2
 
+    @pytest.mark.benchmark
     def test_dot_dir(self, tmp_path, manager, monkeypatch, caplog):
         monkeypatch.setattr(PluginManager, "_environment", _none_returner)
 
@@ -195,6 +202,7 @@ class TestLoadNew(object):
         assert len(manager._runners) == 0
         assert "hidden file" in caplog.messages[0]
 
+    @pytest.mark.benchmark
     def test_scan_path_no_paths(self, monkeypatch, manager, caplog):
         monkeypatch.setattr(manager, "_plugin_path", None)
 
@@ -244,6 +252,7 @@ class TestLoadPlugin(object):
             (lazy_fixture("_good_path_bad_config"), "is not a file"),
         ],
     )
+    @pytest.mark.benchmark
     def test_plugin_path_validator_bad_paths(self, value, message, manager, caplog):
         logger = logging.getLogger(__name__)
 
@@ -254,11 +263,13 @@ class TestLoadPlugin(object):
 
     @pytest.mark.skip
     @pytest.mark.parametrize("path", [None, Path("/not/real")])
+    @pytest.mark.benchmark
     def test_bad_path(self, loader, path):
         with pytest.raises(PluginValidationError):
             loader.load_plugin(path)
 
     @pytest.mark.skip
+    @pytest.mark.benchmark
     def test_single_instance(self, loader, registry, plugin_1):
         plugin_runners = loader.load_plugin(plugin_1)
 
@@ -267,6 +278,7 @@ class TestLoadPlugin(object):
         assert plugin_runners[0].entry_point == "entry.py"
 
     @pytest.mark.skip
+    @pytest.mark.benchmark
     def test_multiple_instances(self, tmp_path, loader):
         plugin = tmp_path / "plugin"
         plugin.mkdir()
@@ -293,6 +305,7 @@ class TestLoadPlugin(object):
         assert sorted_runners[1].entry_point == "entry.py"
 
     @pytest.mark.skip
+    @pytest.mark.benchmark
     def test_existing(self, loader, registry, plugin_1):
         system_id = "58542eb571afd47ead90face"
         instance_id = "58542eb571afd47ead90beef"
@@ -314,6 +327,7 @@ class TestLoadPlugin(object):
         assert plugin_runners[0].entry_point == "entry.py"
 
     @pytest.mark.skip
+    @pytest.mark.benchmark
     def test_existing_multiple(self, tmp_path, loader, registry, plugin_1, bg_instance):
         """This is mainly to test that Instance IDs are correct
 
@@ -361,6 +375,7 @@ class TestLoadPlugin(object):
         assert instance2_db.id == instance2.id
 
     @pytest.mark.skip
+    @pytest.mark.benchmark
     def test_bad_config(self, monkeypatch, caplog, tmp_path, loader, validator):
         monkeypatch.setattr(
             loader, "_load_config", Mock(side_effect=PluginValidationError)
@@ -378,23 +393,27 @@ class TestLoadConfig(object):
         (tmp_path / "entry.py").touch()
 
     @pytest.mark.skip
+    @pytest.mark.benchmark
     def test_failure_missing_conf_file(self, tmp_path, loader):
         with pytest.raises(PluginValidationError):
             ConfigLoader._load_config(tmp_path)
 
     @pytest.mark.skip
+    @pytest.mark.benchmark
     def test_failure_directory_conf_file(self, tmp_path, loader):
         (tmp_path / CONFIG_NAME).mkdir()
 
         with pytest.raises(PluginValidationError):
             loader._load_config(tmp_path)
 
+    @pytest.mark.benchmark
     def test_all_attributes(self, tmp_path, config_all, config_all_serialized):
         write_file(tmp_path, config_all_serialized)
 
         assert ConfigLoader.load(tmp_path / CONFIG_NAME) == config_all
 
     @pytest.mark.skip
+    @pytest.mark.benchmark
     def test_required_attributes(self, tmp_path, config_all):
         write_file(
             tmp_path,
@@ -409,6 +428,7 @@ class TestLoadConfig(object):
 
         assert ConfigLoader.load(tmp_path / CONFIG_NAME) == config_all
 
+    @pytest.mark.benchmark
     def test_instances_no_plugin_args(self, tmp_path):
         write_file(
             tmp_path,
@@ -428,6 +448,7 @@ class TestLoadConfig(object):
         assert loaded_config["PLUGIN_ARGS"] == {"instance1": None, "instance2": None}
         assert loaded_config["MAX_INSTANCES"] == -1
 
+    @pytest.mark.benchmark
     def test_plugin_args_list_no_instances(self, tmp_path):
         write_file(
             tmp_path,
@@ -447,6 +468,7 @@ class TestLoadConfig(object):
         assert loaded_config["PLUGIN_ARGS"] == {"default": ["arg1"]}
         assert loaded_config["MAX_INSTANCES"] == -1
 
+    @pytest.mark.benchmark
     def test_plugin_args_dict_no_instances(self, tmp_path):
         write_file(
             tmp_path,
@@ -466,6 +488,7 @@ class TestLoadConfig(object):
         assert loaded_config["PLUGIN_ARGS"] == {"foo": ["arg1"], "bar": ["arg2"]}
         assert loaded_config["MAX_INSTANCES"] == -1
 
+    @pytest.mark.benchmark
     def test_instance_and_args_list(self, tmp_path):
         write_file(
             tmp_path,
@@ -485,6 +508,7 @@ class TestLoadConfig(object):
         assert loaded_config["PLUGIN_ARGS"] == {"foo": ["arg1"], "bar": ["arg1"]}
         assert loaded_config["MAX_INSTANCES"] == -1
 
+    @pytest.mark.benchmark
     def test_explicit_max_instances(self, tmp_path):
         write_file(
             tmp_path,
@@ -503,6 +527,7 @@ class TestLoadConfig(object):
         assert sorted(loaded_config["INSTANCES"]) == sorted(["foo", "bar"])
         assert loaded_config["MAX_INSTANCES"] == -1
 
+    @pytest.mark.benchmark
     def test_invalid_args(self, tmp_path):
         write_file(
             tmp_path,
@@ -519,6 +544,7 @@ class TestLoadConfig(object):
         with pytest.raises(PluginValidationError):
             ConfigLoader.load(tmp_path / CONFIG_NAME)
 
+    @pytest.mark.benchmark
     def test_auto_brew_global_args(self, tmp_path):
         write_file(
             tmp_path,
@@ -540,6 +566,7 @@ class TestLoadConfig(object):
         assert loaded_config["PLUGIN_ARGS"] == {"default": ["baz", "zoo"]}
         assert loaded_config["AUTO_BREW_KWARGS"] == {"default": None}
 
+    @pytest.mark.benchmark
     def test_auto_brew_global_args_with_instances(self, tmp_path):
         write_file(
             tmp_path,
@@ -566,6 +593,7 @@ class TestLoadConfig(object):
             "b": None,
         }
 
+    @pytest.mark.benchmark
     def test_auto_brew_instance_based_args(self, tmp_path):
         write_file(
             tmp_path,
@@ -586,6 +614,7 @@ class TestLoadConfig(object):
         assert loaded_config["AUTO_BREW_ARGS"] == {"a": ["foo"], "b": ["bar"]}
         assert loaded_config["AUTO_BREW_KWARGS"] == {"a": None, "b": None}
 
+    @pytest.mark.benchmark
     def test_auto_brew_instance_based_args_with_instances(self, tmp_path):
         write_file(
             tmp_path,
@@ -607,6 +636,7 @@ class TestLoadConfig(object):
         assert loaded_config["AUTO_BREW_ARGS"] == {"a": ["foo"], "b": ["bar"]}
         assert loaded_config["AUTO_BREW_KWARGS"] == {"a": None, "b": None}
 
+    @pytest.mark.benchmark
     def test_auto_brew_instance_based_args_with_instances_mismatch(self, tmp_path):
         write_file(
             tmp_path,
@@ -628,6 +658,7 @@ class TestLoadConfig(object):
         assert loaded_config["AUTO_BREW_ARGS"] == {"a": ["foo"], "b": ["bar"]}
         assert loaded_config["AUTO_BREW_KWARGS"] == {"a": None, "b": None}
 
+    @pytest.mark.benchmark
     def test_auto_brew_global_kwargs(self, tmp_path):
         write_file(
             tmp_path,
@@ -648,6 +679,7 @@ class TestLoadConfig(object):
         assert loaded_config["AUTO_BREW_ARGS"] == {"default": None}
         assert loaded_config["AUTO_BREW_KWARGS"] == {"default": ["foo=bar", "bar=baz"]}
 
+    @pytest.mark.benchmark
     def test_auto_brew_global_kwargs_with_instances(self, tmp_path):
         write_file(
             tmp_path,
@@ -669,6 +701,7 @@ class TestLoadConfig(object):
         assert loaded_config["AUTO_BREW_ARGS"] == {"a": None, "b": None}
         assert loaded_config["AUTO_BREW_KWARGS"] == {"a": ["foo=bar"], "b": ["foo=bar"]}
 
+    @pytest.mark.benchmark
     def test_auto_brew_instance_kwargs(self, tmp_path):
         write_file(
             tmp_path,
@@ -689,6 +722,7 @@ class TestLoadConfig(object):
         assert loaded_config["AUTO_BREW_ARGS"] == {"a": None, "b": None}
         assert loaded_config["AUTO_BREW_KWARGS"] == {"a": ["foo=bar"], "b": ["foo=zed"]}
 
+    @pytest.mark.benchmark
     def test_auto_brew_instance_kwargs_with_instances(self, tmp_path):
         write_file(
             tmp_path,
@@ -710,6 +744,7 @@ class TestLoadConfig(object):
         assert loaded_config["AUTO_BREW_ARGS"] == {"a": None, "b": None}
         assert loaded_config["AUTO_BREW_KWARGS"] == {"a": ["foo=bar"], "b": ["foo=zed"]}
 
+    @pytest.mark.benchmark
     def test_auto_brew_instance_kwargs_with_instances_mismatch(self, tmp_path):
         write_file(
             tmp_path,
@@ -731,6 +766,7 @@ class TestLoadConfig(object):
         assert loaded_config["AUTO_BREW_ARGS"] == {"a": None, "b": None}
         assert loaded_config["AUTO_BREW_KWARGS"] == {"a": ["foo=bar"], "b": ["foo=zed"]}
 
+    @pytest.mark.benchmark
     def test_auto_brew_instance_args_and_kwargs_with_instances(self, tmp_path):
         write_file(
             tmp_path,
@@ -763,6 +799,7 @@ class TestLoadConfig(object):
             "b": ["foo=zed"],
         }
 
+    @pytest.mark.benchmark
     def test_auto_brew_instance_args_and_kwargs_with_no_instances(self, tmp_path):
         write_file(
             tmp_path,

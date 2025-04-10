@@ -61,6 +61,7 @@ def config_mock_none(monkeypatch):
 class TestCheckIndexes(object):
     @patch("mongoengine.connect", Mock())
     @patch("mongoengine.register_connection", Mock())
+    @pytest.mark.benchmark
     def test_same_indexes(self, model_mocks):
         for model_mock in model_mocks.values():
             model_mock.list_indexes = Mock(return_value=["index1"])
@@ -74,6 +75,7 @@ class TestCheckIndexes(object):
 
     @patch("mongoengine.connect", Mock())
     @patch("mongoengine.register_connection", Mock())
+    @pytest.mark.benchmark
     def test_missing_index(self, model_mocks):
         for model_mock in model_mocks.values():
             model_mock.list_indexes = Mock(return_value=["index1", "index2"])
@@ -88,6 +90,7 @@ class TestCheckIndexes(object):
     @patch("mongoengine.connection.get_db")
     @patch("mongoengine.connect", Mock())
     @patch("mongoengine.register_connection", Mock())
+    @pytest.mark.benchmark
     def test_successful_index_rebuild(self, get_db_mock, model_mocks):
         # 'normal' return values
         for model_mock in model_mocks.values():
@@ -110,6 +113,7 @@ class TestCheckIndexes(object):
 
     @patch("mongoengine.connect", Mock())
     @patch("mongoengine.connection.get_db")
+    @pytest.mark.benchmark
     def test_unsuccessful_index_drop(self, get_db_mock, model_mocks):
         for model_mock in model_mocks.values():
             model_mock.list_indexes = Mock(return_value=["index1"])
@@ -127,6 +131,7 @@ class TestCheckIndexes(object):
 
     @patch("mongoengine.connect", Mock())
     @patch("mongoengine.connection.get_db", MagicMock())
+    @pytest.mark.benchmark
     def test_unsuccessful_index_rebuild(self, model_mocks):
         for model_mock in model_mocks.values():
             model_mock.list_indexes = Mock(return_value=["index1"])
@@ -144,6 +149,7 @@ class TestCheckIndexes(object):
 
     @patch("mongoengine.connect", Mock())
     @patch("mongoengine.connection.get_db", MagicMock())
+    @pytest.mark.benchmark
     def test_unsuccessful_read_objects(self, model_mocks):
         for model_mock in model_mocks.values():
             model_mock.list_indexes = Mock(return_value=["index1"])
@@ -162,6 +168,7 @@ class TestCheckIndexes(object):
     @patch("mongoengine.connection.get_db")
     @patch("mongoengine.connect", Mock())
     @patch("mongoengine.register_connection", Mock())
+    @pytest.mark.benchmark
     def test_old_request_index(self, get_db_mock, model_mocks, monkeypatch):
         # 'normal' return values
         for model_mock in model_mocks.values():
@@ -212,6 +219,7 @@ class TestEnsureLocalGarden:
     def teardown_method(self):
         beer_garden.db.mongo.models.Garden.drop_collection()
 
+    @pytest.mark.benchmark
     def test_ensure_local_garden_creates_new_garden_from_config(self, monkeypatch):
         """ensure_local_garden should create a Garden entry in the database with
         name derived from the "garden.name" config setting and a connection type of
@@ -224,6 +232,7 @@ class TestEnsureLocalGarden:
 
         assert garden.name == config.get("garden.name")
 
+    @pytest.mark.benchmark
     def test_ensure_local_garden_updates_garden_from_config(self, monkeypatch):
         """ensure_local_garden should update the name of an existing Garden entry in the
         database with a connection type of LOCAL"""

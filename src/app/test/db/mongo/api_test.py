@@ -23,6 +23,7 @@ class TestCheckConnection(object):
             }
         )
 
+    @pytest.mark.benchmark
     def test_setup_database_connect(self, monkeypatch, db_config):
         connect_mock = Mock()
         monkeypatch.setattr(beer_garden.db.mongo.api, "connect", connect_mock)
@@ -39,6 +40,7 @@ class TestCheckConnection(object):
             socketTimeoutMS=1000,
         )
 
+    @pytest.mark.benchmark
     def test_setup_database_connect_error(self, monkeypatch, db_config):
         connect_mock = Mock(side_effect=ConnectionFailure())
         monkeypatch.setattr(beer_garden.db.mongo.api, "connect", connect_mock)

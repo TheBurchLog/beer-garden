@@ -237,6 +237,7 @@ def access_token(user):
 
 class TestRequestAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_returns_any_request(
         self, http_client, base_url, request_not_permitted
     ):
@@ -249,6 +250,7 @@ class TestRequestAPI:
         assert response_body["id"] == str(request_not_permitted.id)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_returns_permitted_request(
         self,
         http_client,
@@ -267,6 +269,7 @@ class TestRequestAPI:
         assert response_body["id"] == str(request_permitted.id)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_returns_403_for_not_permitted_request(
         self,
         http_client,
@@ -284,6 +287,7 @@ class TestRequestAPI:
         assert excinfo.value.code == 403
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_patch_for_permitted_request(
         self,
         http_client,
@@ -310,6 +314,7 @@ class TestRequestAPI:
         assert Request.objects.get(id=request_permitted.id).status == "IN_PROGRESS"
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_patch_for_not_permitted_request(
         self,
         http_client,
@@ -340,6 +345,7 @@ class TestRequestAPI:
         )
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_get_populates_children_when_present(
         self, http_client, base_url, request_permitted, request_permitted_child
     ):
@@ -353,6 +359,7 @@ class TestRequestAPI:
         assert response_body["children"][0]["id"] == str(request_permitted_child.id)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_get_populates_output_from_gridfs(
         self, http_client, base_url, request_with_gridfs_output
     ):
@@ -371,6 +378,7 @@ class TestRequestAPI:
 
 class TestRequestListAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_file_parameter_stores_as_raw_file_on_local_garden(
         self,
         http_client,
@@ -393,6 +401,7 @@ class TestRequestListAPI:
         assert RawFile.objects.get(id=file_id) is not None
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_file_parameter_removes_base64_for_remote_garden(
         self,
         monkeypatch,
@@ -417,6 +426,7 @@ class TestRequestListAPI:
         assert len(RawFile.objects.all()) == 0
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_returns_all_requests(self, http_client, base_url):
         url = f"{base_url}/api/v1/requests"
 
@@ -427,6 +437,7 @@ class TestRequestListAPI:
         assert len(response_body) == 2
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_returns_permitted_requests(
         self,
         http_client,
@@ -446,6 +457,7 @@ class TestRequestListAPI:
         assert response_body[0]["id"] == str(request_permitted.id)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_post_permitted_request(
         self,
         http_client,
@@ -479,6 +491,7 @@ class TestRequestListAPI:
         assert len(Request.objects.all()) == request_before_count + 1
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_post_for_not_permitted_request(
         self,
         http_client,

@@ -112,6 +112,7 @@ class TestGardenSetup(object):
         """Use one of the `pytest`-preferred ways to initialize state before a test."""
         self.created_gardens = self._prepare_beer_garden()
 
+    @pytest.mark.benchmark
     def test_update_garden_connection_info(self):
         child_garden_json = self.parser.serialize_garden(
             self._get_child_garden(), to_string=False
@@ -142,6 +143,7 @@ class TestGardenSetup(object):
 
         assert updated_response.ok
 
+    @pytest.mark.benchmark
     def test_garden_manual_register_successful(self):
         response = self.easy_client.client.session.get(
             self.easy_client.client.base_url + "api/v1/gardens/"
@@ -157,6 +159,7 @@ class TestGardenSetup(object):
         # helper function
         assert len(gardens) - is_default == self.created_gardens
 
+    @pytest.mark.benchmark
     def test_run_sync(self):
         # Give BG a second to setup connection
         time.sleep(5)
@@ -177,6 +180,7 @@ class TestGardenSetup(object):
         # Give BG a sync
         time.sleep(5)  # TODO: verify if these sleeps are actually needed
 
+    @pytest.mark.benchmark
     def test_child_systems_register_successful(self):
         systems = self.child_easy_client.find_systems()
 
@@ -194,6 +198,7 @@ class TestGardenSetup(object):
             and namespaces[self.child_garden_name] > 0
         )
 
+    @pytest.mark.benchmark
     def test_child_request_from_parent(self):
         request = self.request_generator.generate_request(
             parameters={"message": "test_string", "loud": True}
@@ -201,6 +206,7 @@ class TestGardenSetup(object):
         response = wait_for_response(self.easy_client, request)
         assert_successful_request(response, output="test_string!!!!!!!!!")
 
+    @pytest.mark.benchmark
     def test_child_request_from_child(self):
         request = self.request_generator.generate_request(
             parameters={"message": "test_string", "loud": True}
@@ -208,6 +214,7 @@ class TestGardenSetup(object):
         response = wait_for_response(self.child_easy_client, request)
         assert_successful_request(response, output="test_string!!!!!!!!!")
 
+    @pytest.mark.benchmark
     def test_verify_requests(self):
         requests = self.easy_client.find_requests()
 

@@ -16,6 +16,7 @@ class TestScheduler:
         yield
         Job.drop_collection()
 
+    @pytest.mark.benchmark
     def test_create_jobs_does_not_create_invalid_jobs(self):
         valid_job = BrewtilsJob(
             name="valid_job",

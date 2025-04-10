@@ -190,37 +190,44 @@ def canceled():
 
 
 class TestMongoPruner(object):
+    @pytest.mark.benchmark
     def test_prune_info_requests(self, info_request):
         config._CONFIG = {"db": {"prune": {"batch_size": -1, "ttl": {"info": 1}}}}
         prune_info_requests()
         assert len(Request.objects.filter(command_type="INFO")) == 0
 
+    @pytest.mark.benchmark
     def test_prune_action_requests(self, action_request):
         config._CONFIG = {"db": {"prune": {"batch_size": -1, "ttl": {"action": 1}}}}
         prune_action_requests()
         assert len(Request.objects.filter(command_type="ACTION")) == 0
 
+    @pytest.mark.benchmark
     def test_prune_action_request_no_command_type(self, in_progress, created, canceled):
         config._CONFIG = {"db": {"prune": {"batch_size": -1, "ttl": {"action": 1}}}}
         prune_action_requests()
         assert len(Request.objects.filter(command_type="ACTION")) == 0
         assert len(Request.objects.filter(command_type=None)) == 2
 
+    @pytest.mark.benchmark
     def test_prune_admin_requests(self, admin_request):
         config._CONFIG = {"db": {"prune": {"batch_size": -1, "interval": 15}}}
         prune_admin_requests()
         assert len(Request.objects.filter(command_type="ADMIN")) == 0
 
+    @pytest.mark.benchmark
     def test_prune_temp_requests(self, temp_request):
         config._CONFIG = {"db": {"prune": {"batch_size": -1, "interval": 15}}}
         prune_temp_requests()
         assert len(Request.objects.filter(command_type="TEMP")) == 0
 
+    @pytest.mark.benchmark
     def test_prune_files(self, file, raw_file):
         config._CONFIG = {"db": {"prune": {"batch_size": -1, "ttl": {"file": 1}}}}
         prune_files()
         assert len(File.objects.all()) == 0
 
+    @pytest.mark.benchmark
     def test_prune_request_gridfs_files(self, monkeypatch):
         db = get_db()
 
@@ -262,6 +269,7 @@ class TestMongoPruner(object):
         assert db["fs.files"].count() == 0
         assert db["fs.chunks"].count() == 0
 
+    @pytest.mark.benchmark
     def test_prune_raw_file_gridfs_files(self, monkeypatch):
         db = get_db()
 
@@ -293,6 +301,7 @@ class TestMongoPruner(object):
         assert db["fs.files"].count() == 0
         assert db["fs.chunks"].count() == 0
 
+    @pytest.mark.benchmark
     def test_run_cancels_outstanding_requests(self, task, in_progress, created):
         config._CONFIG = {"db": {"prune": {"in_progress_request_expiration": 15}}}
         prune_outstanding()
@@ -301,6 +310,7 @@ class TestMongoPruner(object):
         assert new_in_progress.status == "CANCELED"
         assert new_created.status == "CANCELED"
 
+    @pytest.mark.benchmark
     def test_negative_cancel_threshold(self, task, in_progress, created):
         config._CONFIG = {"db": {"prune": {"in_progress_request_expiration": -1}}}
         prune_outstanding()
@@ -309,6 +319,7 @@ class TestMongoPruner(object):
         assert new_in_progress.status == "IN_PROGRESS"
         assert new_created.status == "CREATED"
 
+    @pytest.mark.benchmark
     def test_none_cancel_threshold(self, task, in_progress, created):
         config._CONFIG = {"db": {"prune": {"ttl": {}}}}
         prune_outstanding()
@@ -319,6 +330,7 @@ class TestMongoPruner(object):
 
 
 class TestDetermineTasks(object):
+    @pytest.mark.benchmark
     def test_determine_tasks(self):
         info_tasks = determine_tasks("info", 5)
         action_tasks = determine_tasks("action", 10)
@@ -354,18 +366,21 @@ class TestDetermineTasks(object):
         assert raw_file_task["delete_after"] == timedelta(minutes=15)
         assert admin_task["delete_after"] == timedelta(minutes=20)
 
+    @pytest.mark.benchmark
     def test_setup_pruning_tasks_empty(self):
         prune_tasks = determine_tasks("info", -1)
         assert prune_tasks == []
         prune_tasks = determine_tasks("action", 0)
         assert prune_tasks == []
 
+    @pytest.mark.benchmark
     def test_setup_pruning_tasks_one(self):
         prune_tasks = determine_tasks("info", -1)
         assert len(prune_tasks) == 0
         prune_tasks = determine_tasks("action", 1)
         assert len(prune_tasks) == 1
 
+    @pytest.mark.benchmark
     def test_setup_pruning_tasks_mixed(self):
         prune_tasks = determine_tasks("action", -1)
         assert len(prune_tasks) == 0
@@ -416,6 +431,7 @@ class TestOrphanPruner(object):
 
         child.delete()
 
+    @pytest.mark.benchmark
     def test_orphan_pruner(self, child_request):
         assert len(Request.objects.filter(command_type="ACTION")) == 1
 
@@ -547,12 +563,14 @@ class TestOrphanFile(object):
 
         file.delete()
 
+    @pytest.mark.benchmark
     def test_orphan_file(self, orphan_request_file, deleted_request_file):
         assert len(File.objects.all()) == 2
 
         prune_orphan_files(1)
         assert len(File.objects.all()) == 1
 
+    @pytest.mark.benchmark
     def test_orphan_job(self, orphan_job_file, deleted_job_file):
         assert len(File.objects.all()) == 2
 

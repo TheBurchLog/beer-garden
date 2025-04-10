@@ -69,7 +69,8 @@ class TestPublish(object):
 
         return completed_request
 
-    def test_one_trigger_topic_subscriber(self, topic1):
+    @pytest.mark.benchmark
+def test_one_trigger_topic_subscriber(self, topic1):
         newtopic = self.easy_client.create_topic(topic1)
         request_dict = self.request_generator.generate_request(
             parameters={"topic": "newtopic", "value": "test"}
@@ -84,7 +85,8 @@ class TestPublish(object):
         assert len(completed_request.children) == 1
         self.easy_client.remove_topic(newtopic.id)
 
-    def test_one_trigger_topic_command_and_subscriber(self, topic):
+    @pytest.mark.benchmark
+def test_one_trigger_topic_command_and_subscriber(self, topic):
         topic = self.easy_client.create_topic(topic)
         request_dict = self.request_generator.generate_request(
             parameters={"topic": "topic", "value": "test"}
@@ -99,7 +101,8 @@ class TestPublish(object):
         assert len(completed_request.children) == 1
         self.easy_client.remove_topic(topic.id)
 
-    def test_one_trigger(self):
+    @pytest.mark.benchmark
+def test_one_trigger(self):
         request_dict = self.request_generator.generate_request(
             parameters={"topic": "topic", "value": "test"}
         )
@@ -112,7 +115,8 @@ class TestPublish(object):
 
         assert len(completed_request.children) == 1
 
-    def test_two_trigger(self):
+    @pytest.mark.benchmark
+def test_two_trigger(self):
         request_dict = self.request_generator.generate_request(
             parameters={"topic": "topic2", "value": "test"}
         )
@@ -128,7 +132,8 @@ class TestPublish(object):
 
         assert len(completed_request.children) == 2
 
-    def test_three_trigger(self):
+    @pytest.mark.benchmark
+def test_three_trigger(self):
         request_dict = self.request_generator.generate_request(
             parameters={"topic": "topic1", "value": "test"}
         )

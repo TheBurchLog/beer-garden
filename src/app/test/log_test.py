@@ -17,6 +17,7 @@ class TestLoad(object):
         """The config needs to not change or else it messes up subsequent tests"""
         monkeypatch.setattr(logging.config, "dictConfig", Mock())
 
+    @pytest.mark.benchmark
     def test_level(self, tmpdir):
         level = "DEBUG"
 
@@ -24,6 +25,7 @@ class TestLoad(object):
 
         assert beer_garden.log._APP_LOGGING == default_app_config(level=level)
 
+    @pytest.mark.benchmark
     def test_level_and_filename(self, tmpdir):
         level = "DEBUG"
         filename = str(Path(tmpdir, "logging-config.json"))
@@ -36,6 +38,7 @@ class TestLoad(object):
             level, filename=filename
         )
 
+    @pytest.mark.benchmark
     def test_from_file(self, tmpdir):
         config_file = Path(tmpdir, "logging-config.json")
         logging_config = {"version": 1}

@@ -77,7 +77,8 @@ class TestRequestLogic(object):
 
         return request
 
-    def test_requires_sleeper_echo(self, easy_client):
+    @pytest.mark.benchmark
+def test_requires_sleeper_echo(self, easy_client):
 
         assert easy_client.can_connect()
 

@@ -128,6 +128,7 @@ def topic_wildcard():
 
 
 class TestSubscriptionEvent(object):
+    @pytest.mark.benchmark
     def test_newtopic(self, monkeypatch, localgarden):
         mock_route_request = Mock(return_value=None)
         monkeypatch.setattr(publish_request, "route_request", mock_route_request)
@@ -151,6 +152,7 @@ class TestSubscriptionEvent(object):
 
         assert mock_route_request.call_count == 0
 
+    @pytest.mark.benchmark
     def test_topic_one(self, monkeypatch, topic_1, localgarden):
         mock_route_request = Mock(return_value=None)
         monkeypatch.setattr(publish_request, "route_request", mock_route_request)
@@ -176,6 +178,7 @@ class TestSubscriptionEvent(object):
 
         assert mock_route_request.call_count == 2
 
+    @pytest.mark.benchmark
     def test_topic_two(self, monkeypatch, topic_2, localgarden):
         mock_route_request = Mock(return_value=None)
         monkeypatch.setattr(publish_request, "route_request", mock_route_request)
@@ -200,6 +203,7 @@ class TestSubscriptionEvent(object):
 
         assert mock_route_request.call_count == 0
 
+    @pytest.mark.benchmark
     def test_topic_wildcard(self, monkeypatch, topic_wildcard, localgarden):
         mock_route_request = Mock(return_value=None)
         monkeypatch.setattr(publish_request, "route_request", mock_route_request)
@@ -230,6 +234,7 @@ class TestSubscriptionEvent(object):
 
         assert mock_route_request.call_count == 2
 
+    @pytest.mark.benchmark
     def test_topic_one_not_local(self, monkeypatch, topic_wildcard, localgarden):
         mock_route_request = Mock(return_value=None)
         monkeypatch.setattr(publish_request, "route_request", mock_route_request)
@@ -255,6 +260,7 @@ class TestSubscriptionEvent(object):
 
         assert mock_route_request.call_count == 0
 
+    @pytest.mark.benchmark
     def test_topic_one_not_local_propagate(self, monkeypatch, topic_1, localgarden):
         mock_route_request = Mock(return_value=None)
         monkeypatch.setattr(publish_request, "route_request", mock_route_request)

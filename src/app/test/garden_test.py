@@ -85,6 +85,7 @@ class TestGarden:
         connect("beer_garden", host="mongomock://localhost")
         config._CONFIG = {"garden": {"name": "localgarden"}}
 
+    @pytest.mark.benchmark
     def test_get_garden(self, localgarden):
         """get_garden should allow for retrieval by name"""
         garden = get_garden(localgarden.name)
@@ -92,11 +93,13 @@ class TestGarden:
         assert type(garden) is BrewtilsGarden
         assert garden.name == localgarden.name
 
+    @pytest.mark.benchmark
     def test_get_garden_raises_exception_when_not_found(self):
         """get_garden should raise DoesNotExist if no garden is found"""
         with pytest.raises(DoesNotExist):
             get_garden("notagarden")
 
+    @pytest.mark.benchmark
     def test_get_gardens_includes_localgarden(self, localgarden, remotegarden):
         """get_gardens should include local gardens when requested"""
         gardens = get_gardens(include_local=True)
@@ -104,6 +107,7 @@ class TestGarden:
         assert len(gardens) == 2
         assert localgarden.name in [garden.name for garden in gardens]
 
+    @pytest.mark.benchmark
     def test_get_gardens_excludes_localgarden(self, localgarden, remotegarden):
         """get_gardens should exclude local gardens when requested"""
         gardens = get_gardens(include_local=False)
@@ -111,12 +115,14 @@ class TestGarden:
         assert len(gardens) == 1
         assert localgarden.name != gardens[0].name
 
+    @pytest.mark.benchmark
     def test_local_garden_returns_brewtils_model(self, localgarden):
         """local_garden returns a brewtils Garden"""
         garden = local_garden()
 
         assert type(garden) is BrewtilsGarden
 
+    @pytest.mark.benchmark
     def test_local_garden_returns_all_systems(self, localgarden, remotegarden):
         """local_garden returns all systems (those of the local garden and its children)
         when requested"""
@@ -124,6 +130,7 @@ class TestGarden:
 
         assert len(garden.systems) == 2
 
+    @pytest.mark.benchmark
     def test_local_garden_returns_local_systems(self, localgarden, remotegarden):
         """local_garden returns local systems (those of the local garden only)
         when requested"""
@@ -131,6 +138,7 @@ class TestGarden:
 
         assert len(garden.systems) == 1
 
+    @pytest.mark.benchmark
     def test_remove_garden_removes_related_systems(self, localgarden, remotegarden):
         """remove_garden should also remove any systems of the garden"""
         remove_garden(remotegarden.name)
@@ -142,6 +150,7 @@ class TestGarden:
         # confirm that systems of other gardens remain intact
         assert len(System.objects.filter(namespace=localgarden.name)) == 1
 
+    @pytest.mark.benchmark
     def test_create_garden_default_config(self, bg_garden):
         """create_garden set publishing connections to Missing Configuration when missing"""
 
@@ -150,6 +159,7 @@ class TestGarden:
         for connection in garden.publishing_connections:
             assert connection.status == "MISSING_CONFIGURATION"
 
+    @pytest.mark.benchmark
     def test_load_configuration_file(self, bg_garden, tmpdir):
         """Loads a yaml file containing configuration details"""
 
@@ -206,6 +216,7 @@ stomp:
 
         os.remove(config_file)
 
+    @pytest.mark.benchmark
     def test_load_configuration_file_stomp(self, bg_garden, tmpdir):
         """Loads a yaml file containing configuration details"""
 
@@ -272,6 +283,7 @@ stomp:
 
         os.remove(config_file)
 
+    @pytest.mark.benchmark
     def test_load_configuration_file_disabled_publishing(self, bg_garden, tmpdir):
         """Loads a yaml file containing configuration details"""
 
@@ -326,6 +338,7 @@ stomp:
 
         os.remove(config_file)
 
+    @pytest.mark.benchmark
     def test_load_configuration_file_disable_receiving(self, bg_garden, tmpdir):
         """Loads a yaml file containing configuration details"""
 
@@ -396,12 +409,14 @@ stomp:
 
     #     assert remote_user_count == 0
 
+    @pytest.mark.benchmark
     def test_check_garden_receiving_heartbeat_update_heartbeat(self):
         garden = check_garden_receiving_heartbeat("http", garden_name="new_garden")
 
         assert len(garden.receiving_connections) == 1
         assert garden.receiving_connections[0].status == "DISABLED"
 
+    @pytest.mark.benchmark
     def test_check_garden_receiving_heartbeat_existing_garden_new_api_with_config(
         self, tmpdir, bg_garden
     ):
@@ -463,6 +478,7 @@ stomp:
 
         os.remove(config_file)
 
+    @pytest.mark.benchmark
     def test_check_garden_receiving_heartbeat_existing_garden_new_api(self, bg_garden):
         bg_garden.systems = []
 
@@ -479,6 +495,7 @@ stomp:
             else:
                 assert connection.status == "RECEIVING"
 
+    @pytest.mark.benchmark
     def test_update_garden_status_stopped(self, bg_garden):
         bg_garden.systems = []
         create_garden(bg_garden)
@@ -492,6 +509,7 @@ stomp:
         for connection in garden.publishing_connections:
             assert connection.status == "DISABLED"
 
+    @pytest.mark.benchmark
     def test_update_garden_status_start(self, bg_garden):
         for connection in bg_garden.receiving_connections:
             connection.status = "DISABLED"
@@ -507,6 +525,7 @@ stomp:
         for connection in garden.publishing_connections:
             assert connection.status == "PUBLISHING"
 
+    @pytest.mark.benchmark
     def test_upsert_garden_add_children(self, bg_garden):
         bg_garden.systems = []
 
@@ -528,6 +547,7 @@ stomp:
         assert child.name == "child"
         assert len(parent.children) == 1
 
+    @pytest.mark.benchmark
     def test_upsert_garden_update_values(self, bg_garden):
         bg_garden.systems = []
         bg_garden.has_parent = False
@@ -556,6 +576,7 @@ stomp:
         assert updated_garden.status == "STOPPED"
         assert updated_garden.version == "2.0.0"
 
+    @pytest.mark.benchmark
     def test_garden_unresponsive_trigger(self, bg_garden):
         bg_garden.systems = []
         for connection in bg_garden.receiving_connections:
@@ -572,6 +593,7 @@ stomp:
         for connection in garden.receiving_connections:
             assert connection.status == "UNRESPONSIVE"
 
+    @pytest.mark.benchmark
     def test_garden_unresponsive_trigger_in_window(self, bg_garden):
         bg_garden.systems = []
         for connection in bg_garden.receiving_connections:
@@ -589,6 +611,7 @@ stomp:
         for connection in garden.receiving_connections:
             assert connection.status == "RECEIVING"
 
+    @pytest.mark.benchmark
     def test_garden_unresponsive_trigger_child_metadata(self, bg_garden):
         bg_garden.systems = []
         for connection in bg_garden.receiving_connections:
@@ -606,6 +629,7 @@ stomp:
         for connection in garden.receiving_connections:
             assert connection.status == "UNRESPONSIVE"
 
+    @pytest.mark.benchmark
     def test_garden_unresponsive_trigger_missing_window(self, bg_garden):
         bg_garden.systems = []
         for connection in bg_garden.receiving_connections:
@@ -623,6 +647,7 @@ stomp:
         for connection in garden.receiving_connections:
             assert connection.status == "RECEIVING"
 
+    @pytest.mark.benchmark
     def test_handle_event_child_delete_garden(self):
         grand_parent = create_garden(
             BrewtilsGarden(

@@ -20,32 +20,37 @@ def system_spec():
 
 @pytest.mark.usefixtures("easy_client", "request_generator")
 class TestEcho(object):
-    def test_say_custom_string_and_loud(self):
+    @pytest.mark.benchmark
+def test_say_custom_string_and_loud(self):
         request = self.request_generator.generate_request(
             parameters={"message": "test_string", "loud": True}
         )
         response = wait_for_response(self.easy_client, request)
         assert_successful_request(response, output="test_string!!!!!!!!!")
 
-    def test_say_custom_string_unicode(self):
+    @pytest.mark.benchmark
+def test_say_custom_string_unicode(self):
         request = self.request_generator.generate_request(
             parameters={"message": "\U0001F4A9"}
         )
         response = wait_for_response(self.easy_client, request)
         assert_successful_request(response, output="\U0001F4A9")
 
-    def test_say_no_parameters_provided(self):
+    @pytest.mark.benchmark
+def test_say_no_parameters_provided(self):
         request = self.request_generator.generate_request()
         response = wait_for_response(self.easy_client, request)
         assert_successful_request(response, output="Hello, World!")
 
-    def test_non_nullable_string_set_to_null(self):
+    @pytest.mark.benchmark
+def test_non_nullable_string_set_to_null(self):
         request = self.request_generator.generate_request(
             parameters={"message": None, "loud": False}
         )
         assert_validation_error(self, self.easy_client, request)
 
-    def test_non_nullable_bool_set_to_null(self):
+    @pytest.mark.benchmark
+def test_non_nullable_bool_set_to_null(self):
         request = self.request_generator.generate_request(
             parameters={"message": "test_string", "loud": None}
         )

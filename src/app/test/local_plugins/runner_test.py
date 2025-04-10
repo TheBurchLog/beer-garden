@@ -31,6 +31,7 @@ class TestPluginRunner(object):
             ("-m package", [sys.executable, "-m", "package", "arg1", "arg2"]),
         ],
     )
+    @pytest.mark.benchmark
     def test_init_entry_point(self, system_mock, entry_point, expected):
         plugin = ProcessRunner(
             entry_point,
@@ -44,9 +45,11 @@ class TestPluginRunner(object):
         )
         assert plugin.executable == expected
 
+    @pytest.mark.benchmark
     def test_unique_name(self, plugin):
         assert plugin.unique_name == "system_name[default]-1.0.0"
 
+    @pytest.mark.benchmark
     def test_plugin_loggers_levels(self, plugin, system_mock):
         # We have to null out the handlers, otherwise we will end up
         # using a cached handler.
@@ -64,6 +67,7 @@ class TestPluginRunner(object):
         assert runner.logger.level == logging.getLogger(__name__).getEffectiveLevel()
         assert runner.unformatted_logger.level == logging.DEBUG
 
+    @pytest.mark.benchmark
     def test_generate_plugin_environment(self, plugin):
         plugin_env = {
             "BG_NAME": plugin.system.name,
@@ -83,11 +87,13 @@ class TestPluginRunner(object):
 
         assert plugin._generate_plugin_environment() == plugin_env
 
+    @pytest.mark.benchmark
     def test_generate_plugin_environment_no_copy_extra_bg_env(self, plugin):
         generated_env = plugin._generate_plugin_environment()
         assert "BG_foo" not in generated_env
         assert "BG_NAME" in generated_env
 
+    @pytest.mark.benchmark
     def test_generate_plugin_environment_with_additional_environment(self, plugin):
         plugin.environment = {"FOO": "BAR"}
         plugin_env = plugin._generate_plugin_environment()
@@ -100,6 +106,7 @@ class TestPluginRunner(object):
             ([None, 1, 1], False, True),  # Bad stop
         ],
     )
+    @pytest.mark.benchmark
     def test_run_plugin_io_thread_stop(
         self, mocker, plugin, process_poll, stopped, error_called
     ):
@@ -142,6 +149,7 @@ class TestCheckIo(object):
             )
         ],
     )
+    @pytest.mark.benchmark
     def test_check_io(self, mocker, plugin, stdout, stderr, logger_calls):
         """Ensure output coming from the subprocess is logged correctly
 
@@ -175,6 +183,7 @@ class TestCheckIo(object):
             for logger_call in _logger_calls:
                 assert logger_call in getattr(plugin, logger_name).log.mock_calls
 
+    @pytest.mark.benchmark
     def test_check_io_multiple_calls(self, plugin):
         stdout_mock = Mock(
             name="stdout mock",
@@ -198,6 +207,7 @@ class TestCheckIo(object):
 
 
 class TestRun(object):
+    @pytest.mark.benchmark
     def test_exception(self, caplog, monkeypatch, runner):
         monkeypatch.setattr(
             subprocess, "Popen", Mock(side_effect=ValueError("error_message"))
@@ -211,11 +221,13 @@ class TestRun(object):
 
 
 class TestKill(object):
+    @pytest.mark.benchmark
     def test_alive(self, runner):
         runner.process = Mock(poll=Mock(return_value=None))
         runner.kill()
         assert runner.process.kill.called
 
+    @pytest.mark.benchmark
     def test_dead(self, runner):
         runner.process = Mock(poll=Mock(return_value="dead"))
         runner.kill()
@@ -225,6 +237,7 @@ class TestKill(object):
 class TestBadPlugin:
     """Test the failure modes of ProcessRunner.run"""
 
+    @pytest.mark.benchmark
     def test_plugin_instance_id_not_set_before_exit(self, caplog, monkeypatch, runner):
         def mock_get_process(*args, **kwargs):
             class PopenWithBadWait:
@@ -246,6 +259,7 @@ class TestBadPlugin:
             ]
         )
 
+    @pytest.mark.benchmark
     def test_exception_thrown_in_plugin(self, caplog, monkeypatch, runner):
         def mock_get_process(*args, **kwargs):
             class PopenWithExceptionWait:

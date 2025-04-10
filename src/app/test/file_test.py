@@ -70,6 +70,7 @@ class TestFileOperations(object):
             id=simple_file.id,
         )
 
+    @pytest.mark.benchmark
     def test_file_create(
         self, monkeypatch, simple_file, modified_file, simple_file_chunk
     ):
@@ -159,6 +160,7 @@ class TestFileOperations(object):
             upsert=True,
         ).operation_complete
 
+    @pytest.mark.benchmark
     def test_file_fetch(self, monkeypatch, simple_file, simple_file_chunk):
         query_mock = Mock()
         monkeypatch.setattr(db, "query_unique", query_mock)
@@ -195,6 +197,7 @@ class TestFileOperations(object):
             simple_file.chunks
         )
 
+    @pytest.mark.benchmark
     def test_file_query(self, monkeypatch, base64_data, simple_file):
         query_mock = Mock()
         monkeypatch.setattr(db, "query_unique", query_mock)
@@ -282,6 +285,7 @@ class TestFileOperations(object):
             job=ObjectIdField().to_python(None),
         )
 
+    @pytest.mark.benchmark
     def test_file_owner(
         self,
         monkeypatch,
@@ -377,6 +381,7 @@ class TestFileOperations(object):
             )
         ).operation_complete
 
+    @pytest.mark.benchmark
     def test_safe_build(self, simple_file, simple_file_chunk):
         status = files._safe_build_object(FileStatus, simple_file)
         assert status.file_name == simple_file.file_name

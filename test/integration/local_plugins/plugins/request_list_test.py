@@ -19,7 +19,8 @@ class TestRequestListApi(object):
             command="say",
         )
 
-    def test_get_requests(self, echo_generator):
+    @pytest.mark.benchmark
+def test_get_requests(self, echo_generator):
         # Make a couple of requests just to ensure there are some
         request_1 = echo_generator.generate_request(
             parameters={"message": "test_string", "loud": True}
@@ -49,17 +50,20 @@ class TestEasyClient(object):
             command="sleep",
         )
 
-    def test_no_wait(self, sleeper_generator):
+    @pytest.mark.benchmark
+def test_no_wait(self, sleeper_generator):
         req = sleeper_generator.generate_request(parameters={"amount": 1})
         response = self.easy_client.create_request(req)
         assert response.status in ["CREATED", "IN_PROGRESS"]
 
-    def test_wait_success(self, sleeper_generator):
+    @pytest.mark.benchmark
+def test_wait_success(self, sleeper_generator):
         req = sleeper_generator.generate_request(parameters={"amount": 1})
         response = self.easy_client.create_request(req, blocking=True)
         assert response.status == "SUCCESS"
 
-    def test_wait_timeout(self, sleeper_generator):
+    @pytest.mark.benchmark
+def test_wait_timeout(self, sleeper_generator):
         req = sleeper_generator.generate_request(parameters={"amount": 2})
 
         with pytest.raises(TimeoutExceededError):
@@ -68,7 +72,8 @@ class TestEasyClient(object):
 
 @pytest.mark.usefixtures("easy_client")
 class TestSystemClient(object):
-    def test_blocking(self):
+    @pytest.mark.benchmark
+def test_blocking(self):
         sys_client = setup_system_client(system_name="sleeper", timeout=1)
 
         req = sys_client.sleep(amount=0)
@@ -77,7 +82,8 @@ class TestSystemClient(object):
         with pytest.raises(TimeoutExceededError):
             sys_client.sleep(amount=2)
 
-    def test_non_blocking(self):
+    @pytest.mark.benchmark
+def test_non_blocking(self):
         sys_client = setup_system_client(
             system_name="sleeper", blocking=False, timeout=1
         )

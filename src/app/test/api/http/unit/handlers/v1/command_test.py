@@ -80,6 +80,7 @@ def access_token(user):
 
 class TestCommandAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_returns_command_for_any_system(
         self, http_client, base_url, system_not_permitted
     ):
@@ -96,6 +97,7 @@ class TestCommandAPI:
         assert response_body["name"] == command.name
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_returns_command_for_permitted_system(
         self,
         http_client,
@@ -115,6 +117,7 @@ class TestCommandAPI:
         assert response_body["name"] == command.name
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_returns_403_for_not_permitted_system(
         self,
         http_client,
@@ -138,6 +141,7 @@ class TestCommandAPI:
 
 class TestCommandListAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_returns_commands_for_any_system(self, http_client, base_url):
         url = f"{base_url}/api/v1/commands/"
 
@@ -148,6 +152,7 @@ class TestCommandListAPI:
         assert len(response_body) == 2
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_returns_commands_for_permitted_systems(
         self,
         http_client,

@@ -34,13 +34,15 @@ class TestSystemRegistration(object):
         yield
         delete_plugins(self.easy_client, "test")
 
-    def test_system_register_successful(self):
+    @pytest.mark.benchmark
+def test_system_register_successful(self):
         plugin = create_plugin("test", "1.0.0", TestPluginV1)
         start_plugin(plugin, self.easy_client)
         assert_system_running(self.easy_client, "test", "1.0.0")
         stop_plugin(plugin)
 
-    def test_system_register_update_data(self):
+    @pytest.mark.benchmark
+def test_system_register_update_data(self):
         # Register the standard plugin, then stop it
         plugin = create_plugin("test", "1.0.0", TestPluginV1)
         start_plugin(plugin, self.easy_client)
@@ -71,7 +73,8 @@ class TestSystemRegistration(object):
         )
         stop_plugin(plugin)
 
-    def test_system_register_dev_different_commands(self):
+    @pytest.mark.benchmark
+def test_system_register_dev_different_commands(self):
         # Register the standard plugin, then stop it
         plugin = create_plugin("test", "1.0.0.dev", TestPluginV1)
         start_plugin(plugin, self.easy_client)
@@ -84,7 +87,8 @@ class TestSystemRegistration(object):
         assert_system_running(self.easy_client, "test", "1.0.0.dev")
         stop_plugin(plugin)
 
-    def test_system_register_different_commands_should_fail(self):
+    @pytest.mark.benchmark
+def test_system_register_different_commands_should_fail(self):
         plugin = create_plugin("test", "1.0.0", TestPluginV1)
         start_plugin(plugin, self.easy_client)
         assert_system_running(self.easy_client, "test", "1.0.0")
@@ -94,7 +98,8 @@ class TestSystemRegistration(object):
         with pytest.raises(ValidationError):
             self.easy_client.create_system(plugin.system)
 
-    def test_system_register_different_versions(self):
+    @pytest.mark.benchmark
+def test_system_register_different_versions(self):
         plugin = create_plugin("test", "1.0.0", TestPluginV1)
         start_plugin(plugin, self.easy_client)
         assert_system_running(self.easy_client, "test", "1.0.0")
@@ -104,7 +109,8 @@ class TestSystemRegistration(object):
         assert_system_running(self.easy_client, "test", "1.0.0")
         assert_system_running(self.easy_client, "test", "2.0.0")
 
-    def test_system_register_same_instance_name(self):
+    @pytest.mark.benchmark
+def test_system_register_same_instance_name(self):
         plugin = create_plugin("test", "1.0.0", TestPluginV1)
         start_plugin(plugin, self.easy_client)
         assert_system_running(self.easy_client, "test", "1.0.0")

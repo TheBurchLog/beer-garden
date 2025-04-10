@@ -9,6 +9,7 @@ from beer_garden.queue.rabbit import PyrabbitClient, get_routing_key, get_routin
 pytestmark = pytest.mark.benchmark
 
 class TestGetRoutingKey(object):
+    @pytest.mark.benchmark
     def test_basic(self):
         assert "system.1-0-0.instance" == get_routing_key("system", "1.0.0", "instance")
 
@@ -19,20 +20,24 @@ class TestGetRoutingKey(object):
             ((None, None, None), "admin"),
         ],
     )
+    @pytest.mark.benchmark
     def test_admin(self, args, expected):
         assert get_routing_key(*args, is_admin=True) == expected
 
 
 class TestGetRoutingKeys(object):
+    @pytest.mark.benchmark
     def test_basic(self):
         assert ["system", "system.1-0-0", "system.1-0-0.instance"] == get_routing_keys(
             "system", "1.0.0", "instance"
         )
 
+    @pytest.mark.benchmark
     def test_admin(self):
         assert ["admin"] == get_routing_keys(is_admin=True)
         assert ["admin"] == get_routing_keys(is_admin=True)
 
+    @pytest.mark.benchmark
     def test_admin_no_clone_id(self):
         assert [
             "admin",
@@ -111,14 +116,17 @@ class TestPyrabbitClient(object):
 
         return the_client
 
+    @pytest.mark.benchmark
     def test_is_alive(self, client, pyrabbit_client):
         pyrabbit_client.is_alive.return_value = True
         assert client.is_alive() is True
 
+    @pytest.mark.benchmark
     def test_not_alive(self, client, pyrabbit_client):
         pyrabbit_client.is_alive.side_effect = NetworkError
         assert client.is_alive() is False
 
+    @pytest.mark.benchmark
     def test_verify_virtual_host(self, client, pyrabbit_client):
         virtual_host_mock = Mock()
         pyrabbit_client.get_vhost.return_value = virtual_host_mock
@@ -126,6 +134,7 @@ class TestPyrabbitClient(object):
         assert client.verify_virtual_host() == virtual_host_mock
         pyrabbit_client.get_vhost.assert_called_once_with("/")
 
+    @pytest.mark.benchmark
     def test_verify_virtual_host_exception(self, client, pyrabbit_client):
         pyrabbit_client.get_vhost.side_effect = ValueError
 
@@ -133,27 +142,32 @@ class TestPyrabbitClient(object):
             client.verify_virtual_host()
         pyrabbit_client.get_vhost.assert_called_once_with("/")
 
+    @pytest.mark.benchmark
     def test_ensure_admin_expiry(self, client, pyrabbit_client):
         client.ensure_admin_expiry()
         assert pyrabbit_client.create_policy.called is True
 
+    @pytest.mark.benchmark
     def test_ensure_admin_expiry_exception(self, client, pyrabbit_client):
         pyrabbit_client.create_policy.side_effect = ValueError
         with pytest.raises(ValueError):
             client.ensure_admin_expiry()
 
+    @pytest.mark.benchmark
     def test_get_queue_size_good(self, client, pyrabbit_client):
         pyrabbit_client.get_queue.return_value = {"messages": 1}
 
         assert client.get_queue_size("queue") == 1
         pyrabbit_client.get_queue.assert_called_with("/", "queue")
 
+    @pytest.mark.benchmark
     def test_get_queue_idle(self, client, pyrabbit_client):
         pyrabbit_client.get_queue.return_value = {}
 
         assert client.get_queue_size("queue") == 0
         pyrabbit_client.get_queue.assert_called_with("/", "queue")
 
+    @pytest.mark.benchmark
     def test_get_queue_size_no_queue(self, client, pyrabbit_client):
         pyrabbit_client.get_queue.side_effect = HTTPError(
             {}, status=404, reason="something"
@@ -161,6 +175,7 @@ class TestPyrabbitClient(object):
         with pytest.raises(HTTPError):
             client.get_queue_size("queue")
 
+    @pytest.mark.benchmark
     def test_get_queue_size_bad_exception(self, client, pyrabbit_client):
         pyrabbit_client.get_queue.side_effect = HTTPError(
             {}, status=500, reason="something"
@@ -168,6 +183,7 @@ class TestPyrabbitClient(object):
         with pytest.raises(HTTPError):
             client.get_queue_size("queue")
 
+    @pytest.mark.benchmark
     def test_clear_queue_no_messages(self, client, pyrabbit_client):
         pyrabbit_client.get_queue.return_value = {"messages_ready": 0}
 
@@ -175,6 +191,7 @@ class TestPyrabbitClient(object):
         assert pyrabbit_client.get_queue.called is True
         assert pyrabbit_client.get_messages.called is False
 
+    @pytest.mark.benchmark
     def test_clear_queue_idle_queue(self, client, pyrabbit_client):
         pyrabbit_client.get_queue.return_value = {}
 
@@ -182,6 +199,7 @@ class TestPyrabbitClient(object):
         assert pyrabbit_client.get_queue.called is True
         assert pyrabbit_client.get_messages.called is False
 
+    @pytest.mark.benchmark
     def test_clear_queue(self, monkeypatch, client, pyrabbit_client):
         fake_request = Mock(id="id", status="CREATED")
         pyrabbit_client.get_queue.return_value = {"messages_ready": 1}
@@ -196,6 +214,7 @@ class TestPyrabbitClient(object):
         client.clear_queue("queue")
         cancel_mock.assert_called_once_with(fake_request.id)
 
+    @pytest.mark.benchmark
     def test_clear_queue_bad_payload(self, monkeypatch, client, pyrabbit_client):
         fake_request = Mock(id="id", status="CREATED")
         pyrabbit_client.get_queue.return_value = {"messages_ready": 1}
@@ -215,6 +234,7 @@ class TestPyrabbitClient(object):
             fake_request, from_string=True
         )
 
+    @pytest.mark.benchmark
     def test_clear_queue_race_condition(self, monkeypatch, client, pyrabbit_client):
         pyrabbit_client.get_queue.return_value = {"messages_ready": 1}
         pyrabbit_client.get_messages.return_value = []
@@ -226,10 +246,12 @@ class TestPyrabbitClient(object):
         assert pyrabbit_client.get_messages.called is True
         assert parser_mock.parse_request.called is False
 
+    @pytest.mark.benchmark
     def test_delete_queue(self, client, pyrabbit_client):
         client.delete_queue("queue")
         assert pyrabbit_client.delete_queue.called is True
 
+    @pytest.mark.benchmark
     def test_destroy_queue_all_exceptions(self, client):
         disconnect_consumers_mock = Mock(side_effect=ValueError)
         clear_queue_mock = Mock(side_effect=ValueError)
@@ -243,6 +265,7 @@ class TestPyrabbitClient(object):
         assert clear_queue_mock.called is True
         assert delete_queue.called is True
 
+    @pytest.mark.benchmark
     def test_destroy_queue_with_http_errors(self, client):
         disconnect_consumers_mock = Mock(side_effect=HTTPError({}, status=500))
         clear_queue_mock = Mock(side_effect=HTTPError({}, status=500))
@@ -256,6 +279,7 @@ class TestPyrabbitClient(object):
         assert clear_queue_mock.called is True
         assert delete_queue.called is True
 
+    @pytest.mark.benchmark
     def test_destroy_queue_no_errors(self, client):
         disconnect_consumers_mock = Mock()
         clear_queue_mock = Mock()
@@ -269,6 +293,7 @@ class TestPyrabbitClient(object):
         assert clear_queue_mock.called is True
         assert delete_queue.called is True
 
+    @pytest.mark.benchmark
     def test_destroy_queue_none_queue_name(self, client, pyrabbit_client):
         disconnect_consumers_mock = Mock()
         clear_queue_mock = Mock()
@@ -282,6 +307,7 @@ class TestPyrabbitClient(object):
         assert clear_queue_mock.called is False
         assert delete_queue.called is False
 
+    @pytest.mark.benchmark
     def test_disconnect_consumers(self, client, pyrabbit_client):
         consumer_details = [
             {
@@ -297,12 +323,14 @@ class TestPyrabbitClient(object):
         client.disconnect_consumers("queue_name")
         pyrabbit_client.delete_connection.assert_called_once_with("conn")
 
+    @pytest.mark.benchmark
     def test_disconnect_consumers_no_channels(self, client, pyrabbit_client):
         pyrabbit_client.get_channels.return_value = None
 
         client.disconnect_consumers("queue_name")
         assert pyrabbit_client.delete_connection.called is False
 
+    @pytest.mark.benchmark
     def test_disconnect_consumers_no_channel(self, client, pyrabbit_client):
         channel = {"name": "channel_name"}
         pyrabbit_client.get_channels.return_value = [channel]

@@ -95,6 +95,7 @@ class TestPublisher(object):
         return request_model
 
     @pytest.mark.usefixtures("easy_client", "request_generator")
+    @pytest.mark.benchmark
     def test_listen_create_request(self):
         """Publish a Request over HTTP and verify it from STOMP."""
 
@@ -138,6 +139,7 @@ class TestPublisher(object):
             stomp_connection.disconnect()
 
     @pytest.mark.usefixtures("easy_client", "request_generator")
+    @pytest.mark.benchmark
     def test_publish_create_request(self):
         """Publish a Request over STOMP and verify it via HTTP."""
 

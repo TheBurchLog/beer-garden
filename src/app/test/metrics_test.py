@@ -22,6 +22,7 @@ def prometheus_mocks(monkeypatch):
 
 class TestMetrics(object):
     @pytest.mark.parametrize("wait", [0, 0.1, 0.25])
+    @pytest.mark.benchmark
     def test_request_latency(self, wait):
         now = datetime.utcnow()
         sleep(wait)
@@ -32,6 +33,7 @@ class TestMetrics(object):
         "status,queued,in_progress",
         [("CREATED", 1, 0), ("IN_PROGRESS", 0, 1), ("SUCCESS", 0, 0)],
     )
+    @pytest.mark.benchmark
     def test_initialize_counts(
         self, prometheus_mocks, monkeypatch, bg_request, status, queued, in_progress
     ):
@@ -46,6 +48,7 @@ class TestMetrics(object):
             == metrics.in_progress_request_gauge.labels.return_value.inc.call_count
         )
 
+    @pytest.mark.benchmark
     def test_request_created(self, prometheus_mocks, bg_request):
         metrics.request_created(bg_request)
 
@@ -64,6 +67,7 @@ class TestMetrics(object):
         )
         assert metrics.request_counter_total.labels.return_value.inc.call_count == 1
 
+    @pytest.mark.benchmark
     def test_request_started(self, prometheus_mocks, bg_request):
         metrics.request_started(bg_request)
 
@@ -81,6 +85,7 @@ class TestMetrics(object):
         )
         assert metrics.in_progress_request_gauge.labels.return_value.inc.call_count == 1
 
+    @pytest.mark.benchmark
     def test_request_completed(self, prometheus_mocks, bg_request):
         metrics.request_completed(bg_request)
 

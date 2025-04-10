@@ -58,6 +58,7 @@ def access_token_not_permitted(user_without_permission):
 
 class TestGardenAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_forward_with_global_permission(
         self,
         http_client,
@@ -80,6 +81,7 @@ class TestGardenAPI:
         assert response.code == 204
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_forward_without_global_permission(
         self,
         http_client,

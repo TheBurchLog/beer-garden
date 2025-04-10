@@ -149,6 +149,7 @@ def common_mocks(monkeypatch, garden_permitted, queue_function_mock):
 
 class TestQueueAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_delete(
         self, http_client, base_url, queue_function_mock
     ):
@@ -161,6 +162,7 @@ class TestQueueAPI:
         assert queue_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_delete_with_permissions(
         self,
         http_client,
@@ -179,6 +181,7 @@ class TestQueueAPI:
         assert queue_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_delete_admin_with_permissions(
         self,
         http_client,
@@ -197,6 +200,7 @@ class TestQueueAPI:
         assert queue_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_delete_without_permissions(
         self,
         http_client,
@@ -217,6 +221,7 @@ class TestQueueAPI:
         assert queue_function_mock.called is False
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_delete_without_permissions_system_filter(
         self,
         http_client,
@@ -237,6 +242,7 @@ class TestQueueAPI:
         assert queue_function_mock.called is False
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_delete_with_permissions_system_filter(
         self,
         http_client,
@@ -257,6 +263,7 @@ class TestQueueAPI:
 
 class TestQueueListAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_get(self, http_client, base_url, queue_function_mock):
         url = f"{base_url}/api/v1/queues/"
 
@@ -266,6 +273,7 @@ class TestQueueListAPI:
         assert queue_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_get_with_permission(
         self,
         http_client,
@@ -283,6 +291,7 @@ class TestQueueListAPI:
         assert queue_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_get_without_permission(
         self,
         http_client,
@@ -301,6 +310,7 @@ class TestQueueListAPI:
         assert queue_function_mock.called is False
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_delete(
         self, http_client, base_url, queue_function_mock
     ):
@@ -313,6 +323,7 @@ class TestQueueListAPI:
         assert queue_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_delete_with_permissions(
         self,
         http_client,
@@ -331,6 +342,7 @@ class TestQueueListAPI:
         assert queue_function_mock.called is True
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_delete_without_permissions(
         self,
         http_client,

@@ -135,6 +135,7 @@ def base_garden(base_system, base_connection):
 
 
 class TestAuthorization:
+    @pytest.mark.benchmark
     def test_query_filter_garden_check(self, user_for_garden_scope):
         """get_garden should allow for retrieval by name"""
         assert check_global_roles(
@@ -146,6 +147,7 @@ class TestAuthorization:
         assert check_global_roles(user_for_garden_scope, permission_level="OPERATOR")
         assert check_global_roles(user_for_garden_scope, permission_level="READ_ONLY")
 
+    @pytest.mark.benchmark
     def test_query_filter_read_check(self, user_for_read_scope):
         """get_garden should allow for retrieval by name"""
         assert not check_global_roles(
@@ -157,6 +159,7 @@ class TestAuthorization:
         assert not check_global_roles(user_for_read_scope, permission_level="OPERATOR")
         assert check_global_roles(user_for_read_scope, permission_level="READ_ONLY")
 
+    @pytest.mark.benchmark
     def test_generate_permission_levels(self):
         assert generate_permission_levels("READ_ONLY") == [
             "READ_ONLY",
@@ -175,6 +178,7 @@ class TestAuthorization:
         ]
         assert generate_permission_levels("GARDEN_ADMIN") == ["GARDEN_ADMIN"]
 
+    @pytest.mark.benchmark
     def test__has_empty_scopes(self):
         assert _has_empty_scopes(
             Role(
@@ -341,6 +345,7 @@ class TestAuthorization:
 
 
 class TestModelFilter:
+    @pytest.mark.benchmark
     def test_get_user_filter(
         self, model_filter, user_for_read_scope, user_for_garden_scope
     ):
@@ -362,6 +367,7 @@ class TestModelFilter:
             user_for_read_scope, user_for_garden_scope, ["ADMIN"]
         )
 
+    @pytest.mark.benchmark
     def test_get_role_filter(
         self,
         model_filter,
@@ -616,6 +622,7 @@ class TestModelFilter:
             ),
         ],
     )
+    @pytest.mark.benchmark
     def test_get_request_filter(self, model_filter, base_request, user, returned):
         if returned:
             assert model_filter._get_request_filter(
@@ -861,6 +868,7 @@ class TestModelFilter:
             ),
         ],
     )
+    @pytest.mark.benchmark
     def test_get_job_filter(self, model_filter, base_job, user, returned):
         if returned:
             assert model_filter._get_job_filter(
@@ -913,6 +921,7 @@ class TestModelFilter:
             ),
         ],
     )
+    @pytest.mark.benchmark
     def test_get_garden_filter(self, model_filter, base_garden, user, returned):
         if returned:
             assert model_filter._get_garden_filter(
@@ -965,6 +974,7 @@ class TestModelFilter:
             ),
         ],
     )
+    @pytest.mark.benchmark
     def test_get_garden_filter_check_systems(
         self, model_filter, base_garden, user, returned
     ):
@@ -1020,6 +1030,7 @@ class TestModelFilter:
             ),
         ],
     )
+    @pytest.mark.benchmark
     def test_get_garden_filter_connection_configs(
         self, model_filter, base_garden, user, returned
     ):
@@ -1073,6 +1084,7 @@ class TestModelFilter:
             ),
         ],
     )
+    @pytest.mark.benchmark
     def test_get_command_filter(
         self, model_filter, base_command, base_system, user, returned
     ):
@@ -1134,6 +1146,7 @@ class TestModelFilter:
             ),
         ],
     )
+    @pytest.mark.benchmark
     def test_get_instance_filter(
         self, model_filter, base_instance, base_system, user, returned
     ):
@@ -1195,6 +1208,7 @@ class TestModelFilter:
             ),
         ],
     )
+    @pytest.mark.benchmark
     def test_get_instance_filter_db_system_check(
         self, model_filter, base_instance, base_system_2, user, returned
     ):
@@ -1256,6 +1270,7 @@ class TestModelFilter:
             ),
         ],
     )
+    @pytest.mark.benchmark
     def test_get_system_filter(self, model_filter, base_system, user, returned):
         if returned:
             assert model_filter._get_system_filter(
@@ -1307,6 +1322,7 @@ class TestModelFilter:
             ),
         ],
     )
+    @pytest.mark.benchmark
     def test_get_system_filter_dropped_by_instance(
         self, model_filter, base_system, user, returned
     ):
@@ -1360,6 +1376,7 @@ class TestModelFilter:
             ),
         ],
     )
+    @pytest.mark.benchmark
     def test_get_system_filter_dropped_by_command(
         self, model_filter, base_system, user, returned
     ):

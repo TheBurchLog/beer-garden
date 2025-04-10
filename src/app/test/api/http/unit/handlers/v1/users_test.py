@@ -55,6 +55,7 @@ def access_token_user_admin(user_admin):
 
 class TestUserAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_get(self, http_client, base_url, user):
         url = f"{base_url}/api/v1/users/{user.username}"
 
@@ -66,6 +67,7 @@ class TestUserAPI:
         assert "password" not in response_user.keys()
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_get_responds_404_when_not_found(self, http_client, base_url):
         url = f"{base_url}/api/v1/users/notauser"
 
@@ -75,6 +77,7 @@ class TestUserAPI:
         assert excinfo.value.code == 404
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_patch_allows_role_assignment_using_role_name(
         self, http_client, base_url, user, user_admin_role
     ):
@@ -94,6 +97,7 @@ class TestUserAPI:
         assert len(get_user(id=user.id).roles) == 1
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_patch_responds_400_for_no_matching_role(
         self, http_client, base_url, user, user_admin_role
     ):
@@ -110,6 +114,7 @@ class TestUserAPI:
         assert excinfo.value.code == 400
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_patch_responds_500_when_no_body_provided(
         self, http_client, base_url, user
     ):
@@ -123,6 +128,7 @@ class TestUserAPI:
         assert excinfo.value.code == 500
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_patch_for_permitted_user(
         self,
         http_client,
@@ -151,6 +157,7 @@ class TestUserAPI:
         assert response.code == 200
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_patch_for_not_permitted_user(
         self,
         http_client,
@@ -174,6 +181,7 @@ class TestUserAPI:
         assert excinfo.value.code == 403
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_delete_for_permitted_user(
         self,
         http_client,
@@ -192,6 +200,7 @@ class TestUserAPI:
             get_user(id=user.id)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_delete_for_not_permitted_user(
         self,
         http_client,
@@ -212,6 +221,7 @@ class TestUserAPI:
 
 class TestUserListAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_get(self, http_client, base_url, user):
         url = f"{base_url}/api/v1/users/"
 
@@ -223,6 +233,7 @@ class TestUserListAPI:
         assert "password" not in response_users[0].keys()
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_post_for_permitted_user(
         self, http_client, base_url, app_config_auth_enabled, access_token_user_admin
     ):
@@ -240,6 +251,7 @@ class TestUserListAPI:
         assert 201 == response.code
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_post_for_not_permitted_user(
         self, http_client, base_url, app_config_auth_enabled, access_token_user
     ):
@@ -256,6 +268,7 @@ class TestUserListAPI:
         assert excinfo.value.code == 403
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_responds_400_when_required_fields_are_missing(
         self, http_client, base_url
     ):
@@ -270,6 +283,7 @@ class TestUserListAPI:
 
 class TestUserPasswordChangeAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_responds_204_on_success(
         self, http_client, base_url, app_config_auth_enabled, access_token_user, user
     ):
@@ -294,6 +308,7 @@ class TestUserPasswordChangeAPI:
         assert verify_password(get_user(id=user.id), new_password)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_responds_400_on_incorrect_current_password(
         self, http_client, base_url, app_config_auth_enabled, access_token_user, user
     ):
@@ -316,6 +331,7 @@ class TestUserPasswordChangeAPI:
         assert verify_password(get_user(id=user.id), "password")
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_responds_400_when_required_fields_are_missing(
         self, http_client, base_url, app_config_auth_enabled, access_token_user, user
     ):

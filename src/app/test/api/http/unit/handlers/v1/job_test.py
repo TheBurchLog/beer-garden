@@ -108,6 +108,7 @@ def drop_jobs():
 
 class TestJobAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_get(self, base_url, http_client, job_not_permitted):
         url = f"{base_url}/api/v1/jobs/{job_not_permitted.id}"
 
@@ -118,6 +119,7 @@ class TestJobAPI:
         assert response_body["id"] == str(job_not_permitted.id)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_get_for_permitted_job(
         self,
         base_url,
@@ -136,6 +138,7 @@ class TestJobAPI:
         assert response_body["id"] == str(job_permitted.id)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_get_for_not_permitted_job(
         self,
         base_url,
@@ -153,6 +156,7 @@ class TestJobAPI:
         assert excinfo.value.code == 403
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_patch(self, base_url, http_client, job_not_permitted):
         url = f"{base_url}/api/v1/jobs/{job_not_permitted.id}"
         patch_body = {"operation": "update", "path": "/status", "value": "PAUSED"}
@@ -167,6 +171,7 @@ class TestJobAPI:
         assert Job.objects.get(id=job_not_permitted.id).status == "PAUSED"
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_patch_for_permitted_job(
         self,
         base_url,
@@ -191,6 +196,7 @@ class TestJobAPI:
         assert Job.objects.get(id=job_permitted.id).status == "PAUSED"
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_patch_for_not_permitted_job(
         self,
         base_url,
@@ -216,6 +222,7 @@ class TestJobAPI:
         assert Job.objects.get(id=job_not_permitted.id).status == "RUNNING"
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_delete(
         self, base_url, http_client, job_not_permitted
     ):
@@ -227,6 +234,7 @@ class TestJobAPI:
         assert response.code == 204
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_delete_for_permitted_job(
         self,
         base_url,
@@ -244,6 +252,7 @@ class TestJobAPI:
         assert response.code == 204
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_delete_for_not_permitted_job(
         self,
         base_url,
@@ -265,6 +274,7 @@ class TestJobAPI:
 
 class TestJobListAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_get(
         self, base_url, http_client, job_permitted, job_not_permitted
     ):
@@ -277,6 +287,7 @@ class TestJobListAPI:
         assert len(response_body) == 2
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_returns_permitted_jobs(
         self,
         base_url,
@@ -297,6 +308,7 @@ class TestJobListAPI:
         assert response_body[0]["id"] == str(job_permitted.id)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_post(
         self,
         base_url,
@@ -317,6 +329,7 @@ class TestJobListAPI:
         assert response.code == 201
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_post_for_permitted_job(
         self,
         base_url,
@@ -338,6 +351,7 @@ class TestJobListAPI:
         assert response.code == 201
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_post_for_not_permitted_job(
         self,
         base_url,
@@ -362,6 +376,7 @@ class TestJobListAPI:
 
 class TestJobExecutionAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_reset_interval(self, http_client, base_url, interval_job):
         url = f"{base_url}/api/v1/jobs/{interval_job.id}/execute?reset_interval=True"
 
@@ -370,6 +385,7 @@ class TestJobExecutionAPI:
         assert response.code == 202
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_reset_interval_on_non_interval_trigger_job(
         self,
         http_client,
@@ -385,6 +401,7 @@ class TestJobExecutionAPI:
         assert excinfo.value.code == 400
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_post(self, base_url, http_client, job_not_permitted):
         url = f"{base_url}/api/v1/jobs/{job_not_permitted.id}/execute"
 
@@ -393,6 +410,7 @@ class TestJobExecutionAPI:
         assert response.code == 202
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_post_for_permitted_job(
         self,
         base_url,
@@ -409,6 +427,7 @@ class TestJobExecutionAPI:
         assert response.code == 202
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_post_for_not_permitted_job(
         self,
         base_url,
@@ -430,6 +449,7 @@ class TestJobExecutionAPI:
         "job_id",
         [ObjectId(), "111111111111111111111111"],
     )
+    @pytest.mark.benchmark
     def test_execute_job_not_found(self, http_client, base_url, job_id):
         url = f"{base_url}/api/v1/jobs/{job_id}/execute"
 
@@ -441,6 +461,7 @@ class TestJobExecutionAPI:
 
 class TestJobExportAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_export(
         self, base_url, http_client, job_permitted, job_not_permitted
     ):
@@ -453,6 +474,7 @@ class TestJobExportAPI:
         assert len(response_body) == 2
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_export_of_permitted_jobs(
         self,
         base_url,
@@ -478,6 +500,7 @@ class TestJobExportAPI:
         )
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_export_of_not_permitted_jobs(
         self,
         base_url,
@@ -502,6 +525,7 @@ class TestJobExportAPI:
 
 class TestJobImportAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_disabled_allows_post(self, base_url, http_client, job_not_permitted):
         url = f"{base_url}/api/v1/import/jobs"
 
@@ -515,6 +539,7 @@ class TestJobImportAPI:
         assert response.code == 201
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_allows_post_for_permitted_job(
         self,
         base_url,
@@ -536,6 +561,7 @@ class TestJobImportAPI:
         assert response.code == 201
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_auth_enabled_rejects_post_for_not_permitted_job(
         self,
         base_url,
@@ -558,6 +584,7 @@ class TestJobImportAPI:
         assert excinfo.value.code == 403
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_creates_only_valid_jobs(self, base_url, http_client, bg_job):
         url = f"{base_url}/api/v1/import/jobs"
         headers = {"Content-Type": "application/json"}

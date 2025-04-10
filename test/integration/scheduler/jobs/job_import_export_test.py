@@ -90,6 +90,7 @@ class TestJobImportExport:
         # not operate in real time
         sleep(base_wait_time * len(existing_jobs))
 
+    @pytest.mark.benchmark
     def test_export_interval_jobs(self, system_spec):
         """Test Job export functionality."""
         export_job_count = 5
@@ -121,6 +122,7 @@ class TestJobImportExport:
             >= set(map(name_getter, jobs_to_be_created_on_bg))
         )
 
+    @pytest.mark.benchmark
     def test_import_interval_jobs(self, system_spec):
         """Test Job import functionality."""
         import_job_count = 5
@@ -146,6 +148,7 @@ class TestJobImportExport:
             >= set(map(name_getter, job_definition_list))
         )
 
+    @pytest.mark.benchmark
     def test_imported_jobs_assigned_next_run_time(self, system_spec):
         """Test the scheduler assigns a next run time to imported jobs."""
         import_job_count = 5

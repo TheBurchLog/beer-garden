@@ -21,7 +21,8 @@ def system_spec():
 
 @pytest.mark.usefixtures("easy_client", "request_generator")
 class TestAutobrew(object):
-    def test_any_kwargs_success(self):
+    @pytest.mark.benchmark
+def test_any_kwargs_success(self):
         parameters = {"foo": {"foo": ["a", "b", "c"], "bar": "baz"}, "bar": "baz"}
         request = self.request_generator.generate_request(
             command="any_kwargs", parameters=parameters

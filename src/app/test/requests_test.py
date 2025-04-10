@@ -126,6 +126,7 @@ def _process_mock(monkeypatch, return_value=""):
 
 
 class TestSessionConfig(object):
+    @pytest.mark.benchmark
     def test_verify(self):
         cert_mock = Mock()
         config = Box(
@@ -139,26 +140,31 @@ class TestSessionConfig(object):
 
         assert RequestValidator(config)._session.verify == cert_mock
 
+    @pytest.mark.benchmark
     def test_no_verify(self, validator):
         assert validator._session.verify is False
 
 
 class TestValidateRequest(object):
+    @pytest.mark.benchmark
     def test_success(self, validator, system_find, bg_system, bg_request):
         system_find.return_value = bg_system
         assert validator.validate_request(bg_request) == bg_request
 
 
 class TestGetAndValidateSystem(object):
+    @pytest.mark.benchmark
     def test_success(self, validator, system_find, bg_system, bg_request):
         system_find.return_value = bg_system
         assert validator.get_and_validate_system(bg_request) == bg_system
 
+    @pytest.mark.benchmark
     def test_missing_system(self, validator, system_find, bg_request):
         system_find.return_value = None
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_system(bg_request)
 
+    @pytest.mark.benchmark
     def test_invalid_instance(self, validator, system_find, bg_system, bg_request):
         system_find.return_value = bg_system
         bg_request.instance_name = "INVALID"
@@ -168,18 +174,21 @@ class TestGetAndValidateSystem(object):
 
 
 class TestGetAndValidateCommandForSystem(object):
+    @pytest.mark.benchmark
     def test_success(self, validator, bg_system, bg_request, bg_command):
         assert (
             validator.get_and_validate_command_for_system(bg_request, system=bg_system)
             == bg_command
         )
 
+    @pytest.mark.benchmark
     def test_no_request_command(self, validator):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_command_for_system(
                 BrewtilsRequest(system="foo", parameters={}), Mock()
             )
 
+    @pytest.mark.benchmark
     def test_system_lookup(
         self, monkeypatch, validator, bg_system, bg_request, bg_command
     ):
@@ -188,12 +197,14 @@ class TestGetAndValidateCommandForSystem(object):
         )
         assert validator.get_and_validate_command_for_system(bg_request) == bg_command
 
+    @pytest.mark.benchmark
     def test_command_type(self, validator, bg_system, bg_request):
         bg_request.command_type = None
 
         validator.get_and_validate_command_for_system(bg_request, system=bg_system)
         assert bg_request.command_type == "ACTION"
 
+    @pytest.mark.benchmark
     def test_output_type(self, validator, bg_system, bg_request):
         bg_request.output_type = None
 
@@ -201,6 +212,7 @@ class TestGetAndValidateCommandForSystem(object):
         assert bg_request.output_type == "STRING"
 
     @pytest.mark.parametrize("attribute", ["command", "command_type", "output_type"])
+    @pytest.mark.benchmark
     def test_bad_request_attributes(self, validator, bg_system, bg_request, attribute):
         setattr(bg_request, attribute, "BAD")
         with pytest.raises(ModelValidationError):
@@ -208,15 +220,18 @@ class TestGetAndValidateCommandForSystem(object):
 
 
 class TestGetAndValidateParameters(object):
+    @pytest.mark.benchmark
     def test_success(self, validator, bg_request, bg_command):
         params = validator.get_and_validate_parameters(bg_request, command=bg_command)
         assert params == bg_request.parameters
 
+    @pytest.mark.benchmark
     def test_empty(self, validator):
         req = BrewtilsRequest(system="foo", command="command1")
         command = Command(parameters=[])
         assert validator.get_and_validate_parameters(req, command) == {}
 
+    @pytest.mark.benchmark
     def test_command_lookup(self, monkeypatch, validator):
         request = BrewtilsRequest(parameters={})
         lookup_mock = Mock(return_value=Mock(parameters=[]))
@@ -226,12 +241,14 @@ class TestGetAndValidateParameters(object):
         validator.get_and_validate_parameters(request)
         lookup_mock.assert_called_once_with(request)
 
+    @pytest.mark.benchmark
     def test_bad_request_parameter_key(self, validator, bg_request, bg_command):
         bg_request.parameters = {"bad_key": "bad_value"}
 
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(bg_request, command=bg_command)
 
+    @pytest.mark.benchmark
     def test_missing_required_key_no_default(self, validator, bg_request, bg_command):
         bg_command.parameters = [
             make_param(key="message", optional=False, default=None, nullable=False)
@@ -241,6 +258,7 @@ class TestGetAndValidateParameters(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(bg_request, command=bg_command)
 
+    @pytest.mark.benchmark
     def test_missing_required_key_with_default(self, validator, bg_request, bg_command):
         bg_command.parameters = [
             make_param(key="message", optional=False, default="foo", nullable=False)
@@ -250,6 +268,7 @@ class TestGetAndValidateParameters(object):
         params = validator.get_and_validate_parameters(bg_request, command=bg_command)
         assert params["message"] == "foo"
 
+    @pytest.mark.benchmark
     def test_missing_nested_parameters(self, validator):
         req = BrewtilsRequest(system="foo", command="command1", parameters={"key1": {}})
         nested_parameter = Mock(key="foo", multi=False, type="String", optional=False)
@@ -262,6 +281,7 @@ class TestGetAndValidateParameters(object):
             validator.get_and_validate_parameters(req, command)
 
     @patch("beer_garden.requests.RequestValidator._validate_parameter_based_on_type")
+    @pytest.mark.benchmark
     def test_extract_parameter_non_multi_calls_no_default(
         self, validate_mock, validator
     ):
@@ -276,6 +296,7 @@ class TestGetAndValidateParameters(object):
         validate_mock.assert_called_once_with("value1", command_parameter, command, req)
 
     @patch("beer_garden.requests.RequestValidator._validate_parameter_based_on_type")
+    @pytest.mark.benchmark
     def test_extract_parameter_non_multi_calls_with_default(
         self, validate_mock, validator
     ):
@@ -290,6 +311,7 @@ class TestGetAndValidateParameters(object):
         )
 
     @patch("beer_garden.requests.RequestValidator._validate_parameter_based_on_type")
+    @pytest.mark.benchmark
     def test_update_and_validate_parameter_extract_parameter_multi(
         self, validate_mock, validator
     ):
@@ -309,6 +331,7 @@ class TestGetAndValidateParameters(object):
             any_order=True,
         )
 
+    @pytest.mark.benchmark
     def test_update_and_validate_parameter_extract_parameter_multi_not_list(
         self, validator
     ):
@@ -321,6 +344,7 @@ class TestGetAndValidateParameters(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_update_and_validate_parameter_extract_parameter_optional_no_default(
         self, validator
     ):
@@ -333,6 +357,7 @@ class TestGetAndValidateParameters(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_update_and_validate_parameter_extract_parameter_nullable_no_default(
         self, validator
     ):
@@ -344,6 +369,7 @@ class TestGetAndValidateParameters(object):
         validated_parameters = validator.get_and_validate_parameters(req, command)
         assert validated_parameters["key1"] is None
 
+    @pytest.mark.benchmark
     def test_validate_parameter_based_on_type_null_not_nullable(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": None}
@@ -354,6 +380,7 @@ class TestGetAndValidateParameters(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_maximum_sequence(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": "value"}
@@ -373,6 +400,7 @@ class TestGetAndValidateParameters(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_maximum_non_sequence(self, validator):
         req = BrewtilsRequest(system="foo", command="command1", parameters={"key1": 5})
 
@@ -390,6 +418,7 @@ class TestGetAndValidateParameters(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_minimum_sequence(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": "value"}
@@ -409,6 +438,7 @@ class TestGetAndValidateParameters(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_accept_any_kwargs(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": "value"}
@@ -422,6 +452,7 @@ class TestGetAndValidateParameters(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_minimum_non_sequence(self, validator):
         req = BrewtilsRequest(system="foo", command="command1", parameters={"key1": 5})
 
@@ -439,6 +470,7 @@ class TestGetAndValidateParameters(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_regex(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": "Hi World!"}
@@ -458,6 +490,7 @@ class TestGetAndValidateParameters(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_regex_nullable(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": None}
@@ -468,6 +501,7 @@ class TestGetAndValidateParameters(object):
         command = Command("test", parameters=[command_parameter])
         validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_minimum_nullable(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": None}
@@ -483,6 +517,7 @@ class TestGetAndValidateParameters(object):
         command = Command("test", parameters=[command_parameter])
         validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_maximum_nullable(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": None}
@@ -518,6 +553,7 @@ class TestValidateParameterType(object):
             (1451606400000, "Datetime", 1451606400000),
         ],
     )
+    @pytest.mark.benchmark
     def test_success(self, validator, req_value, param_type, expected):
         validated_parameters = validator.get_and_validate_parameters(
             make_request(parameters={"key1": req_value}),
@@ -537,6 +573,7 @@ class TestValidateParameterType(object):
             ([1], "Integer"),
         ],
     )
+    @pytest.mark.benchmark
     def test_fail(self, validator, req_value, param_type):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(
@@ -544,6 +581,7 @@ class TestValidateParameterType(object):
                 Mock(parameters=[make_param(key="key1", type=param_type)]),
             )
 
+    @pytest.mark.benchmark
     def test_nested_parameters(self, validator):
         param = make_param(
             key="key1",
@@ -585,6 +623,7 @@ class TestValidateChoices(object):
             ),
         ],
     )
+    @pytest.mark.benchmark
     def test_simple(self, validator, req, choices):
         command = Mock(
             parameters=[make_param(key="p1", choices=choices, optional=False)]
@@ -599,6 +638,7 @@ class TestValidateChoices(object):
             make_request(parameters={"p1": "a", "p2": "1"}),
         ],
     )
+    @pytest.mark.benchmark
     def test_dictionary(self, validator, req):
         choices_value = {"a": ["1", "2", "3"], "b": ["4", "5", "6"], "null": ["7"]}
 
@@ -631,6 +671,7 @@ class TestValidateChoices(object):
             make_request(parameters={"p1": "c", "p2": "1"}),
         ],
     )
+    @pytest.mark.benchmark
     def test_dictionary_bad_parameters(self, validator, req):
         choices_value = {"a": ["1", "2", "3"], "b": ["4", "5", "6"]}
 
@@ -652,6 +693,7 @@ class TestValidateChoices(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_invalid_parameters(self, validator):
         command = Mock(
             parameters=[
@@ -769,6 +811,7 @@ class TestValidateChoices(object):
             with pytest.raises(ModelValidationError):
                 validator.get_and_validate_parameters(req, self.command)
 
+    @pytest.mark.benchmark
     def test_validate_value_in_choices_no_choices(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": "value"}
@@ -777,6 +820,7 @@ class TestValidateChoices(object):
         command = Mock(parameters=[command_parameter])
         validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_value_value_in_choices_not_multi_valid_choice(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": "value"}
@@ -790,6 +834,7 @@ class TestValidateChoices(object):
         command = Mock(parameters=[command_parameter])
         validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_value_in_choices_not_multi_invalid_choice(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": "value"}
@@ -806,6 +851,7 @@ class TestValidateChoices(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_value_in_choices_multi_valid_choice(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": ["v1", "v2"]}
@@ -819,6 +865,7 @@ class TestValidateChoices(object):
         command = Mock(parameters=[command_parameter])
         validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_value_in_choices_multi_invalid_choice(self, validator):
         req = BrewtilsRequest(
             system="foo", command="command1", parameters={"key1": ["v1", "v2"]}
@@ -835,6 +882,7 @@ class TestValidateChoices(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_value_in_choices_optional_none_allowed(self, validator):
         req = BrewtilsRequest(system="foo", command="command1", parameters={})
         command_parameter = Mock(
@@ -848,6 +896,7 @@ class TestValidateChoices(object):
         command = Mock(parameters=[command_parameter])
         validator.get_and_validate_parameters(req, command)
 
+    @pytest.mark.benchmark
     def test_validate_choices_static_bad_type(self, validator):
         command_parameter = Mock(
             key="key1",
@@ -881,6 +930,7 @@ class TestValidateChoices(object):
             '["a", {"text": "b", "value": "2"}, "value"]',
         ],
     )
+    @pytest.mark.benchmark
     def test_validate_url_choices(self, validator, response):
         session_mock = Mock()
         session_mock.get.return_value.text = response
@@ -904,6 +954,7 @@ class TestValidateChoices(object):
         validator.get_and_validate_parameters(req, command)
         session_mock.get.assert_called_with("http://localhost", params={})
 
+    @pytest.mark.benchmark
     def test_validate_command_choices_dict_value(self, monkeypatch, validator):
         process_mock = _process_mock(monkeypatch, return_value='["value"]')
 
@@ -946,6 +997,7 @@ class TestValidateChoices(object):
         assert choices_request.system_version == "0.0.1"
         assert choices_request.instance_name == "default"
 
+    @pytest.mark.benchmark
     def test_validate_command_choices_bad_value_type(self, monkeypatch, validator):
         _process_mock(monkeypatch, return_value='["value"]')
 
@@ -974,6 +1026,7 @@ class TestValidateChoices(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(request, command)
 
+    @pytest.mark.benchmark
     def test_validate_command_choices_simple_list_response(
         self, monkeypatch, validator
     ):
@@ -1005,6 +1058,7 @@ class TestValidateChoices(object):
         assert choices_request.system_version == "0.0.1"
         assert choices_request.instance_name == "instance_name"
 
+    @pytest.mark.benchmark
     def test_validate_command_choices_dictionary_list_response(
         self, monkeypatch, validator
     ):
@@ -1036,6 +1090,7 @@ class TestValidateChoices(object):
         assert choices_request.system_version == "0.0.1"
         assert choices_request.instance_name == "instance_name"
 
+    @pytest.mark.benchmark
     def test_validate_command_choices_bad_parameter(self, monkeypatch, validator):
         _process_mock(monkeypatch, return_value='{"value": "value"}')
 
@@ -1060,6 +1115,7 @@ class TestValidateChoices(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(request, command)
 
+    @pytest.mark.benchmark
     def test_validate_command_choices_empty_list_output(self, monkeypatch, validator):
         _process_mock(monkeypatch, return_value="[]")
 
@@ -1084,6 +1140,7 @@ class TestValidateChoices(object):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(request, command)
 
+    @pytest.mark.benchmark
     def test_validate_command_choices_bad_output_type(self, monkeypatch, validator):
         _process_mock(monkeypatch, return_value='{"value": "value"}')
 
@@ -1110,6 +1167,7 @@ class TestValidateChoices(object):
 
 
 class TestHandleEvent:
+    @pytest.mark.benchmark
     def test_status_updated_at_preserved_on_child_garden_requests(
         self, child_garden_request
     ):
@@ -1131,6 +1189,7 @@ class TestHandleEvent:
 
         assert updated_request.status_updated_at == status_updated_at
 
+    @pytest.mark.benchmark
     def test_metadata_merged_on_child_garden_requests(self, child_garden_request):
         child_garden_request.metadata = {
             "CREATED_child": 1737558145883,
@@ -1191,6 +1250,7 @@ class TestLatestRequest(object):
 
         beer_garden.db.mongo.models.System.drop_collection()
 
+    @pytest.mark.benchmark
     def test_v1_request(self, system_v1):
         latest_request = determine_latest_system_version(
             Request(system="original", namespace="beer_garden", system_version="latest")
@@ -1198,6 +1258,7 @@ class TestLatestRequest(object):
 
         assert latest_request.system_version == system_v1.version
 
+    @pytest.mark.benchmark
     def test_v2_request(self, system_v2):
         latest_request = determine_latest_system_version(
             Request(system="original", namespace="beer_garden", system_version="latest")
@@ -1205,6 +1266,7 @@ class TestLatestRequest(object):
 
         assert latest_request.system_version == system_v2.version
 
+    @pytest.mark.benchmark
     def test_latest_request(self, system_v1, system_v2):
         latest_request = determine_latest_system_version(
             Request(system="original", namespace="beer_garden", system_version="latest")
@@ -1213,6 +1275,7 @@ class TestLatestRequest(object):
         assert latest_request.system_version != system_v1.version
         assert latest_request.system_version == system_v2.version
 
+    @pytest.mark.benchmark
     def test_latest_instance_request(self, system_v1, system_v2):
         latest_request = determine_latest_system_version(
             Request(
@@ -1226,6 +1289,7 @@ class TestLatestRequest(object):
         assert latest_request.system_version != system_v1.version
         assert latest_request.system_version == system_v2.version
 
+    @pytest.mark.benchmark
     def test_latest_instance_request_unique_instance(self, system_v1, system_v2):
         latest_request = determine_latest_system_version(
             Request(
@@ -1239,6 +1303,7 @@ class TestLatestRequest(object):
         assert latest_request.system_version == system_v1.version
         assert latest_request.system_version != system_v2.version
 
+    @pytest.mark.benchmark
     def test_v1_request_no_version(self, system_v1):
         latest_request = determine_latest_system_version(
             Request(system="original", namespace="beer_garden")
@@ -1246,6 +1311,7 @@ class TestLatestRequest(object):
 
         assert latest_request.system_version == system_v1.version
 
+    @pytest.mark.benchmark
     def test_v2_request_no_version(self, system_v2):
         latest_request = determine_latest_system_version(
             Request(system="original", namespace="beer_garden")
@@ -1253,6 +1319,7 @@ class TestLatestRequest(object):
 
         assert latest_request.system_version == system_v2.version
 
+    @pytest.mark.benchmark
     def test_latest_request_no_version(self, system_v1, system_v2):
         latest_request = determine_latest_system_version(
             Request(system="original", namespace="beer_garden")
@@ -1316,6 +1383,7 @@ class TestCancelRequest(object):
 
         return request
 
+    @pytest.mark.benchmark
     def test_cancel_children(self, monkeypatch):
         cancel_mock = Mock()
         cancel_mock.return_value.output = None

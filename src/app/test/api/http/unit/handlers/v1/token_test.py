@@ -30,6 +30,7 @@ def user(user_password):
 
 class TestTokenAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_returns_token_on_valid_login(
         self, http_client, app_config_auth_enabled, base_url, user, user_password
     ):
@@ -60,6 +61,7 @@ class TestTokenAPI:
         assert decoded_access_token["jti"] == decoded_refresh_token["jti"]
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_returns_400_on_invalid_login(self, http_client, base_url, user):
         url = f"{base_url}/api/v1/token"
         body = json.dumps({"username": user.username, "password": "notmypassword"})
@@ -70,6 +72,7 @@ class TestTokenAPI:
         assert excinfo.value.code == 400
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_returns_400_when_user_not_found(self, http_client, base_url):
         url = f"{base_url}/api/v1/token"
         body = json.dumps({"username": "cantfindme", "password": "doesntmatter"})
@@ -82,6 +85,7 @@ class TestTokenAPI:
 
 class TestTokenRefreshAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_with_valid_refresh_token_returns_new_token_pair(
         self, http_client, base_url, user, app_config_auth_enabled
     ):
@@ -120,6 +124,7 @@ class TestTokenRefreshAPI:
         ) < timedelta(seconds=1)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_with_expired_refresh_token_returns_400(
         self, app_config_auth_enabled, http_client, base_url, user
     ):
@@ -135,6 +140,7 @@ class TestTokenRefreshAPI:
         assert excinfo.value.code == 400
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_with_revoked_refresh_token_returns_400(
         self, app_config_auth_enabled, http_client, base_url, user
     ):
@@ -152,6 +158,7 @@ class TestTokenRefreshAPI:
         assert excinfo.value.code == 400
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_with_invalid_refresh_token_returns_400(
         self, http_client, base_url, user
     ):
@@ -167,6 +174,7 @@ class TestTokenRefreshAPI:
 
 class TestTokenRevokeAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_with_valid_refresh_token_expires_token(
         self, http_client, base_url, user, app_config_auth_enabled
     ):
@@ -190,6 +198,7 @@ class TestTokenRevokeAPI:
             get_token(uuid=decoded_refresh_token["jti"])
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_with_expired_refresh_token_returns_204(
         self, app_config_auth_enabled, http_client, base_url, user
     ):
@@ -204,6 +213,7 @@ class TestTokenRevokeAPI:
         assert response.code == 204
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_with_revoked_refresh_token_returns_204(
         self, app_config_auth_enabled, http_client, base_url, user
     ):
@@ -218,6 +228,7 @@ class TestTokenRevokeAPI:
         assert response.code == 204
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_with_invalid_refresh_token_returns_400(
         self, http_client, base_url, user
     ):

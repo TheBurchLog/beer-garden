@@ -28,6 +28,7 @@ def model_instances():
 
 
 class TestFileFieldHandlingQuerySet:
+    @pytest.mark.benchmark
     def test_delete_calls_file_field_delete(self, monkeypatch, model_instances):
         monkeypatch.setattr(GridFSProxy, "delete", Mock())
         ModelWithFileField.objects.all().delete()
@@ -36,6 +37,7 @@ class TestFileFieldHandlingQuerySet:
 
 
 class TestFileFieldHandlingQuerySetNoCache:
+    @pytest.mark.benchmark
     def test_delete_calls_file_field_delete(self, monkeypatch, model_instances):
         monkeypatch.setattr(GridFSProxy, "delete", Mock())
         ModelWithFileField.objects.all().no_cache().delete()

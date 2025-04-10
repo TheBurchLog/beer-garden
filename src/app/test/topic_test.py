@@ -145,6 +145,7 @@ class TestTopic:
     def setup_class(cls):
         connect("beer_garden", host="mongomock://localhost")
 
+    @pytest.mark.benchmark
     def test_get_topic_id(self, topic1):
         """get_topic should allow for retrieval by name"""
         t = get_topic(topic_id=topic1.id)
@@ -152,6 +153,7 @@ class TestTopic:
         assert type(t) is BrewtilsTopic
         assert t.id == topic1.id
 
+    @pytest.mark.benchmark
     def test_get_topic_name(self, topic1):
         """get_topic should allow for retrieval by name"""
         t = get_topic(topic_name=topic1.name)
@@ -159,11 +161,13 @@ class TestTopic:
         assert type(t) is BrewtilsTopic
         assert t.name == topic1.name
 
+    @pytest.mark.benchmark
     def test_get_all_topics(self, topic1, topic2):
         """get_all_topics should get all topics"""
         t = get_all_topics()
         assert len(t) == 2
 
+    @pytest.mark.benchmark
     def test_upsert_subscriber(self, topic1, subscriber):
         """add subscriber to existing topic"""
         assert len(get_topic(topic1.id).subscribers) == 0
@@ -171,27 +175,32 @@ class TestTopic:
         create_topic(new_topic)
         assert len(get_topic(topic1.id).subscribers) == 1
 
+    @pytest.mark.benchmark
     def test_remove_topic_id(self, topic1):
         """remove_topic should remove topic"""
         remove_topic(topic_id=topic1.id)
         assert len(Topic.objects.filter(id=topic1.id)) == 0
 
+    @pytest.mark.benchmark
     def test_remove_topic_name(self, topic1):
         """remove_topic should remove topic"""
         remove_topic(topic_name=topic1.name)
         assert len(Topic.objects.filter(id=topic1.id)) == 0
 
+    @pytest.mark.benchmark
     def test_add_subscriber(self, topic1, subscriber):
         """add subscriber to existing topic"""
         topic_add_subscriber(subscriber, topic1.id)
         assert len(get_topic(topic1.id).subscribers) == 1
 
+    @pytest.mark.benchmark
     def test_remove_subscriber(self, topic2, subscriber):
         """remove subscriber from existing topic"""
         topic_add_subscriber(subscriber, topic2.id)
         topic_remove_subscriber(subscriber, topic2.id)
         assert len(get_topic(topic2.id).subscribers) == 0
 
+    @pytest.mark.benchmark
     def test_subscriber_match(self, subscriber, subscriber1, subscriber2, subscriber3):
         """subscriber comparison"""
         assert (subscriber_match(subscriber, subscriber)) is True
@@ -199,6 +208,7 @@ class TestTopic:
         assert (subscriber_match(subscriber1, subscriber2)) is False
         assert (subscriber_match(subscriber1, subscriber3)) is True
 
+    @pytest.mark.benchmark
     def test_garden_sync(self, local_garden):
 
         topics_generated = Topic.objects().count()
@@ -212,6 +222,7 @@ class TestTopic:
         topics_generated = Topic.objects().count()
         assert topics_generated == 1
 
+    @pytest.mark.benchmark
     def test_topic_prune(self, local_garden):
 
         System.drop_collection()
@@ -224,6 +235,7 @@ class TestTopic:
         topics_generated = Topic.objects().count()
         assert topics_generated == 0
 
+    @pytest.mark.benchmark
     def test_background_garden_topic_prune(self, remote_garden):
 
         topics_generated = Topic.objects().count()
@@ -236,6 +248,7 @@ class TestTopic:
         topics_generated = Topic.objects().count()
         assert topics_generated == 0
 
+    @pytest.mark.benchmark
     def test_background_system_topic_prune(self, local_garden_system):
 
         topics_generated = Topic.objects().count()
@@ -246,6 +259,7 @@ class TestTopic:
         topics_generated = Topic.objects().count()
         assert topics_generated == 0
 
+    @pytest.mark.benchmark
     def test_increase_topic_counter(self, topic1):
         assert topic1.publisher_count == 0
 
@@ -254,6 +268,7 @@ class TestTopic:
         db_topic = get_topic(topic_id=topic1.id)
         assert db_topic.publisher_count == 1
 
+    @pytest.mark.benchmark
     def test_increase_subscriber_counter(self, topic1, subscriber):
         topic_add_subscriber(subscriber, topic1.id)
 

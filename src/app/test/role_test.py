@@ -98,18 +98,22 @@ class TestRole:
     @pytest.mark.parametrize(
         "permission", ["READ_ONLY", "OPERATOR", "PLUGIN_ADMIN", "GARDEN_ADMIN"]
     )
+    @pytest.mark.benchmark
     def test_create_valid_permissions(self, permission):
         role = create_role(Role(name="test", permission=permission))
         assert role.id is not None
 
+    @pytest.mark.benchmark
     def test_create_invalid_permission(self):
         with pytest.raises(ModelValidationError):
             create_role(Role(name="test", permission="Bad_Permission"))
 
+    @pytest.mark.benchmark
     def test_get_role(self, role):
         assert get_role(role_id=role.id) == role
         assert get_role(role_name=role.name) == role
 
+    @pytest.mark.benchmark
     def test_update_role(self, role):
         role.permission = "OPERATOR"
         update_role(role)
@@ -124,12 +128,14 @@ class TestRole:
         db_role = get_role(role_id=role.id)
         assert db_role.permission == "GARDEN_ADMIN"
 
+    @pytest.mark.benchmark
     def test_delete_role(self, role):
         delete_role(role)
 
         with pytest.raises(DoesNotExist):
             get_role(role_id=role.id)
 
+    @pytest.mark.benchmark
     def test_create_generated_roles(self):
         configure_superuser_role()
         configure_plugin_role()
@@ -137,6 +143,7 @@ class TestRole:
         assert get_role(role_name="superuser") is not None
         assert get_role(role_name="plugin") is not None
 
+    @pytest.mark.benchmark
     def test_rescan_roles(self, app_config_roles_file):
         rescan()
 
@@ -145,6 +152,7 @@ class TestRole:
         assert get_role(role_name="operator") is not None
         assert get_role(role_name="read_only") is not None
 
+    @pytest.mark.benchmark
     def test_rescan_roles_missing_file(self, app_config_roles_file_missing):
         rescan()
 
@@ -157,6 +165,7 @@ class TestRole:
         with pytest.raises(DoesNotExist):
             get_role(role_name="read_only")
 
+    @pytest.mark.benchmark
     def test_rescan_roles_overwrite(self, app_config_roles_file):
         garden_admin = create_role(Role(name="garden_admin", permission="READ_ONLY"))
         plugin_admin = create_role(

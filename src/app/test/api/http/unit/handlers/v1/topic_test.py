@@ -44,6 +44,7 @@ def subscriber():
 
 class TestTopicAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_get_topic(self, http_client, base_url, topic_permitted):
         url = f"{base_url}/api/v1/topics/{topic_permitted.id}"
 
@@ -54,6 +55,7 @@ class TestTopicAPI:
         assert response_body["id"] == str(topic_permitted.id)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_delete_topic(
         self,
         http_client,
@@ -70,6 +72,7 @@ class TestTopicAPI:
         assert len(Topic.objects.filter(id=topic_permitted.id)) == 0
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_patch_topic(self, http_client, base_url, topic_permitted, subscriber):
         url = f"{base_url}/api/v1/topics/{topic_permitted.id}"
         headers = {
@@ -104,6 +107,7 @@ class TestTopicAPI:
 
 class TestTopicNameAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_get_topic(self, http_client, base_url, topic_permitted):
         url = f"{base_url}/api/v1/topics/name/{topic_permitted.name}"
 
@@ -114,6 +118,7 @@ class TestTopicNameAPI:
         assert response_body["name"] == str(topic_permitted.name)
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_delete_topic(
         self,
         http_client,
@@ -130,6 +135,7 @@ class TestTopicNameAPI:
         assert len(Topic.objects.filter(name=topic_permitted.name)) == 0
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_patch_topic(self, http_client, base_url, topic_permitted, subscriber):
         url = f"{base_url}/api/v1/topics/name/{topic_permitted.name}"
         headers = {
@@ -164,6 +170,7 @@ class TestTopicNameAPI:
 
 class TestTopicListAPI:
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_get_all_topics(self, http_client, base_url):
         url = f"{base_url}/api/v1/topics"
 
@@ -174,6 +181,7 @@ class TestTopicListAPI:
         assert len(response_body) == 2
 
     @pytest.mark.gen_test
+    @pytest.mark.benchmark
     def test_post_topic(
         self,
         http_client,

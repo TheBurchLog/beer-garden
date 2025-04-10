@@ -14,6 +14,7 @@ pytestmark = pytest.mark.benchmark
 
 class TestReplication(object):
 
+    @pytest.mark.benchmark
     def test_get_replication_id(self):
 
         if "BG_REPLICATION_ID" in os.environ:
@@ -23,6 +24,7 @@ class TestReplication(object):
 
         assert replication_id == os.environ["BG_REPLICATION_ID"]
 
+    @pytest.mark.benchmark
     def test_replication_expiration(self):
         create_replication(
             Replication(
@@ -33,6 +35,7 @@ class TestReplication(object):
 
         assert len(get_replications()) == 0
 
+    @pytest.mark.benchmark
     def test_update_replication(self):
         replication = create_replication(
             Replication(

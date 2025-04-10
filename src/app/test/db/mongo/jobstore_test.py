@@ -62,6 +62,7 @@ def mongo_job(job_dict, ts_dt, mongo_request_template, mongo_date_trigger):
 
 
 class TestConstructJob(object):
+    @pytest.mark.benchmark
     def test_state(self, jobstore, bg_job, bg_request_template):
         ap_job = construct_job(bg_job, jobstore._scheduler)
         assert isinstance(ap_job, APJob)
@@ -88,18 +89,22 @@ class TestJobStore(object):
     def drop_systems(self, mongo_conn):
         Job.drop_collection()
 
+    @pytest.mark.benchmark
     def test_lookup_nonexistent_job(self, jobstore, bad_id):
         assert jobstore.lookup_job(bad_id) is None
 
+    @pytest.mark.benchmark
     def test_lookup_job(self, jobstore, mongo_job):
         mongo_job.save()
         assert jobstore.lookup_job(str(mongo_job.id)) is not None
 
+    @pytest.mark.benchmark
     def test_get_all_jobs(self, jobstore, mongo_job):
         assert len(jobstore.get_all_jobs()) == 0
         mongo_job.save()
         assert len(jobstore.get_all_jobs()) == 1
 
+    @pytest.mark.benchmark
     def test_get_due_jobs(self, jobstore, ts_dt, mongo_job):
         now = utc.localize(ts_dt)
         assert jobstore.get_due_jobs(now) == []
@@ -107,22 +112,26 @@ class TestJobStore(object):
         mongo_job.save()
         assert len(jobstore.get_due_jobs(now)) == 1
 
+    @pytest.mark.benchmark
     def test_get_due_jobs_invalid_job(self, jobstore, mongo_job):
         mongo_job.save()
         with patch("beer_garden.db.mongo.jobstore.construct_job") as convert_mock:
             convert_mock.side_effect = ValueError
             assert len(jobstore.get_all_jobs()) == 0
 
+    @pytest.mark.benchmark
     def test_add_job(self, jobstore, ap_job, mongo_job):
         mongo_job.save()
         jobstore.add_job(ap_job)
         assert len(jobstore.get_all_jobs()) == 1
 
+    @pytest.mark.benchmark
     def test_remove_job(self, jobstore, mongo_job):
         mongo_job.save()
         jobstore.remove_job(mongo_job.id)
         assert jobstore.lookup_job(mongo_job.id) is None
 
+    @pytest.mark.benchmark
     def test_get_next_run_time(self, jobstore, mongo_job):
         assert jobstore.get_next_run_time() is None
 

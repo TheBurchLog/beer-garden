@@ -19,7 +19,8 @@ def system_spec():
 
 @pytest.mark.usefixtures("easy_client", "request_generator")
 class TestEchoSleeper(object):
-    def test_parent_with_children_success(self):
+    @pytest.mark.benchmark
+def test_parent_with_children_success(self):
         request = self.request_generator.generate_request(
             command="say_sleep", parameters={"message": "foo", "amount": 0.01}
         )
@@ -29,7 +30,8 @@ class TestEchoSleeper(object):
         for child_request in response.children:
             assert_successful_request(child_request)
 
-    def test_parent_with_error_does_not_raise(self):
+    @pytest.mark.benchmark
+def test_parent_with_error_does_not_raise(self):
         request = self.request_generator.generate_request(
             command="say_error_and_catch", parameters={"message": "foo"}
         )
@@ -42,7 +44,8 @@ class TestEchoSleeper(object):
             elif child_request.system == "error":
                 assert_errored_request(child_request)
 
-    def test_parent_with_error_and_raise(self):
+    @pytest.mark.benchmark
+def test_parent_with_error_and_raise(self):
         request = self.request_generator.generate_request(
             command="say_error_and_raise", parameters={"message": "foo"}
         )

@@ -16,6 +16,7 @@ def op():
 
 
 class TestDetermineTarget:
+    @pytest.mark.benchmark
     def test_neither(self, monkeypatch, op):
         monkeypatch.setattr(
             beer_garden.router, "_target_from_type", Mock(return_value=None)
@@ -23,6 +24,7 @@ class TestDetermineTarget:
         with pytest.raises(UnknownGardenException):
             _determine_target(op)
 
+    @pytest.mark.benchmark
     def test_target_from_op(self, monkeypatch, op):
         monkeypatch.setattr(
             beer_garden.router, "_target_from_type", Mock(return_value=None)
@@ -31,6 +33,7 @@ class TestDetermineTarget:
 
         assert _determine_target(op) == "parent"
 
+    @pytest.mark.benchmark
     def test_target_from_type(self, monkeypatch, op):
         monkeypatch.setattr(
             beer_garden.router, "_target_from_type", Mock(return_value="parent")
@@ -38,6 +41,7 @@ class TestDetermineTarget:
 
         assert _determine_target(op) == "parent"
 
+    @pytest.mark.benchmark
     def test_same(self, monkeypatch, op):
         monkeypatch.setattr(
             beer_garden.router, "_target_from_type", Mock(return_value="child")
@@ -46,6 +50,7 @@ class TestDetermineTarget:
 
         assert _determine_target(op) == "child"
 
+    @pytest.mark.benchmark
     def test_mismatch(self, monkeypatch, op):
         monkeypatch.setattr(
             beer_garden.router, "_target_from_type", Mock(return_value="child")

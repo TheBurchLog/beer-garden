@@ -21,7 +21,8 @@ def system_spec():
 @pytest.mark.usefixtures("easy_client", "request_generator")
 class TestSleeper(object):
     @pytest.mark.skip("Skipping until we set max current by default")
-    def test_only_process_single_request_at_a_time(self):
+    @pytest.mark.benchmark
+def test_only_process_single_request_at_a_time(self):
         """A single-threaded plugin shouldn't process more than one request at a time."""
 
         # The amount here means that it is impossible for this test to complete in less
