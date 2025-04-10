@@ -1,0 +1,30 @@
+name: CodSpeed
+
+on: workflow_dispatch
+
+jobs:
+  benchmarks:
+    name: Run benchmarks
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./src/app
+
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Dependencies 
+        run: 
+          make deps |
+          pip install pytest-codspeed && pip freeze 
+
+      - name: Run benchmarks
+        uses: CodSpeedHQ/action@v3
+        with:
+          token: ${{ secrets.CODSPEED_TOKEN }}
+          run: pytest tests/ --codspeed
