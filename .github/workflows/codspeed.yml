@@ -7,15 +7,22 @@ jobs:
     name: Run benchmarks
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11"]
+
     defaults:
       run:
         working-directory: ./src/app
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      
+      - name: Setup python
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.13"
+          python-version: ${{ matrix.python-version }}
 
       - name: Install Dependencies 
         run: make deps
