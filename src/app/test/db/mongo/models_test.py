@@ -54,7 +54,6 @@ class TestCommand(object):
             {"name": "foo", "output_type": "BAD", "parameters": []},
         ],
     )
-    @pytest.mark.benchmark
     def test_clean_empty_name(self, params):
         with pytest.raises(ModelValidationError):
             Command(**params).clean()
@@ -106,7 +105,6 @@ class TestChoices(object):
             Choices(type="command", value={"command": "foo"}),
         ],
     )
-    @pytest.mark.benchmark
     def test_clean_value_types(self, choice_obj):
         with pytest.raises(ModelValidationError):
             choice_obj.clean()
@@ -143,7 +141,6 @@ class TestChoices(object):
             },
         ],
     )
-    @pytest.mark.benchmark
     def test_clean_bad_parse(self, value):
         with pytest.raises(ModelValidationError):
             Choices(type="command", value=value).clean()

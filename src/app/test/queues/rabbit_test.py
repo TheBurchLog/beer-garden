@@ -20,7 +20,6 @@ class TestGetRoutingKey(object):
             ((None, None, None), "admin"),
         ],
     )
-    @pytest.mark.benchmark
     def test_admin(self, args, expected):
         assert get_routing_key(*args, is_admin=True) == expected
 

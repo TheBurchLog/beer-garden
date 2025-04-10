@@ -33,7 +33,6 @@ class TestMetrics(object):
         "status,queued,in_progress",
         [("CREATED", 1, 0), ("IN_PROGRESS", 0, 1), ("SUCCESS", 0, 0)],
     )
-    @pytest.mark.benchmark
     def test_initialize_counts(
         self, prometheus_mocks, monkeypatch, bg_request, status, queued, in_progress
     ):

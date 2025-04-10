@@ -553,7 +553,6 @@ class TestValidateParameterType(object):
             (1451606400000, "Datetime", 1451606400000),
         ],
     )
-    @pytest.mark.benchmark
     def test_success(self, validator, req_value, param_type, expected):
         validated_parameters = validator.get_and_validate_parameters(
             make_request(parameters={"key1": req_value}),
@@ -573,7 +572,6 @@ class TestValidateParameterType(object):
             ([1], "Integer"),
         ],
     )
-    @pytest.mark.benchmark
     def test_fail(self, validator, req_value, param_type):
         with pytest.raises(ModelValidationError):
             validator.get_and_validate_parameters(
@@ -623,7 +621,6 @@ class TestValidateChoices(object):
             ),
         ],
     )
-    @pytest.mark.benchmark
     def test_simple(self, validator, req, choices):
         command = Mock(
             parameters=[make_param(key="p1", choices=choices, optional=False)]
@@ -638,7 +635,6 @@ class TestValidateChoices(object):
             make_request(parameters={"p1": "a", "p2": "1"}),
         ],
     )
-    @pytest.mark.benchmark
     def test_dictionary(self, validator, req):
         choices_value = {"a": ["1", "2", "3"], "b": ["4", "5", "6"], "null": ["7"]}
 
@@ -671,7 +667,6 @@ class TestValidateChoices(object):
             make_request(parameters={"p1": "c", "p2": "1"}),
         ],
     )
-    @pytest.mark.benchmark
     def test_dictionary_bad_parameters(self, validator, req):
         choices_value = {"a": ["1", "2", "3"], "b": ["4", "5", "6"]}
 
@@ -930,7 +925,6 @@ class TestValidateChoices(object):
             '["a", {"text": "b", "value": "2"}, "value"]',
         ],
     )
-    @pytest.mark.benchmark
     def test_validate_url_choices(self, validator, response):
         session_mock = Mock()
         session_mock.get.return_value.text = response

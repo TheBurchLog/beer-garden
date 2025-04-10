@@ -30,7 +30,6 @@ class TestLoadConfig(object):
             ("", '{"log":{"fallback_level": "DEBUG"}}'),
         ],
     )
-    @pytest.mark.benchmark
     def test_config_file(self, tmpdir, extension, contents):
         config_file = Path(tmpdir, f"config.{extension}")
 
@@ -54,7 +53,6 @@ class TestLoadConfig(object):
             ("/beer/garden/", "/beer/garden/"),
         ],
     )
-    @pytest.mark.benchmark
     def test_normalize_url_prefix(self, normalized, initial):
         cli_args = ["--entry-http-url-prefix", initial]
 
@@ -216,7 +214,6 @@ class TestConfigGet(object):
             ("", None),
         ],
     )
-    @pytest.mark.benchmark
     def test_get(self, key, expected):
         assert beer_garden.config.get(key) == expected
 

@@ -31,7 +31,6 @@ class TestPluginRunner(object):
             ("-m package", [sys.executable, "-m", "package", "arg1", "arg2"]),
         ],
     )
-    @pytest.mark.benchmark
     def test_init_entry_point(self, system_mock, entry_point, expected):
         plugin = ProcessRunner(
             entry_point,
@@ -106,7 +105,6 @@ class TestPluginRunner(object):
             ([None, 1, 1], False, True),  # Bad stop
         ],
     )
-    @pytest.mark.benchmark
     def test_run_plugin_io_thread_stop(
         self, mocker, plugin, process_poll, stopped, error_called
     ):
@@ -149,7 +147,6 @@ class TestCheckIo(object):
             )
         ],
     )
-    @pytest.mark.benchmark
     def test_check_io(self, mocker, plugin, stdout, stderr, logger_calls):
         """Ensure output coming from the subprocess is logged correctly
 

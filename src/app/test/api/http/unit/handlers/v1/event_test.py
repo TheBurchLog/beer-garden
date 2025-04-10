@@ -14,8 +14,6 @@ from beer_garden.api.http.handlers.v1.event import (
     EventSocket,
 )
 
-pytestmark = pytest.mark.benchmark
-
 @pytest.fixture
 def get_current_user_mock(monkeypatch):
     def get_current_user(self):
@@ -61,7 +59,7 @@ class TestEventSocket(AsyncHTTPTestCase):
 
     @gen_test
     @pytest.mark.usefixtures("app_config_auth_enabled")
-    @pytest.mark.benchmark
+
     def test_event_socket_requests_authorization_on_connect(self):
         ws_client = yield self.ws_connect()
 
@@ -73,7 +71,6 @@ class TestEventSocket(AsyncHTTPTestCase):
 
     @gen_test
     @pytest.mark.usefixtures("app_config_auth_enabled", "user_from_token_mocks")
-    @pytest.mark.benchmark
     def test_event_socket_accepts_valid_token_update(self):
         ws_client = yield self.ws_connect()
         response_valid = (
@@ -90,7 +87,6 @@ class TestEventSocket(AsyncHTTPTestCase):
 
     @gen_test
     @pytest.mark.usefixtures("app_config_auth_enabled")
-    @pytest.mark.benchmark
     def test_event_socket_rejects_invalid_token_update(self):
         ws_client = yield self.ws_connect()
         yield ws_client.read_message()  # Read the AUTHORIZATION_REQUIRED message
@@ -106,7 +102,6 @@ class TestEventSocket(AsyncHTTPTestCase):
 
     @gen_test
     @pytest.mark.usefixtures("app_config_auth_enabled")
-    @pytest.mark.benchmark
     def test_event_socket_rejects_bad_messages(self):
         ws_client = yield self.ws_connect()
         yield ws_client.read_message()  # Read the AUTHORIZATION_REQUIRED message
@@ -121,7 +116,6 @@ class TestEventSocket(AsyncHTTPTestCase):
 
     @gen_test
     @pytest.mark.usefixtures("app_config_auth_disabled")
-    @pytest.mark.benchmark
     def test_publish_auth_disabled(self):
         ws_client = yield self.ws_connect()
         yield EventSocket.publish(self.event)
@@ -134,7 +128,6 @@ class TestEventSocket(AsyncHTTPTestCase):
 
     @gen_test
     @pytest.mark.usefixtures("app_config_auth_enabled")
-    @pytest.mark.benchmark
     def test_publish_auth_enabled_requests_authorization(self):
         ws_client = yield self.ws_connect()
         yield ws_client.read_message()  # Read the AUTHORIZATION_REQUIRED message
@@ -149,7 +142,6 @@ class TestEventSocket(AsyncHTTPTestCase):
 
     @gen_test
     @pytest.mark.usefixtures("app_config_auth_enabled", "get_current_user_mock")
-    @pytest.mark.benchmark
     def test_publish_auth_enabled_publishes_event_for_authorized_user(self):
         ws_client = yield self.ws_connect()
         yield ws_client.read_message()  # Read the AUTHORIZATION_REQUIRED message
@@ -164,7 +156,6 @@ class TestEventSocket(AsyncHTTPTestCase):
 
     @gen_test
     @pytest.mark.usefixtures("app_config_auth_enabled", "get_current_user_mock")
-    @pytest.mark.benchmark
     def test_publish_auth_enabled_publishes_event_without_payload_type(self):
         ws_client = yield self.ws_connect()
         yield ws_client.read_message()  # Read the AUTHORIZATION_REQUIRED message
@@ -181,7 +172,6 @@ class TestEventSocket(AsyncHTTPTestCase):
 
     @gen_test
     @pytest.mark.usefixtures("app_config_auth_disabled")
-    @pytest.mark.benchmark
     def test_publish_skips_events_on_blocklist(self):
         yield self.ws_connect()
 

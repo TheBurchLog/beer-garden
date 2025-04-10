@@ -121,7 +121,6 @@ class TestHandlersAndRunnerMethods:
             ("stop_one", (None, None), Exception),
         ],
     )
-    @pytest.mark.benchmark
     def test_runner_or_instance_ops_none_args(
         self, method, method_args, exception, manager
     ):
@@ -252,7 +251,6 @@ class TestLoadPlugin(object):
             (lazy_fixture("_good_path_bad_config"), "is not a file"),
         ],
     )
-    @pytest.mark.benchmark
     def test_plugin_path_validator_bad_paths(self, value, message, manager, caplog):
         logger = logging.getLogger(__name__)
 

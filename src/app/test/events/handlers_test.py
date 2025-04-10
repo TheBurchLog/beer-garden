@@ -77,7 +77,6 @@ class TestHandlers:
             (Events.DIRECTORY_FILE_CHANGE, 1),
         ],
     )
-    @pytest.mark.benchmark
     def test_garden_local_callbacks(
         self, monkeypatch, bg_event, event_name, expected_calls
     ):
@@ -170,7 +169,6 @@ class TestHandlers:
             (Events.DIRECTORY_FILE_CHANGE, 0),
         ],
     )
-    @pytest.mark.benchmark
     def test_garden_remote_callbacks(
         self, monkeypatch, bg_event, event_name, expected_calls
     ):
